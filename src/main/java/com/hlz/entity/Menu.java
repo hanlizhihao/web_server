@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Menu.findById", query = "SELECT m FROM Menu m WHERE m.id = :id")
     , @NamedQuery(name = "Menu.findByGreensName", query = "SELECT m FROM Menu m WHERE m.greensName = :greensName")
     , @NamedQuery(name = "Menu.findByPrice", query = "SELECT m FROM Menu m WHERE m.price = :price")
-    , @NamedQuery(name = "Menu.findByNoDefine", query = "SELECT m FROM Menu m WHERE m.noDefine = :noDefine")})
+    , @NamedQuery(name = "Menu.findByDbVersion", query = "SELECT m FROM Menu m WHERE m.dbVersion = :dbVersion")})
 public class Menu implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -38,8 +38,8 @@ public class Menu implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "price")
     private Double price;
-    @Column(name = "no_define")
-    private String noDefine;
+    @Column(name = "db_version")
+    private String dbVersion;
 
     public Menu() {
     }
@@ -72,12 +72,12 @@ public class Menu implements Serializable {
         this.price = price;
     }
 
-    public String getNoDefine() {
-        return noDefine;
+    public String getDbVersion() {
+        return dbVersion;
     }
 
-    public void setNoDefine(String noDefine) {
-        this.noDefine = noDefine;
+    public void setDbVersion(String dbVersion) {
+        this.dbVersion = dbVersion;
     }
 
     @Override

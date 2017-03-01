@@ -1,7 +1,7 @@
 package com.hlz.entity;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,8 +12,6 @@ import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -58,13 +56,10 @@ public class Indent implements Serializable {
     @Column(name = "reminder_number")
     private Integer reminderNumber;
     @Column(name = "begin_time")
-    @Temporal(TemporalType.TIMESTAMP)
     private Date beginTime;
     @Column(name = "end_time")
-    @Temporal(TemporalType.TIMESTAMP)
     private Date endTime;
     @Column(name = "first_time")
-    @Temporal(TemporalType.TIMESTAMP)
     private Date firstTime;
     @Column(name = "style")
     private Integer style;
