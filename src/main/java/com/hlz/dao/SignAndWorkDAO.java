@@ -11,7 +11,9 @@ import javax.persistence.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.context.WebApplicationContext;
 
 /**
  *添加签到信息和工作时间的信息是特殊的
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Repository;
  * @author Administrator 2017-3-1
  */
 @Repository
+@Scope(value = WebApplicationContext.SCOPE_SESSION)
 public class SignAndWorkDAO implements SignAndWorkRepository{
     private Set<Integer> userSign;
     private Set<Integer> userWork;
