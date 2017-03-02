@@ -5,7 +5,6 @@ import com.hlz.interf.UserRepository;
 import com.hlz.webModel.UserModel;
 import java.util.List;
 import javax.persistence.Query;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -21,7 +20,7 @@ public class UserDAO implements UserRepository{
         SessionFactory sf=SessionFactoryUtil.getSessionFactory();
         Session session=sf.openSession();
         Users user=new Users();
-        user.setJoinTime(model.getJoinTime());
+        user.setJoinTime(new java.sql.Date(System.currentTimeMillis()));
         user.setName(model.getName());
         user.setPassword(model.getPassword());
         user.setStyle(model.getStyle());
@@ -51,9 +50,10 @@ public class UserDAO implements UserRepository{
         userTemp.setPassword(user.getPassword());
         userTemp.setStyle(user.getStyle());
         userTemp.setUsername(user.getUsername());
-        Transaction ts= session.beginTransaction();
-        session.update(user);
-        try{
+        session.clear();
+        Transaction ts = session.beginTransaction();
+        try {
+            session.update(user);
             ts.commit();
         }catch(Exception e){
             e.printStackTrace();
@@ -91,8 +91,8 @@ public class UserDAO implements UserRepository{
         SessionFactory sf = SessionFactoryUtil.getSessionFactory();
         List<Users> result;
         try (Session session = sf.openSession()) {
-            String hql="from User order by id";
-            Query query=(Query) session.createQuery(hql);
+            String hql="from Users order by id";
+            Query query= session.createQuery(hql);
             result = query.getResultList();
             System.out.println("成功查询所有用户信息");
         }

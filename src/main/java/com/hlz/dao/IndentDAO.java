@@ -26,6 +26,9 @@ import org.springframework.web.context.WebApplicationContext;
 public class IndentDAO implements IndentRepository{
     @Autowired
     private SellAnalyzeDAO dao;
+    public IndentDAO(){
+        this.dao=new SellAnalyzeDAO();
+    }
     @Override
     public boolean addIndent(IndentModel model) {
        SessionFactory sf=SessionFactoryUtil.getSessionFactory();

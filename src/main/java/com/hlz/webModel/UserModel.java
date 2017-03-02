@@ -10,7 +10,6 @@ public class UserModel {
     private String name;
     private String username;
     private String password;
-    private Date joinTime;
     private int style;
 
     public String getName() {
@@ -36,19 +35,9 @@ public class UserModel {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public Date getJoinTime() {
-        return joinTime;
-    }
-
-    public void setJoinTime(Date joinTime) {
-        this.joinTime = joinTime;
-    }
-
     public int getStyle() {
         return style;
     }
-
     public void setStyle(int style) {
         this.style = style;
     }
