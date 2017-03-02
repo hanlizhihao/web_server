@@ -8,16 +8,11 @@ import javax.persistence.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Repository;
-import org.springframework.web.context.WebApplicationContext;
 
 /**
  *
  * @author Administrator 2017-3-1
  */
-@Repository
-@Scope(value = WebApplicationContext.SCOPE_SESSION)
 public class UserDAO implements UserRepository{
 
     @Override
