@@ -7,6 +7,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import javax.persistence.Query;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.context.WebApplicationContext;
@@ -16,7 +18,6 @@ import org.springframework.web.context.WebApplicationContext;
  * @author Administrator 2017-3-2
  */
 @Repository
-@Scope(value = WebApplicationContext.SCOPE_SESSION)
 public class BillDAO{
     public List<Bill> queryAll() {
         String hql="from Bill order by id";
@@ -51,7 +52,8 @@ public class BillDAO{
         System.out.println("添加账单成功");
         return true;
     }
-    public boolean deleteBill(int id) {
+    @CacheEvict(value="bill",key="#bill.id")
+    public Bill deleteBill(int id) {
         SessionFactory sf=SessionFactoryUtil.getSessionFactory();
         Session session=sf.openSession();
         Bill bill=(Bill)session.get(Bill.class, id);
@@ -62,14 +64,15 @@ public class BillDAO{
         }catch(Exception e){
             e.printStackTrace();
             ts.rollback();
-            return false;
+            return null;
         }finally{
             session.close();
         }
         System.out.print("删除账单信息成功");
-        return true;
+        return bill;
     }
-    public boolean updateBill(Bill bill) {
+    @CacheEvict(value="bill",key="#bill.id")
+    public Bill updateBill(Bill bill) {
         SessionFactory sf = SessionFactoryUtil.getSessionFactory();
         Session session = sf.openSession();
         Transaction ts = session.beginTransaction();
@@ -79,12 +82,19 @@ public class BillDAO{
         } catch (Exception e) {
             e.printStackTrace();
             ts.rollback();
-            return false;
+            return null;
         } finally {
             session.close();
         }
         System.out.print("修改账单信息成功");
-        return true;
+        return bill;
     }
-
+    @Cacheable(value="bill",key="#bill.id")
+    public Bill queryOne(int id){
+        SessionFactory sf = SessionFactoryUtil.getSessionFactory();
+        Session session = sf.openSession();
+        Bill bill=session.get(Bill.class, id);
+        System.out.println("查询单独账单成功");
+        return bill;
+    }
 }

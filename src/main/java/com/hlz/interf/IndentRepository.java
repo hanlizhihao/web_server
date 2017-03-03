@@ -11,8 +11,8 @@ import java.util.List;
  */
 public interface IndentRepository {
     boolean addIndent(IndentModel model);
-    boolean updateIndent(IndentModel model);
-    boolean updateIndent(IndentStyle style);//用于专门更新餐桌信息状态
+    Indent updateIndent(IndentModel model);
+    Indent updateIndent(IndentStyle style);//用于专门更新餐桌信息状态
     List<Indent> queryUnderwayIndent(int page);//分页查询正在进行的
     List<Indent> queryFinishedIndent(int page);//分页查询完成的
     List<Indent> queryCanceledIndent(int page);//分页查询取消的

@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.context.WebApplicationContext;
 import com.hlz.entity.*;
+import java.util.List;
 import org.hibernate.Transaction;
 
 /**
@@ -16,7 +17,6 @@ import org.hibernate.Transaction;
  * @author Administrator 2017-2-28
  */
 @Repository
-@Scope(value=WebApplicationContext.SCOPE_SESSION)
 public class MenuDAO implements MenuRepository{
     //分为两种情况，一种是第一次添加，初始化版本
     //另一种是非第一次添加，更改版本号
@@ -138,5 +138,15 @@ public class MenuDAO implements MenuRepository{
         System.out.print("删除菜单信息成功");
         return true;
     }
-
+    @Override
+    public List<Menu> queryMenu() {
+        SessionFactory sf=SessionFactoryUtil.getSessionFactory();
+        Session session=sf.openSession();
+        String hql="from Menu order by id";
+        Query query=session.createQuery(hql);
+        List<Menu> result=query.getResultList();
+        System.out.println("查询菜单成功");
+        session.close();
+        return result;
+    }
 }

@@ -10,8 +10,8 @@ import java.util.List;
  */
 public interface UserRepository {
     boolean addUser(UserAddModel model);
-    boolean updateUser(Users user);
-    boolean deleteUser(int id);
+    Users updateUser(Users user);
+    Users deleteUser(int id);
     List<Users> queryAllUser();
     Users querySingleUsers(int id);
     Users findByUsername(String username);

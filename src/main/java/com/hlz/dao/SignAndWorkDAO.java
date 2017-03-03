@@ -21,7 +21,6 @@ import org.springframework.web.context.WebApplicationContext;
  * @author Administrator 2017-3-1
  */
 @Repository
-@Scope(value = WebApplicationContext.SCOPE_SESSION)
 public class SignAndWorkDAO implements SignAndWorkRepository{
     private Set<Integer> userSign;
     private Set<Integer> userWork;

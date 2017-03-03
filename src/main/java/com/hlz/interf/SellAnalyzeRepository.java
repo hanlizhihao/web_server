@@ -8,5 +8,5 @@ import com.hlz.webModel.IndentStyle;
  * @author Administrator
  */
 public interface SellAnalyzeRepository {
-    boolean updateSellAnalyze(IndentStyle style,Indent indent);
+    Indent updateSellAnalyze(IndentStyle style,Indent indent);
 }

@@ -8,6 +8,8 @@ import javax.persistence.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.context.WebApplicationContext;
@@ -17,7 +19,6 @@ import org.springframework.web.context.WebApplicationContext;
  * @author Administrator 2017-3-2
  */
 @Repository
-@Scope(value = WebApplicationContext.SCOPE_SESSION)
 public class VipDAO implements VipRepository{
 
     @Override
@@ -44,9 +45,9 @@ public class VipDAO implements VipRepository{
         }
         return true;
     }
-
+    @CacheEvict(value="vip",key="#vip.id")
     @Override
-    public boolean updateVip(Vip vip) {
+    public Vip updateVip(Vip vip) {
         SessionFactory sf=SessionFactoryUtil.getSessionFactory();
         Session session=sf.openSession();
         Transaction ts= session.beginTransaction();
@@ -56,16 +57,16 @@ public class VipDAO implements VipRepository{
         }catch(Exception e){
             e.printStackTrace();
             ts.rollback();
-            return false;
+            return null;
         }finally{
             session.close();
         }
         System.out.print("修改会员信息成功");
-        return true;
+        return vip;
     }
-
+    @CacheEvict(value="vip",key="#vip.id")
     @Override
-    public boolean deleteVip(int id) {
+    public Vip deleteVip(int id) {
         SessionFactory sf=SessionFactoryUtil.getSessionFactory();
         Session session=sf.openSession();
         Vip a=(Vip)session.get(Vip.class,id);
@@ -76,12 +77,12 @@ public class VipDAO implements VipRepository{
         }catch(Exception e){
             e.printStackTrace();
             ts.rollback();
-            return false;
+            return null;
         }finally{
             session.close();
         }
         System.out.print("删除会员信息成功");
-        return true;
+        return a;
     }
 
     @Override
@@ -112,7 +113,7 @@ public class VipDAO implements VipRepository{
         session.close();
         return result;
     }
-
+    @Cacheable(value="vip",key="#vip.id")
     @Override
     public Vip querySingle(int id) {
         SessionFactory sf = SessionFactoryUtil.getSessionFactory();

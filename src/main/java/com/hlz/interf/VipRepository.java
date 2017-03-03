@@ -10,8 +10,8 @@ import java.util.List;
  */
 public interface VipRepository {
     boolean addVip(VipModel model);
-    boolean updateVip(Vip vip);
-    boolean deleteVip(int id);
+    Vip updateVip(Vip vip);
+    Vip deleteVip(int id);
     int countVip();
     List<Vip> queryVipOnPage(int page);
     Vip querySingle(int id);

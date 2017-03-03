@@ -8,6 +8,8 @@ import javax.persistence.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.context.WebApplicationContext;
@@ -17,7 +19,6 @@ import org.springframework.web.context.WebApplicationContext;
  * @author Administrator 2017-3-1
  */
 @Repository
-@Scope(value = WebApplicationContext.SCOPE_SESSION)
 public class UserDAO implements UserRepository{
 
     @Override
@@ -44,9 +45,9 @@ public class UserDAO implements UserRepository{
         }
         return true;
     }
-
+    @CacheEvict(value="users",key="#users.id")
     @Override
-    public boolean updateUser(Users user) {
+    public Users updateUser(Users user) {
         SessionFactory sf=SessionFactoryUtil.getSessionFactory();
         Session session=sf.openSession();
         Users userTemp=(Users)session.get(Users.class,user.getId());
@@ -63,16 +64,16 @@ public class UserDAO implements UserRepository{
         }catch(Exception e){
             e.printStackTrace();
             ts.rollback();
-            return false;
+            return null;
         }finally{
             session.close();
         }
         System.out.print("修改用户信息成功");
-        return true;
+        return userTemp;
     }
-
+    @CacheEvict(value="users",key="#users.id")
     @Override
-    public boolean deleteUser(int id) {
+    public Users deleteUser(int id) {
         SessionFactory sf = SessionFactoryUtil.getSessionFactory();
         Session session = sf.openSession();
         Users a = (Users) session.get(Users.class, id);
@@ -83,12 +84,12 @@ public class UserDAO implements UserRepository{
         } catch (Exception e) {
             e.printStackTrace();
             ts.rollback();
-            return false;
+            return null;
         } finally {
             session.close();
         }
         System.out.print("删除账户信息成功");
-        return true;
+        return a;
     }
 
     @Override
@@ -103,7 +104,7 @@ public class UserDAO implements UserRepository{
         }
         return result;  
     }
-
+    @Cacheable(value="users",key="#users.id")
     @Override
     public Users querySingleUsers(int id) {
         SessionFactory sf = SessionFactoryUtil.getSessionFactory();

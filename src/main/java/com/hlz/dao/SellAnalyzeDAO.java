@@ -18,11 +18,10 @@ import org.hibernate.Transaction;
  * @author Administrator 2017-2-28
  */
 @Repository
-@Scope(value = WebApplicationContext.SCOPE_SESSION)
 public class SellAnalyzeDAO implements SellAnalyzeRepository {
 
     @Override
-    public boolean updateSellAnalyze(IndentStyle style, Indent indent) {
+    public Indent updateSellAnalyze(IndentStyle style, Indent indent) {
         //只处理将要完成的订单
         SessionFactory sf = SessionFactoryUtil.getSessionFactory();
         Session session = sf.openSession();
@@ -57,10 +56,10 @@ public class SellAnalyzeDAO implements SellAnalyzeRepository {
         } catch (Exception e) {
             e.printStackTrace();
             t.rollback();
-            return false;
+            return null;
         } finally {
             session.close();
         }
-        return true;
+        return indent;
     }
 }

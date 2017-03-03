@@ -13,6 +13,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.context.WebApplicationContext;
@@ -22,7 +24,6 @@ import org.springframework.web.context.WebApplicationContext;
  * @author Administrator 2017-2-26
  */
 @Repository
-@Scope(value=WebApplicationContext.SCOPE_SESSION)
 public class IndentDAO implements IndentRepository{
     @Autowired
     private final SellAnalyzeDAO dao;
@@ -65,7 +66,8 @@ public class IndentDAO implements IndentRepository{
         }
     }
     @Override
-    public boolean updateIndent(IndentModel model) {
+    @CacheEvict(value="indent",key="indent.id")
+    public Indent updateIndent(IndentModel model) {
         SessionFactory sf = SessionFactoryUtil.getSessionFactory();
         Session session = sf.openSession();
         Transaction ts = session.beginTransaction();
@@ -77,16 +79,17 @@ public class IndentDAO implements IndentRepository{
         } catch (Exception e) {
             e.printStackTrace();
             ts.rollback();
-            return false;
+            return null;
         } finally {
             session.close();
         }
         System.out.print("修改餐桌信息成功");
-        return true;
+        return indent;
     }
     @Override
+    @CacheEvict(value="indent",key="indent.id")
     //专门用于更新餐桌状态
-    public boolean updateIndent(IndentStyle style) {
+    public Indent updateIndent(IndentStyle style) {
         SessionFactory sf = SessionFactoryUtil.getSessionFactory();
         Session session = sf.openSession();
         Transaction ts = session.beginTransaction();
@@ -99,7 +102,7 @@ public class IndentDAO implements IndentRepository{
         } catch (Exception e) {
             e.printStackTrace();
             ts.rollback();
-            return false;
+            return null;
         } finally {
             session.close();
         }
@@ -107,7 +110,7 @@ public class IndentDAO implements IndentRepository{
             return dao.updateSellAnalyze(style, indent);
         } else {
             System.out.print("修改餐桌信息成功");
-            return true;
+            return indent;
         }
     }
     @Override
@@ -163,7 +166,7 @@ public class IndentDAO implements IndentRepository{
         }
         return result;
     }
-
+    @Cacheable(value="indent",key="#indent.id")
     @Override
     public Indent findOneIndent(int id) {
         SessionFactory sf = SessionFactoryUtil.getSessionFactory();
