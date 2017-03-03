@@ -15,10 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class LoginController {
     @Autowired
     private LoginService service;
-    @RequestMapping(value = {"/", "/login"}, method = RequestMethod.GET)
-    public String toLogin() {
-        return "login";
-    }
     @RequestMapping(value="/login",method=RequestMethod.POST)
     public String login(UserModel user){
         if(service.login(user)){

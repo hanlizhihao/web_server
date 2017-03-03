@@ -14,4 +14,5 @@ public interface UserRepository {
     boolean deleteUser(int id);
     List<Users> queryAllUser();
     Users querySingleUsers(int id);
+    Users findByUsername(String username);
 }

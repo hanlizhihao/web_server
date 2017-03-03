@@ -114,4 +114,16 @@ public class UserDAO implements UserRepository{
         return user;
     }
 
+    @Override
+    public Users findByUsername(String username) {
+        String hql="from Users order by id where username=?";
+        SessionFactory sf=SessionFactoryUtil.getSessionFactory();
+        Session session=sf.openSession();
+        Query query=session.createQuery(hql);
+        query.setParameter(0,username);
+        Users user=(Users)query.getSingleResult();
+        System.out.println("根据username查询User成功");
+        session.close();
+        return user;
+    }
 }

@@ -1,15 +1,12 @@
 package com.hlz.dao;
 
 import com.hlz.entity.Bill;
-import com.hlz.interf.BillRepository;
 import com.hlz.webModel.BillModel;
 import java.util.List;
-import javax.persistence.Cacheable;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import javax.persistence.Query;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.context.WebApplicationContext;
@@ -20,8 +17,7 @@ import org.springframework.web.context.WebApplicationContext;
  */
 @Repository
 @Scope(value = WebApplicationContext.SCOPE_SESSION)
-public class BillDAO implements BillRepository{
-    @Override
+public class BillDAO{
     public List<Bill> queryAll() {
         String hql="from Bill order by id";
         SessionFactory sf=SessionFactoryUtil.getSessionFactory();
@@ -32,7 +28,6 @@ public class BillDAO implements BillRepository{
         session.close();
         return result;
     }
-    @Override
     public boolean addBill(BillModel model) {
         SessionFactory sf=SessionFactoryUtil.getSessionFactory();
         Session session=sf.openSession();
@@ -56,8 +51,6 @@ public class BillDAO implements BillRepository{
         System.out.println("添加账单成功");
         return true;
     }
-
-    @Override
     public boolean deleteBill(int id) {
         SessionFactory sf=SessionFactoryUtil.getSessionFactory();
         Session session=sf.openSession();
@@ -76,8 +69,6 @@ public class BillDAO implements BillRepository{
         System.out.print("删除账单信息成功");
         return true;
     }
-
-    @Override
     public boolean updateBill(Bill bill) {
         SessionFactory sf = SessionFactoryUtil.getSessionFactory();
         Session session = sf.openSession();
