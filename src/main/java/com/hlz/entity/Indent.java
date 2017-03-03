@@ -1,7 +1,7 @@
 package com.hlz.entity;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.sql.Timestamp;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -56,11 +56,11 @@ public class Indent implements Serializable {
     @Column(name = "reminder_number")
     private Integer reminderNumber;
     @Column(name = "begin_time")
-    private Date beginTime;
+    private Timestamp beginTime;
     @Column(name = "end_time")
-    private Date endTime;
+    private Timestamp endTime;
     @Column(name = "first_time")
-    private Date firstTime;
+    private Timestamp firstTime;
     @Column(name = "style")
     private Integer style;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -130,27 +130,27 @@ public class Indent implements Serializable {
         this.reminderNumber = reminderNumber;
     }
 
-    public Date getBeginTime() {
+    public Timestamp getBeginTime() {
         return beginTime;
     }
 
-    public void setBeginTime(Date beginTime) {
+    public void setBeginTime(Timestamp beginTime) {
         this.beginTime = beginTime;
     }
 
-    public Date getEndTime() {
+    public Timestamp getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(Timestamp endTime) {
         this.endTime = endTime;
     }
 
-    public Date getFirstTime() {
+    public Timestamp getFirstTime() {
         return firstTime;
     }
 
-    public void setFirstTime(Date firstTime) {
+    public void setFirstTime(Timestamp firstTime) {
         this.firstTime = firstTime;
     }
 

@@ -3,7 +3,6 @@ package com.hlz.util;
 import com.hlz.entity.Indent;
 import com.hlz.webModel.IndentModel;
 import com.hlz.webModel.IndentStyle;
-import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -31,7 +30,7 @@ public class IndentModelUtil {
         indent.setPrice(model.getPrice());
         indent.setReminderNumber(model.getRemiderNumber());
         indent.setTableId(model.getTable());
-        indent.setFirstTime(new java.sql.Date(model.getTime()));
+        indent.setFirstTime(new java.sql.Timestamp(model.getTime()));
         return indent;
     }
     public static Indent TransformStyleModel(IndentStyle style,Indent indent){

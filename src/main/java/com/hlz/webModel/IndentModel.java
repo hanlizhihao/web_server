@@ -1,6 +1,5 @@
 package com.hlz.webModel;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 /**

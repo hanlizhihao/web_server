@@ -5,7 +5,7 @@ import com.hlz.interf.IndentRepository;
 import com.hlz.util.IndentModelUtil;
 import com.hlz.webModel.IndentModel;
 import com.hlz.webModel.IndentStyle;
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.Query;
@@ -25,7 +25,7 @@ import org.springframework.web.context.WebApplicationContext;
 @Scope(value=WebApplicationContext.SCOPE_SESSION)
 public class IndentDAO implements IndentRepository{
     @Autowired
-    private SellAnalyzeDAO dao;
+    private final SellAnalyzeDAO dao;
     public IndentDAO(){
         this.dao=new SellAnalyzeDAO();
     }
@@ -34,7 +34,8 @@ public class IndentDAO implements IndentRepository{
        SessionFactory sf=SessionFactoryUtil.getSessionFactory();
        Session session=sf.openSession();
        Indent indent=new Indent();
-       indent.setBeginTime(new Date(System.currentTimeMillis()));
+       Timestamp beginTime=new Timestamp(System.currentTimeMillis());
+       indent.setBeginTime(beginTime);
        Map<String,Integer> reserves=model.getReserve();
        String reserve="";
        for(Map.Entry<String,Integer> entry:reserves.entrySet()){
@@ -91,8 +92,9 @@ public class IndentDAO implements IndentRepository{
         Transaction ts = session.beginTransaction();
         Indent indent = session.get(Indent.class, style.getId());
         indent = IndentModelUtil.TransformStyleModel(style, indent);
-        session.update(indent);
+        indent.setEndTime(new Timestamp(System.currentTimeMillis()));
         try {
+            session.update(indent);
             ts.commit();
         } catch (Exception e) {
             e.printStackTrace();
