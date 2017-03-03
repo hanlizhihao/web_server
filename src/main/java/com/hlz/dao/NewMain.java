@@ -1,7 +1,7 @@
 package com.hlz.dao;
 
 import com.hlz.entity.Users;
-import com.hlz.webModel.UserModel;
+import com.hlz.webModel.UserAddModel;
 import java.util.List;
 
 /**
@@ -15,7 +15,7 @@ public class NewMain {
      */
     public static void main(String[] args) {
         UserDAO dao=new UserDAO();
-        UserModel model=new UserModel();
+        UserAddModel model=new UserAddModel();
         model.setName("wugq");
         model.setPassword("1q");
         model.setStyle(0);

@@ -1,7 +1,7 @@
 package com.hlz.interf;
 
 import com.hlz.entity.Users;
-import com.hlz.webModel.UserModel;
+import com.hlz.webModel.UserAddModel;
 import java.util.List;
 
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * @author Administrator
  */
 public interface UserRepository {
-    boolean addUser(UserModel model);
+    boolean addUser(UserAddModel model);
     boolean updateUser(Users user);
     boolean deleteUser(int id);
     List<Users> queryAllUser();

@@ -2,7 +2,7 @@ package com.hlz.dao;
 
 import com.hlz.entity.Users;
 import com.hlz.interf.UserRepository;
-import com.hlz.webModel.UserModel;
+import com.hlz.webModel.UserAddModel;
 import java.util.List;
 import javax.persistence.Query;
 import org.hibernate.Session;
@@ -21,7 +21,7 @@ import org.springframework.web.context.WebApplicationContext;
 public class UserDAO implements UserRepository{
 
     @Override
-    public boolean addUser(UserModel model) {
+    public boolean addUser(UserAddModel model) {
         SessionFactory sf=SessionFactoryUtil.getSessionFactory();
         Session session=sf.openSession();
         Users user=new Users();

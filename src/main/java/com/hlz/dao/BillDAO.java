@@ -4,10 +4,12 @@ import com.hlz.entity.Bill;
 import com.hlz.interf.BillRepository;
 import com.hlz.webModel.BillModel;
 import java.util.List;
+import javax.persistence.Cacheable;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import javax.persistence.Query;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.context.WebApplicationContext;
@@ -26,11 +28,10 @@ public class BillDAO implements BillRepository{
         Session session=sf.openSession();
         Query query=session.createQuery(hql);
         List<Bill> result=query.getResultList();
-        System.out.print("分页查询账单信息成功");
+        System.out.print("查询账单信息成功");
         session.close();
         return result;
     }
-
     @Override
     public boolean addBill(BillModel model) {
         SessionFactory sf=SessionFactoryUtil.getSessionFactory();
