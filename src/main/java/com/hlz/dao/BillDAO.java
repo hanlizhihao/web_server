@@ -10,14 +10,16 @@ import javax.persistence.Query;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.context.WebApplicationContext;
 
 /**
  *
  * @author Administrator 2017-3-2
  */
 @Repository
+@Scope(value="WebApplicationContext.SCOPE_SESSION",
+        proxyMode=ScopedProxyMode.TARGET_CLASS)
 public class BillDAO{
     public List<Bill> queryAll() {
         String hql="from Bill order by id";

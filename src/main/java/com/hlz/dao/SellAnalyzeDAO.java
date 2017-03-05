@@ -12,12 +12,15 @@ import org.springframework.web.context.WebApplicationContext;
 import com.hlz.entity.*;
 import javax.persistence.Query;
 import org.hibernate.Transaction;
+import org.springframework.context.annotation.ScopedProxyMode;
 
 /**
  *
  * @author Administrator 2017-2-28
  */
 @Repository
+@Scope(value="WebApplicationContext.SCOPE_SESSION",
+        proxyMode=ScopedProxyMode.TARGET_CLASS)
 public class SellAnalyzeDAO implements SellAnalyzeRepository {
 
     @Override

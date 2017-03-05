@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 public class MyMvcConfig extends WebMvcConfigurerAdapter{
     @Override
     public void addViewControllers(ViewControllerRegistry registry){
-        registry.addViewController("/login").setViewName("login");
+        registry.addViewController("/tologin").setViewName("login");
         registry.addViewController("/").setViewName("login");
     }
 }

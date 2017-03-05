@@ -25,6 +25,7 @@ public class SessionFactoryUtil {
                     configuration.addAnnotatedClass(com.hlz.entity.Users.class);
                     configuration.addAnnotatedClass(com.hlz.entity.Vip.class);
                     configuration.addAnnotatedClass(com.hlz.entity.WorkTime.class);
+                    configuration.addAnnotatedClass(com.hlz.entity.Bill.class);
                     ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                     .applySettings(configuration.getProperties()).build();
                     instance = configuration.buildSessionFactory(serviceRegistry);
@@ -32,5 +33,8 @@ public class SessionFactoryUtil {
             }
         }
         return instance;
+    }
+    private SessionFactoryUtil(){
+        
     }
 }

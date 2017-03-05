@@ -7,16 +7,18 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.context.WebApplicationContext;
 import com.hlz.entity.*;
 import java.util.List;
 import org.hibernate.Transaction;
+import org.springframework.context.annotation.ScopedProxyMode;
 
 /**
  *对菜单更改时，也要对sell_analyze进行更改
  * @author Administrator 2017-2-28
  */
 @Repository
+@Scope(value="WebApplicationContext.SCOPE_SESSION",
+        proxyMode=ScopedProxyMode.TARGET_CLASS)
 public class MenuDAO implements MenuRepository{
     //分为两种情况，一种是第一次添加，初始化版本
     //另一种是非第一次添加，更改版本号
