@@ -8,8 +8,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.context.WebApplicationContext;
 import com.hlz.entity.*;
+import java.util.ArrayList;
 import javax.persistence.Query;
 import org.hibernate.Transaction;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -64,5 +64,17 @@ public class SellAnalyzeDAO implements SellAnalyzeRepository {
             session.close();
         }
         return indent;
+    }
+
+    @Override
+    public ArrayList<Indent> queryAllSellAnalyze() {
+        String hql = "from SellAnalyze order by number";
+        SessionFactory sf = SessionFactoryUtil.getSessionFactory();
+        Session session = sf.openSession();
+        Query query=session.createQuery(hql);
+        List<Indent> result=query.getResultList();
+        ArrayList<Indent> results=new ArrayList<>();
+        results.addAll(result);
+        return results;
     }
 }
