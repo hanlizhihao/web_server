@@ -10,8 +10,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -19,8 +17,6 @@ import org.springframework.stereotype.Repository;
  * @author Administrator 2017-3-2
  */
 @Repository
-@Scope(value="WebApplicationContext.SCOPE_SESSION",
-        proxyMode=ScopedProxyMode.TARGET_CLASS)
 public class VipDAO implements VipRepository{
 
     @Override

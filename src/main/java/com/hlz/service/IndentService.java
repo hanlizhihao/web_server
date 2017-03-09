@@ -1,30 +1,57 @@
 package com.hlz.service;
 
 import com.hlz.dao.IndentDAO;
+import com.hlz.dao.SellAnalyzeDAO;
 import com.hlz.entity.Indent;
+import com.hlz.entity.SellAnalyze;
 import com.hlz.webModel.IndentModel;
 import com.hlz.webModel.IndentStyle;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
+//Stomp
 /**
- * @author Administrator 2017-3-7
+ * 需要推送的活动：创建订单，上菜，退菜，加菜，催单，结算，取消，换桌
+ * 1.创建订单：成功处理创建订单的逻辑之后，重新从后台查出刚存入数据库中的那条数据的id，赋值给领域模型的IndentModel，然后推送到各个 客户端；
+ * 2.上菜、退菜、加菜、催单、换桌，只需要等待持久化数据库成功后，推送IndentModel到客户端即可
+ * 3.结算、取消要等数据库更改成功后，推送IndentStyle到客户端
  */
 @Service
 public class IndentService {
+
     @Autowired
     private IndentDAO dao;
+    @Autowired
+    private SellAnalyzeDAO analyzedao;
+    @Autowired
+    private SimpMessageSendingOperations messaging;
     /**
      * 增，删，改均涉及消息推送
      * @param model 客户端传递过来最新的数据
      * @return 
      */
     public boolean createIndent(IndentModel model){
-        return dao.addIndent(model);
+        if(!dao.addIndent(model))
+        {
+            return false;
+        }else{
+            //由于Indent的设计，不会出现删除Indent情况，故表中存储的id最大的，就是最后插入的那一条数据
+            int count=dao.countIndent();
+            model.setId(count);
+            messaging.convertAndSend("/topic/add",model);//向订阅/topic/add主题的客户端推送消息
+            return true;
+        }
     }
     public boolean updateIndent(IndentModel model){
         Indent indent=dao.updateIndent(model);
-        return indent != null;
+        if(indent != null){
+            messaging.convertAndSend("/topic/update",model);
+            return true;
+        }else{
+            return false;
+        }
     }
     /**
      * 结算与取消订单，均涉及推送消息
@@ -33,7 +60,33 @@ public class IndentService {
      */
     public boolean updateIndentStyle(IndentStyle model){
         Indent indent=dao.updateIndent(model);
-        return indent!=null;
+        if(indent!=null){
+            messaging.convertAndSend("/topic/style",model);
+            return true;
+        }else{
+            return false;
+        }
     }
-    
+    //查询相关
+    public List<Indent> findAllUnderwayIndent(){
+        List<Indent> indents=dao.queryAllUnderwayIndent();
+        return indents;
+    }
+    public List<Indent> findUnderwayIndentOnPage(int page){
+        List<Indent> indents=dao.queryUnderwayIndent(page);
+        return indents;
+    }
+    public List<Indent> findCanceledIndentOnPage(int page){
+        List<Indent> indents=dao.queryCanceledIndent(page);
+        return indents;
+    }
+    public List<Indent> findFinishedIndentOnPage(int page){
+        List<Indent> indents=dao.queryFinishedIndent(page);
+        return indents;
+    }
+    //用于查询销售分析
+    public List<SellAnalyze> findAllSellAnalyze(){
+        List<SellAnalyze> analyzes=analyzedao.queryAllSellAnalyze();
+        return analyzes;
+    }
 }

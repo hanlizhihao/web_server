@@ -15,8 +15,6 @@ import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -24,8 +22,6 @@ import org.springframework.stereotype.Repository;
  * @author Administrator 2017-2-26
  */
 @Repository
-@Scope(value="WebApplicationContext.SCOPE_SESSION",
-        proxyMode=ScopedProxyMode.TARGET_CLASS)
 public class IndentDAO implements IndentRepository{
     @Autowired
     private final SellAnalyzeDAO dao;
@@ -129,6 +125,7 @@ public class IndentDAO implements IndentRepository{
             query.setMaxResults(pageSize);
             result = query.getResultList();
             System.out.print("分页查询订单信息成功");
+            session.close();
         }
         return result;
     }
@@ -146,11 +143,11 @@ public class IndentDAO implements IndentRepository{
             query.setFirstResult(from);
             query.setMaxResults(pageSize);
             result = query.getResultList();
+            session.close();
             System.out.print("分页查询订单信息成功");
         }
         return result;
     }
-
     @Override
     public List<Indent> queryCanceledIndent(int page) {
         String hql = "from Indent order by id where style=2";
@@ -164,6 +161,7 @@ public class IndentDAO implements IndentRepository{
             query.setFirstResult(from);
             query.setMaxResults(pageSize);
             result = query.getResultList();
+            session.close(); 
             System.out.print("分页查询订单信息成功");
         }
         return result;
@@ -175,6 +173,7 @@ public class IndentDAO implements IndentRepository{
         try (Session session = sf.openSession()) {
             Indent a = session.get(Indent.class, id);
             System.out.println("查询一个订单成功");
+            session.close();
             return a;
         } catch (Exception e) {
             e.printStackTrace();
@@ -191,6 +190,7 @@ public class IndentDAO implements IndentRepository{
             Query query= (Query)session.createQuery(hql);
             rows = Integer.valueOf(query.getSingleResult().toString()); //查询总行数
             System.out.println("正在进行的订单总数为："+rows);
+            session.close();
         } //查询总行数
        return rows; 
     }
@@ -204,7 +204,8 @@ public class IndentDAO implements IndentRepository{
             Query query = (Query) session.createQuery(hql);
             rows = Integer.valueOf(query.getSingleResult().toString()); //查询总行数
             System.out.println("已完成的订单总数为：" + rows);
-        } //查询总行数
+            session.close(); 
+        } 
         return rows;
     }
 
@@ -217,7 +218,31 @@ public class IndentDAO implements IndentRepository{
             Query query = (Query) session.createQuery(hql);
             rows = Integer.valueOf(query.getSingleResult().toString()); //查询总行数
             System.out.println("已经取消的订单总数为：" + rows);
+            session.close();
         } //查询总行数
+        return rows;
+    }
+
+    @Override
+    public List<Indent> queryAllUnderwayIndent() {
+        String hql="from Indent order by id where style=0";
+        SessionFactory sf=SessionFactoryUtil.getSessionFactory();
+        List<Indent> result;
+        try (Session session = sf.openSession()) {
+            Query query=(Query) session.createQuery(hql);
+            result = query.getResultList();
+            System.out.print("查询正在进行订单信息成功");
+            session.close();
+        }
+        return result;
+    }
+    @Override
+    public int countIndent() {
+        String hql = "select count(*) from Indent";
+        SessionFactory sf = SessionFactoryUtil.getSessionFactory();
+        Session session=sf.openSession();
+        Query query=session.createQuery(hql);
+        int rows=Integer.valueOf(query.getSingleResult().toString());
         return rows;
     }
 }

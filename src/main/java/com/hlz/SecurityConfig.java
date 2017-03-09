@@ -25,6 +25,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     //请求授权
     @Override
     protected void configure(HttpSecurity http) throws Exception{
+        http.authorizeRequests()
+                .antMatchers("/","/login").permitAll();
 //        http.authorizeRequests()//通过这个方法开始请求配置;
 //                .antMatchers("/admin/**").hasRole("0")
 //               .anyRequest()

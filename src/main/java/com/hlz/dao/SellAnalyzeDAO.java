@@ -67,13 +67,13 @@ public class SellAnalyzeDAO implements SellAnalyzeRepository {
     }
 
     @Override
-    public ArrayList<Indent> queryAllSellAnalyze() {
+    public ArrayList<SellAnalyze> queryAllSellAnalyze() {
         String hql = "from SellAnalyze order by number";
         SessionFactory sf = SessionFactoryUtil.getSessionFactory();
         Session session = sf.openSession();
         Query query=session.createQuery(hql);
-        List<Indent> result=query.getResultList();
-        ArrayList<Indent> results=new ArrayList<>();
+        List<SellAnalyze> result=query.getResultList();
+        ArrayList<SellAnalyze> results=new ArrayList<>();
         results.addAll(result);
         return results;
     }

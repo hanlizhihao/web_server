@@ -17,7 +17,9 @@ public interface IndentRepository {
     List<Indent> queryFinishedIndent(int page);//分页查询完成的
     List<Indent> queryCanceledIndent(int page);//分页查询取消的
     Indent findOneIndent(int id);
+    int countIndent();//返回Indent的数
     long countUnderway();
     long countFinished();
     long countCanceled();
+    List<Indent> queryAllUnderwayIndent();
 }
