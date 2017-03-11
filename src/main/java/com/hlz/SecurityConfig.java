@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -25,8 +26,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     //请求授权
     @Override
     protected void configure(HttpSecurity http) throws Exception{
-        http.authorizeRequests()
-                .antMatchers("/","/login").permitAll();
+//        http.authorizeRequests()
+//                .antMatchers("/","/login").permitAll();
 //        http.authorizeRequests()//通过这个方法开始请求配置;
 //                .antMatchers("/admin/**").hasRole("0")
 //               .anyRequest()
@@ -41,5 +42,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 //                //注销的url以及注销成功后转向的页面
 //                .logout().logoutUrl("/logout").logoutSuccessUrl("/login")
 //                .permitAll();
+    }
+    @Override
+    public void configure(WebSecurity web) throws Exception{
+        web.ignoring().antMatchers("/resources/static/**");//对/resources/static目录下的静态资源不做拦截
     }
 }

@@ -6,21 +6,17 @@ import com.hlz.webModel.IndentStyle;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 import com.hlz.entity.*;
 import java.util.ArrayList;
 import javax.persistence.Query;
 import org.hibernate.Transaction;
-import org.springframework.context.annotation.ScopedProxyMode;
 
 /**
  *
  * @author Administrator 2017-2-28
  */
 @Repository
-@Scope(value="WebApplicationContext.SCOPE_SESSION",
-        proxyMode=ScopedProxyMode.TARGET_CLASS)
 public class SellAnalyzeDAO implements SellAnalyzeRepository {
 
     @Override

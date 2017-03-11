@@ -26,7 +26,6 @@ public class VipDAO implements VipRepository{
         Vip vip = new Vip();
         vip.setConsumNumber(model.getConsumNumber());
         vip.setJoinTime(new java.sql.Date(System.currentTimeMillis()));
-        vip.setName(model.getName());
         vip.setPhoneNumber(model.getPhoneNumber());
         vip.setTotalConsum(model.getTotalConsum());
         Transaction t = session.beginTransaction();
@@ -85,14 +84,14 @@ public class VipDAO implements VipRepository{
 
     @Override
     public int countVip() {
-        SessionFactory sf=SessionFactoryUtil.getSessionFactory();
-        Session session=sf.openSession();
-        String hql="select count(*) from Vip";//查询总行数
-        Query query= session.createQuery(hql);
-       int rows=Integer.valueOf(query.getSingleResult().toString());//查询总行数
-       System.out.println("会员信息的总数为："+rows);
-       session.close();
-       return rows;
+        SessionFactory sf = SessionFactoryUtil.getSessionFactory();
+        Session session = sf.openSession();
+        String hql = "select count(*) from Vip";//查询总行数
+        Query query = session.createQuery(hql);
+        int rows = Integer.valueOf(query.getSingleResult().toString());//查询总行数
+        System.out.println("会员信息的总数为：" + rows);
+        session.close();
+        return rows;
     }
 
     @Override
@@ -127,5 +126,14 @@ public class VipDAO implements VipRepository{
             session.close();
         }
     }
-
+    //用于验证这个手机号是否为会员
+    public boolean validateVip(String telephone){
+        SessionFactory sf=SessionFactoryUtil.getSessionFactory();
+        Session session=sf.openSession();
+        String hql="from Vip where phoneNumber=?";
+        Query query=session.createQuery(hql);
+        query.setParameter(0,telephone);
+        List<Vip> result=query.getResultList();
+        return !(result==null||result.isEmpty());
+    }
 }

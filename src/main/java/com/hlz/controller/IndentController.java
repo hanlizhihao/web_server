@@ -8,8 +8,6 @@ import com.hlz.webModel.IndentStyle;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -100,5 +98,16 @@ public class IndentController {
         ArrayList<SellAnalyze> analyzes=new ArrayList<>();
         analyzes.addAll(result);
         return analyzes;
+    }
+    @RequestMapping(value="/indent/{id}",produces="application/json;charset=UTF-8",method=RequestMethod.GET)
+    public Indent getIndentOnId(@PathVariable String id){
+        Indent indent=service.findIndentOnId(Integer.valueOf(id));
+        if(indent!=null){
+            return indent;
+        }else{
+            indent=new Indent();
+            indent.setTableId("404");
+            return indent;
+        }
     }
 }

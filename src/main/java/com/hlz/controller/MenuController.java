@@ -27,7 +27,7 @@ public class MenuController {
             return "defeat";
         }
     }
-    @RequestMapping(value="/menu/add",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)
+    @RequestMapping(value="/menu/update",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)
     public String updateMenu(MenuModel model){
         boolean sign=service.updateMenu(model);
         if(sign){

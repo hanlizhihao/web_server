@@ -26,18 +26,19 @@ public class VipController {
         List<Vip> result=service.findVipOnPage(Integer.valueOf(id));
         if(result==null||result.isEmpty()){
             Vip vip=new Vip();
-            vip.setName("404");
-            result.add(vip);
-            return result;
+            vip.setPhoneNumber("404");
+            vips.add(vip);
+            return vips;
         }
-        return result;
+        vips.addAll(result);
+        return vips;
     }
     @RequestMapping(value="/vip/{id}",produces="application/json;charset=UTF-8",method=RequestMethod.GET)
     public Vip getOneVip(@PathVariable String id){
         Vip vip=service.findOneVip(Integer.valueOf(id));
         if(vip==null){
             vip=new Vip();
-            vip.setName("404");
+            vip.setPhoneNumber("404");
             return vip;
         }
         return vip;
@@ -45,6 +46,15 @@ public class VipController {
     @RequestMapping(value="/vip/add",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)
     public String addVip(VipModel model){
         boolean result=service.addVip(model);
+        if(result){
+            return "success";
+        }else{
+            return "defeat";
+        }
+    }
+    @RequestMapping(value="/vip/validate",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)
+    public String validateVip(VipModel model){
+        boolean result=service.validateVip(model);
         if(result){
             return "success";
         }else{
@@ -61,7 +71,7 @@ public class VipController {
         }
     }
     @RequestMapping(value="/vip/delete/{id}",produces="text/plain;charset=UTF-8")
-    public String deleteBill(@PathVariable String id){
+    public String deleteVip(@PathVariable String id){
         boolean sign=service.deleteVip(Integer.valueOf(id));
         if(sign){
             return "success";

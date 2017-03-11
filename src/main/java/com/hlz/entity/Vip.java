@@ -23,11 +23,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Vip.findAll", query = "SELECT v FROM Vip v")
     , @NamedQuery(name = "Vip.findById", query = "SELECT v FROM Vip v WHERE v.id = :id")
-    , @NamedQuery(name = "Vip.findByName", query = "SELECT v FROM Vip v WHERE v.name = :name")
     , @NamedQuery(name = "Vip.findByPhoneNumber", query = "SELECT v FROM Vip v WHERE v.phoneNumber = :phoneNumber")
     , @NamedQuery(name = "Vip.findByJoinTime", query = "SELECT v FROM Vip v WHERE v.joinTime = :joinTime")
-    , @NamedQuery(name = "Vip.findByConsumNumber", query = "SELECT v FROM Vip v WHERE v.consumNumber = :consumNumber")
-    , @NamedQuery(name = "Vip.findByTotalConsum", query = "SELECT v FROM Vip v WHERE v.totalConsum = :totalConsum")})
+    , @NamedQuery(name = "Vip.findByConsumNumber", query = "SELECT v FROM Vip v WHERE v.consumeNumber = :consumeNumber")
+    , @NamedQuery(name = "Vip.findByTotalConsum", query = "SELECT v FROM Vip v WHERE v.totalConsume = :totalConsume")})
 public class Vip implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -36,17 +35,15 @@ public class Vip implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "name")
-    private String name;
     @Column(name = "phone_number")
     private String phoneNumber;
     @Column(name = "join_time")
     private Date joinTime;
-    @Column(name = "consum_number")
-    private Integer consumNumber;
+    @Column(name = "consume_number")
+    private Integer consumeNumber;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "total_consum")
-    private Double totalConsum;
+    @Column(name = "total_consume")
+    private Double totalConsume;
 
     public Vip() {
     }
@@ -62,15 +59,6 @@ public class Vip implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -88,19 +76,19 @@ public class Vip implements Serializable {
     }
 
     public Integer getConsumNumber() {
-        return consumNumber;
+        return consumeNumber;
     }
 
     public void setConsumNumber(Integer consumNumber) {
-        this.consumNumber = consumNumber;
+        this.consumeNumber = consumNumber;
     }
 
     public Double getTotalConsum() {
-        return totalConsum;
+        return totalConsume;
     }
 
     public void setTotalConsum(Double totalConsum) {
-        this.totalConsum = totalConsum;
+        this.totalConsume = totalConsum;
     }
 
     @Override

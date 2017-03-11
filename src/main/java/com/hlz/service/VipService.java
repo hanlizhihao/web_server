@@ -33,4 +33,14 @@ public class VipService {
     public Vip findOneVip(int id){
         return dao.querySingle(id);
     }
+    //如果验证不通过，则将这条数据存入数据库
+    public boolean validateVip(VipModel model){
+        boolean sign=dao.validateVip(model.getPhoneNumber());
+        if(!sign){
+            dao.addVip(model);
+            return false;
+        }else{
+            return true;
+        }
+    }
 }

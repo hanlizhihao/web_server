@@ -7,6 +7,7 @@ import com.hlz.entity.SellAnalyze;
 import com.hlz.webModel.IndentModel;
 import com.hlz.webModel.IndentStyle;
 import java.util.List;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,8 @@ public class IndentService {
     private SellAnalyzeDAO analyzedao;
     @Autowired
     private SimpMessageSendingOperations messaging;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
     /**
      * 增，删，改均涉及消息推送
      * @param model 客户端传递过来最新的数据
@@ -40,7 +43,8 @@ public class IndentService {
             //由于Indent的设计，不会出现删除Indent情况，故表中存储的id最大的，就是最后插入的那一条数据
             int count=dao.countIndent();
             model.setId(count);
-            messaging.convertAndSend("/topic/add",model);//向订阅/topic/add主题的客户端推送消息
+            messaging.convertAndSend("/topic/add",model);//stomp推送
+            rabbitTemplate.convertAndSend("add-indent",model);//rabbitmq推送
             return true;
         }
     }
@@ -48,6 +52,7 @@ public class IndentService {
         Indent indent=dao.updateIndent(model);
         if(indent != null){
             messaging.convertAndSend("/topic/update",model);
+            rabbitTemplate.convertAndSend("update-indent",model);
             return true;
         }else{
             return false;
@@ -62,6 +67,7 @@ public class IndentService {
         Indent indent=dao.updateIndent(model);
         if(indent!=null){
             messaging.convertAndSend("/topic/style",model);
+            rabbitTemplate.convertAndSend("style-indent",model);
             return true;
         }else{
             return false;
@@ -88,5 +94,8 @@ public class IndentService {
     public List<SellAnalyze> findAllSellAnalyze(){
         List<SellAnalyze> analyzes=analyzedao.queryAllSellAnalyze();
         return analyzes;
+    }
+    public Indent findIndentOnId(int id){
+        return dao.findOneIndent(id);
     }
 }

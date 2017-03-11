@@ -5,19 +5,9 @@ package com.hlz.webModel;
  * @author Administrator 2017-3-2
  */
 public class VipModel {
-    private String name;
     private String phoneNumber;
     private int consumNumber;
     private double totalConsum;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }

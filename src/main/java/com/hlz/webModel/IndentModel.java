@@ -11,7 +11,7 @@ public class IndentModel {
     private String table;//桌号
     private Map<String,Integer> reserve;//订菜
     private Map<String,Integer> fulfill;//上菜
-    private int remiderNumber;//催单次数
+    private int reminderNumber;//催单次数
     private double price;
     private long time;//第一次上菜时间
     private int id;
@@ -48,11 +48,11 @@ public class IndentModel {
     }
 
     public int getRemiderNumber() {
-        return remiderNumber;
+        return reminderNumber;
     }
 
-    public void setRemiderNumber(int remiderNumber) {
-        this.remiderNumber = remiderNumber;
+    public void setRemiderNumber(int reminderNumber) {
+        this.reminderNumber = reminderNumber;
     }
 
     public double getPrice() {

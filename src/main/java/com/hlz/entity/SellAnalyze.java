@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -35,7 +36,7 @@ public class SellAnalyze implements Serializable {
     private Integer id;
     @Column(name = "name")
     private String name;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Min(value=1)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "price")
     private Double price;
     @Column(name = "number")

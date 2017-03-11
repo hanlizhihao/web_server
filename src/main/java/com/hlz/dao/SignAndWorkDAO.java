@@ -8,12 +8,9 @@ import com.hlz.webModel.WorkModel;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -23,8 +20,6 @@ import org.springframework.stereotype.Repository;
  * @author Administrator 2017-3-1
  */
 @Repository
-@Scope(value="WebApplicationContext.SCOPE_SESSION",
-        proxyMode=ScopedProxyMode.TARGET_CLASS)
 public class SignAndWorkDAO implements SignAndWorkRepository{
     private final Set<Integer> userSign;
     private final Set<Integer> userWork;
