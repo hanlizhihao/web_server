@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.8/iconfont.min.css" />
+</head>
+<body ng-app="app">
+<header class="navbar-wrapper">
+    <div class="navbar navbar-fixed-top" style="background-color:dodgerblue">
+        <div class="container cl">
+            <nav class="nav navbar-nav nav-collapse" role="navigation" id="Hui-navbar">
+                <ul class="cl">
+                    <li class="current"> <a href="main.html" target="_blank" style="color: white">首页</a> </li>
+                    <li class="dropDown dropDown_hover"> <a href="javascript:" class="dropDown_A" style="color: white">餐厅运营实况<i class="Hui-iconfont">&#xe6d5;</i></a>
+                        <ul class="dropDown-menu menu radius box-shadow">
+                            <li> <a href="#/underway" >正在进行的</a> </li>
+                            <li> <a href="#/finished" >已完成的</a> </li>
+                            <li><a href="#/canceled">已经取消的</a></li>
+                        </ul>
+                    </li>
+                    <li> <a href="#/menu" style="color: white">菜单管理</a> </li>
+                    <li> <a href="#/vip" style="color: white">会员管理</a> </li>
+                    <li> <a href="#/user" style="color: white">用户管理</a> </li>
+                    <li class="dropDown dropDown_hover"> <a href="javascript:" class="dropDown_A" style="color: white">统计分析<i class="Hui-iconfont">&#xe6d5;</i></a>
+                        <ul class="dropDown-menu menu radius box-shadow">
+                            <li> <a href="#/sales">销售分析</a> </li>
+                            <li> <a href="#/bill">账套管理</a> </li>
+                            <li><a href="#/income">损益表分析</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <nav class="navbar-userbar hidden-xs"> </nav>
+        </div>
+    </div>
+</header>
+<div ui-view></div>
+<!--此处用于设计具体页面的路由模板-->
+</body>
+<script type="text/javascript" src="lib/angularJS/angular.js"></script>
+<script type="text/javascript" src="lib/angularJS/angular-ui-router.js"></script>
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="lib/jquery.SuperSlide/2.1.1/jquery.SuperSlide.min.js"></script>
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/jquery.validate.min.js"></script>
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/messages_zh.min.js"></script>
+<script type="text/javascript">
+    /**
+     * angularJS开始，angularJS ui router
+     * */
+    (function(){
+        var app = angular.module('app',['ui.router']);
+        app.config(['$stateProvider', function($stateProvider){
+            $stateProvider
+                .state('underway',{//正在进行
+                    url:'/underway',
+                    controller: 'UnderwayController',
+                    controllerAs: 'underway',
+                    templateUrl: "ongoing.html"
+                })
+                .state('underway/carry',{//结账
+                    url:'/underwayCarry',
+                    controller: 'UnderwayCarryController',
+                    controllerAs: 'underwayCarry',
+                    templateUrl: "underwayCarry.html"
+                })
+                .state('underway/details', {//正在进行的详情
+                    controller: 'UnderwayDetailsController',
+                    controllerAs: 'underwayDetails',
+                    url:'/underwayDetails',
+                    templateUrl: "underwayDetails.html"})
+                .state('finished', {//已完成
+                    controller: 'FinishedController',
+                    controllerAs: 'finished',
+                    url:'/finished',
+                    templateUrl: "finished.html"
+                })
+                .state('finished/details', {//已完成的详情
+                    controller: 'FinishedDetailsController',
+                    controllerAs: 'finishedDetails',
+                    url:'/finishedDetails',
+                    templateUrl: "finishedDetails.html"
+                })
+                .state('canceled', {//已取消
+                    controller: 'CanceledController',
+                    controllerAs: 'canceled',
+                    url:'/canceled',
+                    templateUrl: "canceled.html"})
+                .state('canceled/details', {//已取消的详情
+                    controller: 'CanceledDetailsController',
+                    controllerAs: 'canceledDetails',
+                    url:'/canceledDetails',
+                    templateUrl: "canceledDetails.html"})
+                .state('menu', {//菜单管理
+                    controller: 'MenuController',
+                    controllerAs: 'menu',
+                    url:'/menu',
+                    templateUrl: "menu.html"})
+                .state('menu/details', {//菜单管理详情
+                    controller: 'MenuDetailsController',
+                    controllerAs: 'menuDetails',
+                    url:'/menuDetails',
+                    templateUrl: "menuDetails.html"})
+                .state('vip', {//vip管理
+                    controller: 'VipController',
+                    controllerAs: 'vip',
+                    url:'/vip',
+                    templateUrl: "Vip.html"})
+                .state('vip/details', {//vip管理详情
+                    controller: 'VipDetailsController',
+                    controllerAs: 'vipDetails',
+                    url:'/vipDetails',
+                    templateUrl: "VipDetails.html"})
+                .state('user', {//用户管理
+                    controller: 'UserController',
+                    controllerAs: 'user',
+                    url:'/user',
+                    templateUrl: "user.html"})
+                .state('user/details', {//用户管理
+                    controller: 'UserDetailsController',
+                    controllerAs: 'userDetails',
+                    url:'/userDetails',
+                    templateUrl: "userDetails.html"})
+                .state('sales', {//销售分析
+                    controller: 'SalesController',
+                    controllerAs: 'sales',
+                    url:'/sales',
+                    templateUrl: "sales.html"})
+                .state('bill', {//账单管理
+                    controller: 'BillController',
+                    controllerAs: 'bill',
+                    url:'/bill',
+                    templateUrl: "bill.html"})
+                .state('income', {//损益表
+                    controller: 'IncomeController',
+                    controllerAs: 'income',
+                    url:'/income',
+                    templateUrl: "income.html"})
+        }]);
+        /**
+         * 控制器开始
+         * */
+        app.controller('UnderwayController',function ($scope,$http) {
+
+        })
+    }())
+    /**
+     * 与UI相关的JS
+     * */
+    $(function(){
+        //checkbox 美化
+        $('.skin-minimal input').iCheck({
+            checkboxClass: 'icheckbox-blue',
+            radioClass: 'iradio-blue',
+            increaseArea: '20%'
+        });
+        //日期插件
+        $("#joinTime").datetimepicker({
+            format: 'yyyy-mm-dd',
+            minView: "month",
+            todayBtn:  1,
+            autoclose: 1,
+            endDate : new Date()
+        }).on('hide',function(e) {
+            //此处可以触发日期校验。
+        });
+        /*+1 -1效果*/
+        //编写控制器时，应该将其置于指定的控制器中
+        $("#underway_reserve").Spinner({value:1, min:1, len:2, max:99});
+        $("#underway_fulfil").Spinner({value:1, min:1, len:2, max:99});
+        $("#carry_number").Spinner({value:8,min:1,len:2,max:99})
+        //返回顶部
+        $(window).on("scroll",backToTopFun);
+        backToTopFun();
+    });
+    //弹窗
+    function modaldemo(){
+        $("#modal-demo").modal("show");
+    }
+</script>
+</html>

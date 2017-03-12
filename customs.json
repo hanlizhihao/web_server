@@ -3,6 +3,9 @@
     "attributes": {
         "th:src": {
             "context": "link"
+        },
+        "ui-view": {
+            "context": "div"
         }
     }
 }
