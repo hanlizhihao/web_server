@@ -3,6 +3,7 @@ package com.hlz.controller;
 import com.hlz.entity.Users;
 import com.hlz.service.UserService;
 import com.hlz.webModel.UserAddModel;
+import com.hlz.webModel.UserOutput;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,17 +21,17 @@ public class UserController {
     @Autowired
     private UserService service;
     @RequestMapping(value="/users",produces="application/json;charset=UTF-8",method=RequestMethod.GET)
-    public List<Users> getUsers(){
-        ArrayList<Users> users=new ArrayList<>();
-        List<Users> result=service.findAllUser();
+    public ArrayList<UserOutput> getUsers(){
+        ArrayList<UserOutput> users=new ArrayList<>();
+        List<UserOutput> result=service.findAllUser();
         if(result==null||result.isEmpty()){
-            Users user=new Users();
+            UserOutput user=new UserOutput();
             user.setName("404");
             users.add(user);
         }else{
             users.addAll(result);
         }
-        return users;
+        return users; 
     }
     @RequestMapping(value="/user/{id}",produces="application/json;charset=UTF-8",method=RequestMethod.GET)
     public Users getOneUser(@PathVariable String id){

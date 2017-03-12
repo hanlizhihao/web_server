@@ -17,9 +17,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  *
@@ -36,7 +33,7 @@ import org.springframework.security.core.userdetails.UserDetails;
     , @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.password = :password")
     , @NamedQuery(name = "Users.findByJoinTime", query = "SELECT u FROM Users u WHERE u.joinTime = :joinTime")
     , @NamedQuery(name = "Users.findByStyle", query = "SELECT u FROM Users u WHERE u.style = :style")})
-public class Users implements Serializable,UserDetails {
+public class Users implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -158,31 +155,4 @@ public class Users implements Serializable,UserDetails {
     }
     //返回这个user所具有的的权限集合,
     //并设置这个账号是可用的
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> auths=new ArrayList<>();
-        auths.add(new SimpleGrantedAuthority(this.getStyle().toString()));
-        return auths;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
 }
