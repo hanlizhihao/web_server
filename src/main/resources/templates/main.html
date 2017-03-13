@@ -50,38 +50,96 @@
 <script type="text/javascript" src="lib/jquery.validation/1.14.0/jquery.validate.min.js"></script>
 <script type="text/javascript" src="lib/jquery.validation/1.14.0/validate-methods.js"></script>
 <script type="text/javascript" src="lib/jquery.validation/1.14.0/messages_zh.min.js"></script>
+<script type="text/javascript" src="FunctionUtil.js"></script>
 <script type="text/javascript">
-    /**
-     * angularJS开始，angularJS ui router
+     /**
+     * angularJS开始
      * */
     (function(){
         var app = angular.module('app',['ui.router']);
+        //常用服务
+        app.service('stringService',function () {
+            this.convertString=function (reserve) {//接受一个字符串，输出一个对象数组
+                var reserve1=new String(reserve);
+                var book=reserve1.substring(0,reserve1.length-1);//去掉e
+                var reserves=book.split("e");//每个字符串有a连接
+                var result=[];
+                var grenns={};
+                var i=0;
+                for (var x in reserves){
+                    var shuzu=x.split("a");
+                    grenns.name=shuzu[0];
+                    grenns.count=shuzu[1];
+                    result[i]=grenns;
+                    i=i+1;
+                }
+                return result;
+                };
+            });
+        /**
+         * 控制器
+         * */ 
+            app.controller('FinishedController',['$rootScope','$scope','$http',function ($rootScope,$scope,$http) {
+            }])
+                //正在进行的控制器
+            .controller("UnderwayController",function ($scope,$http,$rootScope,stringService) {
+                console.log('测试1111');
+                $http.get('underway',{
+                    //参数
+                }).success(function (data) {
+                    for(var i=0;i<data.length;i++){
+                        if(data[i].firstTime===null){//如果还没上菜则取现在时间减去开始时间，格式化为字符串
+                            var now=new Date();
+                            var nowMS=now.getTime();
+                            var waitTimeMS=nowMS-data[i].beginTime;//现在与开始时间之差是等待时间
+                            var waitTimeS=waitTimeMS/1000;//转为秒数
+                            data[i].waitTime=timeToString(waitTimeS);
+                        }else{
+                            var first=new Number(data[i].firstTime);
+                            var begin=new Number(data[i].beginTime);
+                            var waitTime=first-begin;
+                            data[i].waitTime=timeToString(waitTime);
+                        }
+                        var result=stringService.convertString(data[i].reserve);
+                        data[i].reserve=result;//预定的菜品数,将字符串转为对象数组
+                        var test=new Date();//将开始时间的毫秒数转为字符串
+                        var beginTime=new Number(data[i].beginTime);
+                        test.setTime(beginTime);
+                        data[i].beginTime=test.toLocaleString();
+                    }
+                    $scope.indents=data;//由于服务器端直接返回的就是json，而不是字符串，所以可以直接像调用对象一样调用
+                });
+            });
+            /**
+             * 配置ui-router
+             * */
         app.config(['$stateProvider', function($stateProvider){
             $stateProvider
-                .state('underway',{//正在进行
+                .state('/underway',{//正在进行的路由
                     url:'/underway',
                     controller: 'UnderwayController',
                     controllerAs: 'underway',
-                    templateUrl: "ongoing.html"
+                    templateUrl: 'ongoing.html'
                 })
-                .state('underway/carry',{//结账
+                .state('/underway/carry',{//结账
                     url:'/underwayCarry',
                     controller: 'UnderwayCarryController',
                     controllerAs: 'underwayCarry',
-                    templateUrl: "underwayCarry.html"
+                    templateUrl: 'underwayCarry.html'
                 })
-                .state('underway/details', {//正在进行的详情
+
+                .state('/underway/details', {//正在进行的详情
                     controller: 'UnderwayDetailsController',
                     controllerAs: 'underwayDetails',
                     url:'/underwayDetails',
                     templateUrl: "underwayDetails.html"})
-                .state('finished', {//已完成
+                .state('/finished', {//已完成
                     controller: 'FinishedController',
                     controllerAs: 'finished',
                     url:'/finished',
                     templateUrl: "finished.html"
                 })
-                .state('finished/details', {//已完成的详情
+                .state('/finished/details', {//已完成的详情
                     controller: 'FinishedDetailsController',
                     controllerAs: 'finishedDetails',
                     url:'/finishedDetails',
@@ -143,13 +201,7 @@
                     url:'/income',
                     templateUrl: "income.html"})
         }]);
-        /**
-         * 控制器开始
-         * */
-        app.controller('UnderwayController',function ($scope,$http) {
-
-        })
-    }())
+    }());
     /**
      * 与UI相关的JS
      * */
