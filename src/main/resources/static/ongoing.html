@@ -15,16 +15,16 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td class="col1">1</td>
-                <td class="col2">a1</td>
-                <td class="col3">20</td>
-                <td class="col4">10</td>
-                <td class="col5">12:50</td>
-                <td class="col6">20分钟</td>
-                <td class="col7">300</td>
-                <td class="col8"><a href="#/underwayDetails" class="btn btn-primary radius">详情</a>
-                    <a href="#/underwayCarry" class="btn btn-success radius">结算</a>
+            <tr ng-repeat="x in indents">
+                <td class="col1">{{x.id}}</td>
+                <td class="col2">{{x.tableId}}</td>
+                <td class="col3">{{x.reserveNumber}}</td>
+                <td class="col4">{{x.fulfillNumber}}</td>
+                <td class="col5">{{x.beginTime}}</td>
+                <td class="col6">{{x.waitTime}}</td>
+                <td class="col7">{{x.price}}</td>
+                <td class="col8"><a ng-href="#/underwayDetails/{{x.id}}" class="btn btn-primary radius">详情</a>
+                    <a ng-href="#/underwayCarry/{{x.id}}" class="btn btn-success radius">结算</a>
                     <button class="btn btn-danger radius" type="button">取消</button>
                 </td>
             </tr>

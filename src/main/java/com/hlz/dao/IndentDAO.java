@@ -113,13 +113,15 @@ public class IndentDAO implements IndentRepository{
     }
     @Override
     public List<Indent> queryUnderwayIndent(int page) {
-        String hql="from Indent order by id where style=0";
+        String hql="from Indent i where i.style=:s";
         int pageSize=10;
         SessionFactory sf=SessionFactoryUtil.getSessionFactory();
         List<Indent> result;
         try (Session session = sf.openSession()) {
             Query query=(Query) session.createQuery(hql);
             //增加分页起点
+            query.setParameter("s",0);
+            query.setParameter(0,"0");
             int from=(page-1)*pageSize;
             query.setFirstResult(from);
             query.setMaxResults(pageSize);
@@ -132,13 +134,14 @@ public class IndentDAO implements IndentRepository{
 
     @Override
     public List<Indent> queryFinishedIndent(int page) {
-        String hql = "from Indent order by id where style=1";
+        String hql = "from Indent i where i.style=:s";
         int pageSize = 10;
         SessionFactory sf = SessionFactoryUtil.getSessionFactory();
         List<Indent> result;
         try (Session session = sf.openSession()) {
             Query query = (Query) session.createQuery(hql);
             //增加分页起点
+            query.setParameter("s",1);
             int from = (page - 1) * pageSize;
             query.setFirstResult(from);
             query.setMaxResults(pageSize);
@@ -150,13 +153,14 @@ public class IndentDAO implements IndentRepository{
     }
     @Override
     public List<Indent> queryCanceledIndent(int page) {
-        String hql = "from Indent order by id where style=2";
+        String hql = "from Indent i where i.style=:s order by i.id";
         int pageSize = 10;
         SessionFactory sf = SessionFactoryUtil.getSessionFactory();
         List<Indent> result;
         try (Session session = sf.openSession()) {
             Query query = (Query) session.createQuery(hql);
             //增加分页起点
+            query.setParameter("s",2);
             int from = (page - 1) * pageSize;
             query.setFirstResult(from);
             query.setMaxResults(pageSize);
@@ -186,8 +190,9 @@ public class IndentDAO implements IndentRepository{
         SessionFactory sf=SessionFactoryUtil.getSessionFactory();
         int rows;
         try (Session session = sf.openSession()) {
-            String hql="select count(*) from Indent where style=0";//查询总行数
+            String hql="select count(*) from Indent i where i.style=:s";//查询总行数
             Query query= (Query)session.createQuery(hql);
+            query.setParameter("s",0);
             rows = Integer.valueOf(query.getSingleResult().toString()); //查询总行数
             System.out.println("正在进行的订单总数为："+rows);
             session.close();
@@ -200,8 +205,9 @@ public class IndentDAO implements IndentRepository{
         SessionFactory sf = SessionFactoryUtil.getSessionFactory();
         int rows;
         try (Session session = sf.openSession()) {
-            String hql = "select count(*) from Indent where style=1";//查询总行数
+            String hql = "select count(*) from Indent i where i.style=:s";//查询总行数
             Query query = (Query) session.createQuery(hql);
+            query.setParameter("s",1);
             rows = Integer.valueOf(query.getSingleResult().toString()); //查询总行数
             System.out.println("已完成的订单总数为：" + rows);
             session.close(); 
@@ -214,8 +220,9 @@ public class IndentDAO implements IndentRepository{
         SessionFactory sf = SessionFactoryUtil.getSessionFactory();
         int rows;
         try (Session session = sf.openSession()) {
-            String hql = "select count(*) from Indent where style=2";//查询总行数
+            String hql = "select count(*) from Indent i where i.style=:s";//查询总行数
             Query query = (Query) session.createQuery(hql);
+            query.setParameter("s",2);
             rows = Integer.valueOf(query.getSingleResult().toString()); //查询总行数
             System.out.println("已经取消的订单总数为：" + rows);
             session.close();
@@ -225,11 +232,12 @@ public class IndentDAO implements IndentRepository{
 
     @Override
     public List<Indent> queryAllUnderwayIndent() {
-        String hql="from Indent order by id where style=0";
+        String hql="from Indent i where i.style=:s";
         SessionFactory sf=SessionFactoryUtil.getSessionFactory();
         List<Indent> result;
         try (Session session = sf.openSession()) {
             Query query=(Query) session.createQuery(hql);
+            query.setParameter("s",0);
             result = query.getResultList();
             System.out.print("查询正在进行订单信息成功");
             session.close();

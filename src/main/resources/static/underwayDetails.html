@@ -5,25 +5,25 @@
             <div class="row cl">
                 <label class="form-label col-xs-3">序号：</label>
                 <div class="formControls col-xs-8">
-                    <label type="text">1</label>
+                    <label type="text">{{indent.id}}</label>
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-3">桌号：</label>
                 <div class="formControls col-xs-8">
-                    <input type="text" class="input-text" name="table" id="table">
+                    <input type="text" class="input-text" name="table" id="table" value="{{indent.tableId}}">
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-3">催单次数：</label>
                 <div class="formControls col-xs-8">
-                    <input type="text" class="input-text" name="reminderNumber" id="reminderNumber">
+                    <input type="text" class="input-text" name="reminderNumber" id="reminderNumber" value="{{indent.reminderNumber}}">
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-3">总价(元)：</label>
                 <div class="formControls col-xs-8">
-                    <input type="number" class="input-text" autocomplete="off" name="price" id="price">
+                    <input type="number" class="input-text" autocomplete="off" name="price" id="price" value="{{indent.price}}">
                 </div>
             </div>
             <div class="panel panel-default mt-20">
@@ -39,9 +39,9 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td class="col1">1</td>
-                            <td class="col2">a1</td>
+                        <tr ng-repeat="x in reserve">
+                            <td class="col1">{{$index+1}}</td>
+                            <td class="col2">{{x.name}}</td>
                             <td class="col3">
                                 <div class="formControls skin-minimal col-xs-5">
                                     <div id="underway_reserve" class="spinner"></div>
