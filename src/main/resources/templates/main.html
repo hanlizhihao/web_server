@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="h-ui/css/H-ui.min.css" />
     <link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.8/iconfont.min.css" />
 </head>
-<body ng-app="app">
+<body ng-app="app" ng-controller="MainController">
 <header class="navbar-wrapper">
     <div class="navbar navbar-fixed-top" style="background-color:dodgerblue">
         <div class="container cl">
@@ -50,6 +50,9 @@
 <script type="text/javascript" src="lib/jquery.validation/1.14.0/jquery.validate.min.js"></script>
 <script type="text/javascript" src="lib/jquery.validation/1.14.0/validate-methods.js"></script>
 <script type="text/javascript" src="lib/jquery.validation/1.14.0/messages_zh.min.js"></script>
+<!--stomp相关-->
+<script type="text/javascript" src="js/stomp.js"></script>
+<script type="text/javascript" src="js/sockjs.min.js"></script>
 <script type="text/javascript" src="FunctionUtil.js"></script>
 <script type="text/javascript">
      /**
@@ -61,17 +64,16 @@
         app.service('stringService',function () {
             this.convertString=function (reserve) {//接受一个字符串，输出一个对象数组
                 var reserve1=new String(reserve);
-                var book=reserve1.substring(0,reserve1.length-1);//去掉e
-                var reserves=book.split("e");//每个字符串有a连接
+                var book=String(reserve1.substring(0,reserve1.length-1));//去掉e
+                var reserves=[];
+                reserves=book.split("e");//每个字符串有a连接
                 var result=[];
                 var grenns={};
-                var i=0;
-                for (var x in reserves){
-                    var shuzu=x.split("a");
+                for (var x=0;x<reserves.length;x++){
+                    var shuzu=reserves[x].split("a");
                     grenns.name=shuzu[0];
                     grenns.count=shuzu[1];
-                    result[i]=grenns;
-                    i=i+1;
+                    result[x]=grenns;
                 }
                 return result;
                 };
@@ -79,37 +81,99 @@
         /**
          * 控制器
          * */ 
-            app.controller('FinishedController',['$rootScope','$scope','$http',function ($rootScope,$scope,$http) {
+        app.controller('mainController',function($rootScope,$http,$scope){
+           $http.get('/menus',{
+               
+           }).success(function(data){
+               var greens=[];
+               var green={};
+               //从数据中抽取出用于判断菜品价格的对象数组
+               for(var i=0;i<data.length;i++){
+                   green.name=data[i].greensName;
+                   green.price=data[i].price;
+                   greens[i]=green;
+               }
+               $rootScope.greens=greens;//菜单
+               $rootScoep.menu=data;//用于显示的菜单
+           });
+           //设置stomp
+           
+        });
+        app.controller('FinishedController',['$rootScope','$scope','$http',function ($rootScope,$scope,$http) {
             }])
-                //正在进行的控制器
-            .controller("UnderwayController",function ($scope,$http,$rootScope,stringService) {
-                console.log('测试1111');
-                $http.get('underway',{
+        .controller("UnderwayController",function ($scope,$http,$rootScope,stringService,$interval) {
+            $http.get('underway',{
                     //参数
-                }).success(function (data) {
-                    for(var i=0;i<data.length;i++){
-                        if(data[i].firstTime===null){//如果还没上菜则取现在时间减去开始时间，格式化为字符串
-                            var now=new Date();
-                            var nowMS=now.getTime();
-                            var waitTimeMS=nowMS-data[i].beginTime;//现在与开始时间之差是等待时间
-                            var waitTimeS=waitTimeMS/1000;//转为秒数
-                            data[i].waitTime=timeToString(waitTimeS);
-                        }else{
-                            var first=new Number(data[i].firstTime);
-                            var begin=new Number(data[i].beginTime);
-                            var waitTime=first-begin;
-                            data[i].waitTime=timeToString(waitTime);
-                        }
-                        var result=stringService.convertString(data[i].reserve);
-                        data[i].reserve=result;//预定的菜品数,将字符串转为对象数组
-                        var test=new Date();//将开始时间的毫秒数转为字符串
-                        var beginTime=new Number(data[i].beginTime);
-                        test.setTime(beginTime);
-                        data[i].beginTime=test.toLocaleString();
+            }).success(function (data) {
+                for(var i=0;i<data.length;i++){
+                    if(data[i].firstTime===null){//如果还没上菜则取现在时间减去开始时间，格式化为字符串
+                        var now=new Date();
+                        var nowMS=now.getTime();
+                        var waitTimeMS=nowMS-data[i].beginTime;//现在与开始时间之差是等待时间
+                        var waitTimeS=waitTimeMS/1000;//转为秒数
+                        data[i].waitTimeS=Number(waitTimeS);
+                        data[i].waitTime=timeToString(waitTimeS);
+                    }else{
+                        var first=Number(data[i].firstTime);
+                        var begin=Number(data[i].beginTime);
+                        var waitTime=first-begin;
+                        data[i].waitTime=timeToString(waitTime);
                     }
-                    $scope.indents=data;//由于服务器端直接返回的就是json，而不是字符串，所以可以直接像调用对象一样调用
-                });
+                    //将表示点菜的一个字符串转化为对象数组
+                    var reserve=stringService.convertString(data[i].reserve);
+                    data[i].reserve=reserve;//预定的菜品数,将字符串转为对象数组
+                    var fulfill=""!=data[i].fulfill?stringService.convertString(data[i].fulfill):"";
+                    data[i].fulfill=fulfill;
+                    var test=new Date();//将开始时间的毫秒数转为字符串
+                    var beginTime=Number(data[i].beginTime);
+                    test.setTime(beginTime);
+                    data[i].beginTime=test.toLocaleString();
+                }
+                $rootScope.indents=data;
+                $scope.indents=data;
+                $interval(function () {
+                    for (var i=0;i<$scope.indents.length;i++){
+                        if ($scope.indents[i].firstTime===null){
+                            var waitTimeS=Number($scope.indents[i].waitTimeS);
+                            waitTimeS=waitTimeS+1;
+                            $scope.indents[i].waitTimeS=Number(waitTimeS);
+                            $scope.indents[i].waitTime=timeToString(waitTimeS);
+                        }
+                    }
+                },1000);
             });
+        });//正在进行控制器结束
+        app.controller('UnderwayDetailsController',function ($rootScope,$stateParams,$scope) {
+           var id=Number($stateParams.id);
+           for (var i=0;i<$rootScope.indents.length;i++){
+               if ($rootScope.indents[i].id==id){
+                   $scope.indent=$rootScope.indents[i];
+                   $scope.reserve=$rootScope.indents[i].reserve;//取出菜单赋值给scope
+                   //设置上菜和订菜
+                   $("#underway_reserve").Spinner({value:indent.count, min:1, len:2, max:99});
+                   $("#underway_fulfil").Spinner({value:1, min:1, len:2, max:99});
+                   break;
+               }
+           }
+        });
+        //常用服务
+        app.service('stringService',function () {
+            this.convertString=function (reserve) {//接受一个字符串，输出一个对象数组
+                var reserve1=new String(reserve);
+                var book=String(reserve1.substring(0,reserve1.length-1));//去掉e
+                var reserves=[];
+                reserves=book.split("e");//每个字符串有a连接
+                var result=[];
+                var grenns={};
+                for (var x=0;x<reserves.length;x++){
+                    var shuzu=reserves[x].split("a");
+                    grenns.name=shuzu[0];
+                    grenns.count=shuzu[1];
+                    result[x]=grenns;
+                }
+                return result;
+            };
+        });
             /**
              * 配置ui-router
              * */
@@ -119,10 +183,10 @@
                     url:'/underway',
                     controller: 'UnderwayController',
                     controllerAs: 'underway',
-                    templateUrl: 'ongoing.html'
+                    templateUrl: 'underway.html'
                 })
                 .state('/underway/carry',{//结账
-                    url:'/underwayCarry',
+                    url:'/underwayCarry/:id',
                     controller: 'UnderwayCarryController',
                     controllerAs: 'underwayCarry',
                     templateUrl: 'underwayCarry.html'
@@ -131,7 +195,7 @@
                 .state('/underway/details', {//正在进行的详情
                     controller: 'UnderwayDetailsController',
                     controllerAs: 'underwayDetails',
-                    url:'/underwayDetails',
+                    url:'/underwayDetails/:id',
                     templateUrl: "underwayDetails.html"})
                 .state('/finished', {//已完成
                     controller: 'FinishedController',
@@ -142,7 +206,7 @@
                 .state('/finished/details', {//已完成的详情
                     controller: 'FinishedDetailsController',
                     controllerAs: 'finishedDetails',
-                    url:'/finishedDetails',
+                    url:'/finishedDetails/:id',
                     templateUrl: "finishedDetails.html"
                 })
                 .state('canceled', {//已取消
@@ -153,7 +217,7 @@
                 .state('canceled/details', {//已取消的详情
                     controller: 'CanceledDetailsController',
                     controllerAs: 'canceledDetails',
-                    url:'/canceledDetails',
+                    url:'/canceledDetails/:id',
                     templateUrl: "canceledDetails.html"})
                 .state('menu', {//菜单管理
                     controller: 'MenuController',
@@ -163,7 +227,7 @@
                 .state('menu/details', {//菜单管理详情
                     controller: 'MenuDetailsController',
                     controllerAs: 'menuDetails',
-                    url:'/menuDetails',
+                    url:'/menuDetails/:id',
                     templateUrl: "menuDetails.html"})
                 .state('vip', {//vip管理
                     controller: 'VipController',
@@ -173,17 +237,17 @@
                 .state('vip/details', {//vip管理详情
                     controller: 'VipDetailsController',
                     controllerAs: 'vipDetails',
-                    url:'/vipDetails',
+                    url:'/vipDetails/:id',
                     templateUrl: "VipDetails.html"})
                 .state('user', {//用户管理
                     controller: 'UserController',
                     controllerAs: 'user',
                     url:'/user',
                     templateUrl: "user.html"})
-                .state('user/details', {//用户管理
+                .state('user/details', {//用户管理详情
                     controller: 'UserDetailsController',
                     controllerAs: 'userDetails',
-                    url:'/userDetails',
+                    url:'/userDetails/:id',
                     templateUrl: "userDetails.html"})
                 .state('sales', {//销售分析
                     controller: 'SalesController',
@@ -199,7 +263,7 @@
                     controller: 'IncomeController',
                     controllerAs: 'income',
                     url:'/income',
-                    templateUrl: "income.html"})
+                    templateUrl: "income.html"});
         }]);
     }());
     /**
