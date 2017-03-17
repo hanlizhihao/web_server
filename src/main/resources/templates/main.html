@@ -60,28 +60,10 @@
      * */
     (function(){
         var app = angular.module('app',['ui.router']);
-        //常用服务
-        app.service('stringService',function () {
-            this.convertString=function (reserve) {//接受一个字符串，输出一个对象数组
-                var reserve1=new String(reserve);
-                var book=String(reserve1.substring(0,reserve1.length-1));//去掉e
-                var reserves=[];
-                reserves=book.split("e");//每个字符串有a连接
-                var result=[];
-                var grenns={};
-                for (var x=0;x<reserves.length;x++){
-                    var shuzu=reserves[x].split("a");
-                    grenns.name=shuzu[0];
-                    grenns.count=shuzu[1];
-                    result[x]=grenns;
-                }
-                return result;
-                };
-            });
         /**
          * 控制器
          * */ 
-        app.controller('mainController',function($rootScope,$http,$scope){
+        app.controller('MainController',function($rootScope,$http,$scope){
            $http.get('/menus',{
                
            }).success(function(data){
@@ -93,11 +75,9 @@
                    green.price=data[i].price;
                    greens[i]=green;
                }
-               $rootScope.greens=greens;//菜单
-               $rootScoep.menu=data;//用于显示的菜单
+                $rootScope.findMenu=greens;//菜单
+                $rootScope.showMenu=data;//用于显示的菜单
            });
-           //设置stomp
-           
         });
         app.controller('FinishedController',['$rootScope','$scope','$http',function ($rootScope,$scope,$http) {
             }])
@@ -106,34 +86,34 @@
                     //参数
             }).success(function (data) {
                 for(var i=0;i<data.length;i++){
-                    if(data[i].firstTime===null){//如果还没上菜则取现在时间减去开始时间，格式化为字符串
+                    if(data[i].firstTime==null){//如果还没上菜则取现在时间减去开始时间，格式化为字符串
                         var now=new Date();
                         var nowMS=now.getTime();
                         var waitTimeMS=nowMS-data[i].beginTime;//现在与开始时间之差是等待时间
-                        var waitTimeS=waitTimeMS/1000;//转为秒数
+                        var waitTimeS=round(waitTimeMS/1000);//转为秒数
                         data[i].waitTimeS=Number(waitTimeS);
                         data[i].waitTime=timeToString(waitTimeS);
                     }else{
                         var first=Number(data[i].firstTime);
                         var begin=Number(data[i].beginTime);
-                        var waitTime=first-begin;
+                        var waitTime=round((first-begin)/1000);
                         data[i].waitTime=timeToString(waitTime);
                     }
                     //将表示点菜的一个字符串转化为对象数组
-                    var reserve=stringService.convertString(data[i].reserve);
+                    var reserve=stringService.convertString(data[i].reserve,data[i].fulfill);
                     data[i].reserve=reserve;//预定的菜品数,将字符串转为对象数组
                     var fulfill=""!=data[i].fulfill?stringService.convertString(data[i].fulfill):"";
                     data[i].fulfill=fulfill;
-                    var test=new Date();//将开始时间的毫秒数转为字符串
+                    var beginDate=new Date();//将开始时间的毫秒数转为字符串
                     var beginTime=Number(data[i].beginTime);
-                    test.setTime(beginTime);
-                    data[i].beginTime=test.toLocaleString();
+                    beginDate.setTime(beginTime);
+                    data[i].beginTime=beginDate.toLocaleString();
                 }
                 $rootScope.indents=data;
                 $scope.indents=data;
                 $interval(function () {
                     for (var i=0;i<$scope.indents.length;i++){
-                        if ($scope.indents[i].firstTime===null){
+                        if ($scope.indents[i].firstTime==null){
                             var waitTimeS=Number($scope.indents[i].waitTimeS);
                             waitTimeS=waitTimeS+1;
                             $scope.indents[i].waitTimeS=Number(waitTimeS);
@@ -145,31 +125,74 @@
         });//正在进行控制器结束
         app.controller('UnderwayDetailsController',function ($rootScope,$stateParams,$scope) {
            var id=Number($stateParams.id);
-           for (var i=0;i<$rootScope.indents.length;i++){
-               if ($rootScope.indents[i].id==id){
-                   $scope.indent=$rootScope.indents[i];
-                   $scope.reserve=$rootScope.indents[i].reserve;//取出菜单赋值给scope
-                   //设置上菜和订菜
-                   $("#underway_reserve").Spinner({value:indent.count, min:1, len:2, max:99});
-                   $("#underway_fulfil").Spinner({value:1, min:1, len:2, max:99});
+           var indents=$rootScope.indents;
+           for (var i=0;i<indents.length;i++){
+               if (indents[i].id==id){
+                   $scope.indent=indents[i];
+                   $scope.reserve=indents[i].reserve;//取出菜单赋值给scope
                    break;
                }
            }
+           //利用id不同来实现用jquery控制spinner
+           var count=new String("reserve");
+           for(var index=1;index<$scope.reserve.length;index++){
+               count=count+index;
+               doucument
+           }
         });
         //常用服务
+        //StringService将reserve和fulfill字符串处理并返回一个对象数组
+        //数组中的对象将包含单个订单的：菜名name，订菜数量count，上菜数量number
         app.service('stringService',function () {
-            this.convertString=function (reserve) {//接受一个字符串，输出一个对象数组
-                var reserve1=new String(reserve);
-                var book=String(reserve1.substring(0,reserve1.length-1));//去掉e
-                var reserves=[];
-                reserves=book.split("e");//每个字符串有a连接
+            this.convertString=function (reserve,fulfill) {//接受一个字符串，输出一个对象数组
+                var reserve1=String(reserve);
+                var fulfills=String(fulfill);
                 var result=[];
-                var grenns={};
-                for (var x=0;x<reserves.length;x++){
-                    var shuzu=reserves[x].split("a");
-                    grenns.name=shuzu[0];
-                    grenns.count=shuzu[1];
-                    result[x]=grenns;
+                if(fulfills!=""){
+                    var book=String(reserve1.substring(0,reserve1.length-1));//去掉e
+                    var fulfil=String(fulfills.substring(0,fulfills.length-1));
+                    var fulfillArray=[];
+                    var reserves=[];
+                    reserves=book.split("e");//每个字符串有a连接
+                    fulfillArray=fulfil.split("e");
+                    var fulfillObject={};
+                    var fulfillResult=[];
+                    for (var i=0;i<fulfillArray.length;i++){
+                        var fulfillshuzu=fulfillArray[i].split("a");
+                        fulfillObject.name=fulfillshuzu[0];
+                        fulfillObject.number=fulfillshuzu[1];
+                        fulfillResult[i]=fulfillObject;
+                    }
+                    //以上代码对fulfill也做出格式化，并且存储到一个对象数组中
+                    for (var x=0;x<reserves.length;x++){
+                        var shuzu=reserves[x].split("a");
+                        var greens={};
+                        greens.id=x+1;
+                        greens.name=shuzu[0];
+                        greens.count=shuzu[1];
+                        //给菜单赋值，使其既有菜品名字，又有上菜和订菜的数量
+                        for (var y=0;y<fulfillResult.length;y++){
+                            if (greens.name==fulfillResult[y].name){
+                                greens.number=fulfillResult[y].number;
+                                break;
+                            }
+                        }
+                        result.push(greens);
+                    }
+                }else{
+                    var book1=String(reserve1.substring(0,reserve1.length-1));//去掉e
+                    var reserves1=[];
+                    reserves1=book1.split("e");//每个字符串有a连接
+                    for (var z=0;z<reserves1.length;z++){
+                        var grenns1={};
+                        var shuzu1=[];
+                        shuzu1=reserves1[z].split("a");
+                        grenns1.id=z+1;
+                        grenns1.name=shuzu1[0];
+                        grenns1.count=shuzu1[1];
+                        grenns1.number=0;
+                        result.push(grenns1);
+                    }
                 }
                 return result;
             };
@@ -183,7 +206,7 @@
                     url:'/underway',
                     controller: 'UnderwayController',
                     controllerAs: 'underway',
-                    templateUrl: 'underway.html'
+                    templateUrl: 'ongoing.html'
                 })
                 .state('/underway/carry',{//结账
                     url:'/underwayCarry/:id',
