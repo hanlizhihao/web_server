@@ -58,7 +58,7 @@
      /**
      * angularJS开始
      * */
-    (function(){
+    ;(function(){
         var app = angular.module('app',['ui.router']);
         /**
          * 控制器
@@ -111,6 +111,8 @@
                 }
                 $rootScope.indents=data;
                 $scope.indents=data;
+                stompAdd();//对stomp的监听
+                stompUpdate();
                 $interval(function () {
                     for (var i=0;i<$scope.indents.length;i++){
                         if ($scope.indents[i].firstTime==null){
@@ -133,12 +135,8 @@
                    break;
                }
            }
-           //利用id不同来实现用jquery控制spinner
-           var count=new String("reserve");
-           for(var index=1;index<$scope.reserve.length;index++){
-               count=count+index;
-               doucument
-           }
+            //利用id不同来实现用jquery控制spinner，reserve中对象的属性有count,number,name,id
+            
         });
         //常用服务
         //StringService将reserve和fulfill字符串处理并返回一个对象数组
@@ -313,7 +311,7 @@
         //编写控制器时，应该将其置于指定的控制器中
         $("#underway_reserve").Spinner({value:1, min:1, len:2, max:99});
         $("#underway_fulfil").Spinner({value:1, min:1, len:2, max:99});
-        $("#carry_number").Spinner({value:8,min:1,len:2,max:99})
+        $("#reserve11").Spinner({value:8,min:1,len:2,max:99})
         //返回顶部
         $(window).on("scroll",backToTopFun);
         backToTopFun();

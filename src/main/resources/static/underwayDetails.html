@@ -44,12 +44,12 @@
                             <td class="col2">{{x.name}}</td>
                             <td class="col3">
                                 <div class="formControls skin-minimal col-xs-5">
-                                    <div id="reserve{{x.id}}" class="spinner"></div>
+                                    <input type="text" class="input-text" name="table" value="{{x.count}}">
                                 </div>
                             </td>
                             <td class="col4">
                                 <div class="formControls skin-minimal col-xs-5">
-                                    <div id="fulfill{{x.id}}" class="spinner"></div>
+                                    <input type="text" class="input-text" name="table" value="{{x.number}}">
                                 </div>
                             </td>
                         </tr>
@@ -60,8 +60,8 @@
             <div class="row cl">
                 <div class="col-xs-8 col-xs-offset-3">
                     <!--交给AngularJS处理-->
-                    <button class="btn btn-primary" onclick="">&nbsp;&nbsp;更改&nbsp;&nbsp;</button>
-                    <a href="#/underway" class="btn btn-primary" style="position:relative; left:20%;">&nbsp;&nbsp;返回&nbsp;&nbsp;</a>
+                    <button class="btn btn-success-outline radius" onclick="">&nbsp;&nbsp;更改&nbsp;&nbsp;</button>
+                    <a href="#/underway" class="btn btn-primary-outline radius" style="position:relative; left:20%;">&nbsp;&nbsp;返回&nbsp;&nbsp;</a>
                 </div>
             </div>
         </form>
