@@ -55,6 +55,7 @@ public class IndentController {
     //结算与取消订单
     @RequestMapping(value="/indent/style",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)
     public String updateIndentStyle(IndentStyle model){
+        System.out.println(model);
         boolean sign=service.updateIndentStyle(model);
         if(sign){
             return "success";

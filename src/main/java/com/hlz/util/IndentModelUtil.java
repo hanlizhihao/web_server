@@ -33,8 +33,4 @@ public class IndentModelUtil {
         indent.setFirstTime(new java.sql.Timestamp(model.getTime()));
         return indent;
     }
-    public static Indent TransformStyleModel(IndentStyle style,Indent indent){
-        indent.setStyle(style.getStyle());
-        return indent;
-    }
 }

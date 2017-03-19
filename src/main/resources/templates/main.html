@@ -53,7 +53,7 @@
 <!--stomp相关-->
 <script type="text/javascript" src="js/stomp.js"></script>
 <script type="text/javascript" src="js/sockjs.min.js"></script>
-<script type="text/javascript" src="FunctionUtil.js"></script>
+<script type="text/javascript" src="js/functionUtil.js"></script>
 <script type="text/javascript">
      /**
      * angularJS开始
@@ -111,8 +111,11 @@
                 }
                 $rootScope.indents=data;
                 $scope.indents=data;
-                stompAdd();//对stomp的监听
+                //stomp相关，用于接受指定主题返回的消息
+                stompAdd();
                 stompUpdate();
+                stompStyle();
+                //stomp相关结束
                 $interval(function () {
                     for (var i=0;i<$scope.indents.length;i++){
                         if ($scope.indents[i].firstTime==null){
@@ -124,6 +127,28 @@
                     }
                 },1000);
             });
+            //对取消的支持
+            $scope.cancel=function(id){
+                console.log(id);
+                var indentStyle = {};
+                indentStyle.id = id;
+                indentStyle.style = 2;
+                $http.post('/indent/style',indentStyle).success(function (data) {
+                    if (data == "success") {
+                        for (var i = 0; i < $rootScope.indents.length; i++) {
+                            if ($rootScope.indents[i].id == id) {
+                                $rootScope.indents.splice(i, 1);
+                                $scope.indents.splice(i, 1);
+                                break;
+                            }
+                        }
+                    } else {
+                        alert("取消订单失败");
+                    }
+                }).error(function (a) {
+                    alert("服务器发生错误");
+                });
+            };
         });//正在进行控制器结束
         app.controller('UnderwayDetailsController',function ($rootScope,$stateParams,$scope) {
            var id=Number($stateParams.id);

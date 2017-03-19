@@ -92,7 +92,7 @@ public class IndentDAO implements IndentRepository{
         Session session = sf.openSession();
         Transaction ts = session.beginTransaction();
         Indent indent = session.get(Indent.class, style.getId());
-        indent = IndentModelUtil.TransformStyleModel(style, indent);
+        indent.setStyle(style.getStyle());
         indent.setEndTime(new Timestamp(System.currentTimeMillis()));
         try {
             session.update(indent);
