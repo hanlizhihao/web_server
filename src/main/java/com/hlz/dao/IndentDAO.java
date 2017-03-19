@@ -85,14 +85,20 @@ public class IndentDAO implements IndentRepository{
         return indent;
     }
     @Override
-    @CacheEvict(value="indent",key="indent.id")
     //专门用于更新餐桌状态
     public Indent updateIndent(IndentStyle style) {
         SessionFactory sf = SessionFactoryUtil.getSessionFactory();
         Session session = sf.openSession();
         Transaction ts = session.beginTransaction();
         Indent indent = session.get(Indent.class, style.getId());
-        indent.setStyle(style.getStyle());
+        if(indent==null){
+            System.out.println("没有指定的订单id");
+            System.out.println(style.getId());
+            System.out.println(style.getStyle());
+            return null;
+        }else{
+            indent.setStyle(style.getStyle());
+        }
         indent.setEndTime(new Timestamp(System.currentTimeMillis()));
         try {
             session.update(indent);
@@ -107,7 +113,7 @@ public class IndentDAO implements IndentRepository{
         if (style.getStyle() == 1) {
             return dao.updateSellAnalyze(style, indent);
         } else {
-            System.out.print("修改餐桌信息成功");
+            System.out.print("结算订单信息成功");
             return indent;
         }
     }

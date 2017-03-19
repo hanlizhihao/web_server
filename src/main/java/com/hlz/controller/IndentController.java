@@ -7,6 +7,8 @@ import com.hlz.webModel.IndentModel;
 import com.hlz.webModel.IndentStyle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,7 +57,6 @@ public class IndentController {
     //结算与取消订单
     @RequestMapping(value="/indent/style",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)
     public String updateIndentStyle(IndentStyle model){
-        System.out.println(model);
         boolean sign=service.updateIndentStyle(model);
         if(sign){
             return "success";

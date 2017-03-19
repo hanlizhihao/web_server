@@ -112,9 +112,59 @@
                 $rootScope.indents=data;
                 $scope.indents=data;
                 //stomp相关，用于接受指定主题返回的消息
-                stompAdd();
-                stompUpdate();
-                stompStyle();
+                var stompClient=null;
+                var socket=new SockJS('/server');
+                stompClient=Stomp.over(socket);
+                stompClient.connect({},function (frame) {
+                    stompClient.subscribe('/topic/update',function (response) {//订阅消息
+                        var indent={};
+                        //这个indent与rootScope之前传过来的indent，属性不相同
+                        indent=JSON.parse(response.body);
+                        for (var i=0;i<$rootScope.indents;i++){
+                            //找到指定的rootScope中的indent，更新
+                            if ($rootScope.indents[i].id==indent.id){
+                                var indentNew={};
+                                indentNew.id=indent.id;
+                                indentNew.tableId=indent.table;
+                                indentNew.reserve=indent.reserve;
+                                indentNew.fulfill=indent.fulfill;
+                                indentNew.reserveNumber=indent.reserve.length;
+                                indentNew.fulfillNumber=indent.fulfill.length;
+                                var beginTimeS=new Date();
+                                var beginTime=beginTimeS.toLocaleString();
+                                indentNew.beginTime=beginTime;
+                                indentNew.reminderNumber=0;
+                                indentNew.firstTime="";
+                                indentNew.waitTimeS=0;
+                                indentNew.waitTime=timeToString(indentNew.waitTimeS);
+                                indentNew.price=indent.price;
+                                indentNew.firstTime=indent.time;//第一次上菜时间，毫秒
+                                $rootScope.indents[i]=indentNew;
+                                $scope.indents[i]=indentNew;
+                                break;
+                            }
+                        }
+                    });
+                    stompClient.subscribe('/topic/add',function (response) {//订阅消息
+                        var indent={};
+                        indent=JSON.parse(response.body);
+                        $rootScope.indents.push(indent);
+                        $scope.indents.push(indent);
+                    });
+                    stompClient.subscribe('/topic/style',function (response) {//订阅消息
+                        var indent={};
+                        indent=JSON.parse(response.body);
+                        var id=indent.id;
+                        //获取id并删除指定的indent
+                        for (var i=0;i<$rootScope.indents.length;i++){
+                            if (id==$rootScope.indents.id){
+                                $rootScope.indents.splice(i,1);
+                                $scope.indents.splice(i,1);
+                                break;
+                            }
+                        }
+                    });
+                });
                 //stomp相关结束
                 $interval(function () {
                     for (var i=0;i<$scope.indents.length;i++){
@@ -133,7 +183,10 @@
                 var indentStyle = {};
                 indentStyle.id = id;
                 indentStyle.style = 2;
-                $http.post('/indent/style',indentStyle).success(function (data) {
+                $http.post('/indent/style',
+                $.param({id:indentStyle.id,style:indentStyle.style}),
+                {headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}}
+                ).success(function (data) {
                     if (data == "success") {
                         for (var i = 0; i < $rootScope.indents.length; i++) {
                             if ($rootScope.indents[i].id == id) {
