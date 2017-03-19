@@ -26,7 +26,7 @@ public class LoginController {
             return "login";
         }
     }
-    @RequestMapping(value={"/","/login"},method=RequestMethod.GET)
+    @RequestMapping(value={"/","/login"})
     public String index(){
         if(user.getUser()!=null){
             return "main";

@@ -5,10 +5,11 @@ import com.hlz.entity.SellAnalyze;
 import com.hlz.service.IndentService;
 import com.hlz.webModel.IndentModel;
 import com.hlz.webModel.IndentStyle;
+import com.hlz.webModel.OrderModel;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,18 +37,31 @@ public class IndentController {
             return "defeat";
         }
     }
-    /**
-     * 增加菜品--添菜；
-     * 删除菜品--退菜；
-     * 催单；
-     * 上菜--对于第一次上菜时间的控制，交由安卓客户端
-     * 换桌
-     * @param mdoel
-     * @return 
-     */
-    @RequestMapping(value="/indent/update",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)
-    public String updateIndent(IndentModel mdoel){
-        boolean sign=service.updateIndent(mdoel);
+//     增加菜品--添菜；
+//     删除菜品--退菜；
+//     催单；
+//     上菜--对于第一次上菜时间的控制，交由安卓客户端
+//     换桌
+    @RequestMapping(value="/indent/update",produces="application/json;charset=UTF-8",method=RequestMethod.POST)
+    public String updateIndent(OrderModel indent){
+        IndentModel model=new IndentModel();
+        model.setId(Integer.valueOf(indent.getId()));
+        model.setPrice(Double.valueOf(indent.getPrice()));
+        model.setRemiderNumber(Integer.valueOf(indent.getReminderNumber()));
+        model.setTable(indent.getTable());
+        if("".equals(indent.getTime())){
+            model.setTime(0);
+        }
+        model.setTime(Long.valueOf(indent.getTime()));
+        Map<String,String> reserve=new HashMap<>();
+        Map<String,String> fulfill=new HashMap<>();
+        for(int i=0;i<indent.getName().length;i++){
+            reserve.put(indent.getName()[i],indent.getCount()[i]);
+            fulfill.put(indent.getName()[i],indent.getNumber()[i]);
+        }
+        model.setFulfill(fulfill);
+        model.setReserve(reserve);
+        boolean sign=service.updateIndent(model);
         if(sign){
             return "success";
         }else{

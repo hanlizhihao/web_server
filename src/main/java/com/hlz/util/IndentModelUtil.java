@@ -2,8 +2,8 @@ package com.hlz.util;
 
 import com.hlz.entity.Indent;
 import com.hlz.webModel.IndentModel;
-import com.hlz.webModel.IndentStyle;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  *用于将给定的IndentModel转化为Indent
@@ -11,10 +11,9 @@ import java.util.Map;
  */
 public class IndentModelUtil {
     public static Indent TransformModel(IndentModel model,Indent indent){
-        String fulfills = new String();
-        Map<String,Integer> reserves = model.getReserve();
+        Map<String,String> reserves = model.getReserve();
         String reserve = "";
-       for(Map.Entry<String,Integer> entry:reserves.entrySet()){
+       for(Entry<String,String> entry:reserves.entrySet()){
            reserve=reserve+entry.getKey()+"a"+entry.getValue()+"e";
        }
         indent.setReserveNumber(reserves.size());
@@ -22,7 +21,7 @@ public class IndentModelUtil {
         reserves.clear();
         reserves.putAll(model.getFulfill());
         reserve="";
-       for(Map.Entry<String,Integer> entry:reserves.entrySet()){
+       for(Entry<String,String> entry:reserves.entrySet()){
            reserve=reserve+entry.getKey()+"a"+entry.getValue()+"e";
        }
         indent.setFulfillNumber(reserves.size());
@@ -30,6 +29,10 @@ public class IndentModelUtil {
         indent.setPrice(model.getPrice());
         indent.setReminderNumber(model.getRemiderNumber());
         indent.setTableId(model.getTable());
+        //如果为0表示怒存在firstTime，还没上菜
+        if(model.getTime()==0){
+            indent.setFirstTime(null);
+        }
         indent.setFirstTime(new java.sql.Timestamp(model.getTime()));
         return indent;
     }

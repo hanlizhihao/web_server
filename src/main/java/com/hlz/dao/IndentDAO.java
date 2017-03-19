@@ -35,9 +35,9 @@ public class IndentDAO implements IndentRepository{
        Indent indent=new Indent();
        Timestamp beginTime=new Timestamp(System.currentTimeMillis());
        indent.setBeginTime(beginTime);
-       Map<String,Integer> reserves=model.getReserve();
+       Map<String,String> reserves=model.getReserve();
        String reserve="";
-       for(Map.Entry<String,Integer> entry:reserves.entrySet()){
+       for(Map.Entry<String,String> entry:reserves.entrySet()){
            reserve=reserve+entry.getKey()+"a"+entry.getValue()+"e";
        }
        indent.setReserve(reserve);
