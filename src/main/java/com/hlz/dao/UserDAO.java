@@ -43,7 +43,6 @@ public class UserDAO implements UserRepository{
         }
         return true;
     }
-    @CacheEvict(value="users",key="#users.id")
     @Override
     public Users updateUser(Users user) {
         SessionFactory sf=SessionFactoryUtil.getSessionFactory();
@@ -69,7 +68,6 @@ public class UserDAO implements UserRepository{
         System.out.print("修改用户信息成功");
         return userTemp;
     }
-    @CacheEvict(value="users",key="#users.id")
     @Override
     public Users deleteUser(int id) {
         SessionFactory sf = SessionFactoryUtil.getSessionFactory();
@@ -102,7 +100,6 @@ public class UserDAO implements UserRepository{
         }
         return result;  
     }
-    @Cacheable(value="users",key="#users.id")
     @Override
     public Users querySingleUsers(int id) {
         SessionFactory sf = SessionFactoryUtil.getSessionFactory();

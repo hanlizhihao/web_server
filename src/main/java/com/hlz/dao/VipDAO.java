@@ -42,7 +42,6 @@ public class VipDAO implements VipRepository{
         }
         return true;
     }
-    @CacheEvict(value="vip",key="#vip.id")
     @Override
     public Vip updateVip(Vip vip) {
         SessionFactory sf=SessionFactoryUtil.getSessionFactory();
@@ -61,7 +60,6 @@ public class VipDAO implements VipRepository{
         System.out.print("修改会员信息成功");
         return vip;
     }
-    @CacheEvict(value="vip",key="#vip.id")
     @Override
     public Vip deleteVip(int id) {
         SessionFactory sf=SessionFactoryUtil.getSessionFactory();
@@ -110,7 +108,6 @@ public class VipDAO implements VipRepository{
         session.close();
         return result;
     }
-    @Cacheable(value="vip",key="#vip.id")
     @Override
     public Vip querySingle(int id) {
         SessionFactory sf = SessionFactoryUtil.getSessionFactory();

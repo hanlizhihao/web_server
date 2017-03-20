@@ -125,8 +125,7 @@
                 var counts=[];
                 var numbers=[];
                 for (var i=0;i<$scope.indent.reserve.length;i++){
-                    var name=String();
-                    name=$scope.reserve[i].name;
+                    var name=String($scope.reserve[i].name);
                     var count=String($scope.reserve[i].count);
                     var number=String($scope.reserve[i].number);
                     names.push(name);
@@ -134,19 +133,21 @@
                     numbers.push(number);
                 }
                 console.log(names,counts,numbers);
-                $http.post('/indent/update',$.param({name:names,count:counts,number:numbers,id:$scope.indent.id,table:$scope.indent.tableId,
-                    reminderNumber:1,price:$scope.indent.price,time:$scope.indent.firstTime}),
-                {headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}})
-                    .success(function (data) {
-                        if(data=="success"){
-                            $state.go('/underway');
-                        }else{
-                            alert("更改失败，服务器暂时无法响应");
-                        }
-                }).error(function () {
-                    alert("更改失败，网络连接错误，请稍后重试");
+                var param={"id":$scope.indent.id,"name":names,"count":counts,"number":numbers,"table":$scope.indent.tableId,
+                    "reminderNumber":$scope.indent.reminderNumber,"price":$scope.indent.price,"time":$scope.indent.firstTime};
+                $http.post('/indent/update',$.param(param),{headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}})
+                    .success(function(data){
+                    if(data=="success"){
+                       $state.go('/underway'); 
+                       alert("修改成功");
+                    }else{
+                        $state.go('/underway');
+                        alert("修改失败");
+                    }
+                }).error(function(){
                     $state.go('/underway');
-                });
+                    alert("出现错误");
+                });  
             };
             //利用id不同来实现用jquery控制spinner，reserve中对象的属性有count,number,name,id
         });

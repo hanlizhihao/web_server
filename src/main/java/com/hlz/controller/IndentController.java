@@ -7,6 +7,7 @@ import com.hlz.webModel.IndentModel;
 import com.hlz.webModel.IndentStyle;
 import com.hlz.webModel.OrderModel;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -42,22 +44,27 @@ public class IndentController {
 //     催单；
 //     上菜--对于第一次上菜时间的控制，交由安卓客户端
 //     换桌
-    @RequestMapping(value="/indent/update",produces="application/json;charset=UTF-8",method=RequestMethod.POST)
-    public String updateIndent(OrderModel indent){
+//"id":$scope.indent.id,"name":names,"count":counts,"number":numbers,"table":$scope.indent.tableId,
+//                    "reminderNumber":$scope.indent.reminderNumber,"price":$scope.indent.price,"time":$scope.indent.firstTime
+    @RequestMapping(value="/indent/update",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)
+    public String updateIndent(@RequestParam("id") Integer id,@RequestParam("name[]") String[] names,@RequestParam("count[]") String[] 
+            counts,@RequestParam("number[]") String[] numbers,@RequestParam("table") String table,@RequestParam("reminderNumber") Integer 
+            reminderNumber,@RequestParam("price") Double price,@RequestParam("time") String firstTime){
         IndentModel model=new IndentModel();
-        model.setId(Integer.valueOf(indent.getId()));
-        model.setPrice(Double.valueOf(indent.getPrice()));
-        model.setRemiderNumber(Integer.valueOf(indent.getReminderNumber()));
-        model.setTable(indent.getTable());
-        if("".equals(indent.getTime())){
+        model.setId(id);
+        model.setPrice(price);
+        model.setRemiderNumber(reminderNumber);
+        model.setTable(table);
+        if("".equals(firstTime)){
             model.setTime(0);
+        }else{
+            model.setTime(Long.valueOf(firstTime));
         }
-        model.setTime(Long.valueOf(indent.getTime()));
         Map<String,String> reserve=new HashMap<>();
         Map<String,String> fulfill=new HashMap<>();
-        for(int i=0;i<indent.getName().length;i++){
-            reserve.put(indent.getName()[i],indent.getCount()[i]);
-            fulfill.put(indent.getName()[i],indent.getNumber()[i]);
+        for(int i=0;i<names.length;i++){
+            reserve.put(names[i],counts[i]);
+            fulfill.put(names[i],numbers[i]);
         }
         model.setFulfill(fulfill);
         model.setReserve(reserve);
@@ -67,6 +74,11 @@ public class IndentController {
         }else{
             return "defeat";
         }
+    }
+    @RequestMapping(value="/test",produces="test/plain",method=RequestMethod.POST)
+    public String postTest(@RequestParam("test[]") String[] test){
+        System.out.println(Arrays.toString(test));
+        return "test";
     }
     //结算与取消订单
     @RequestMapping(value="/indent/style",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)

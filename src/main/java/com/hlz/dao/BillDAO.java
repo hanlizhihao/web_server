@@ -50,7 +50,6 @@ public class BillDAO{
         System.out.println("添加账单成功");
         return true;
     }
-    @CacheEvict(value="bill",key="#bill.id")
     public Bill deleteBill(int id) {
         SessionFactory sf=SessionFactoryUtil.getSessionFactory();
         Session session=sf.openSession();
@@ -69,7 +68,6 @@ public class BillDAO{
         System.out.print("删除账单信息成功");
         return bill;
     }
-    @CacheEvict(value="bill",key="#bill.id")
     public Bill updateBill(Bill bill) {
         SessionFactory sf = SessionFactoryUtil.getSessionFactory();
         Session session = sf.openSession();
@@ -87,7 +85,6 @@ public class BillDAO{
         System.out.print("修改账单信息成功");
         return bill;
     }
-    @Cacheable(value="bill",key="#bill.id")
     public Bill queryOne(int id){
         SessionFactory sf = SessionFactoryUtil.getSessionFactory();
         Session session = sf.openSession();

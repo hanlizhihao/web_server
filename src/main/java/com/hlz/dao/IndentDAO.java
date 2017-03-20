@@ -13,8 +13,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -64,7 +62,6 @@ public class IndentDAO implements IndentRepository{
         }
     }
     @Override
-    @CacheEvict(value="indent",key="indent.id")
     public Indent updateIndent(IndentModel model) {
         SessionFactory sf = SessionFactoryUtil.getSessionFactory();
         Session session = sf.openSession();
@@ -176,7 +173,6 @@ public class IndentDAO implements IndentRepository{
         }
         return result;
     }
-    @Cacheable(value="indent",key="#indent.id")
     @Override
     public Indent findOneIndent(int id) {
         SessionFactory sf = SessionFactoryUtil.getSessionFactory();
