@@ -33,10 +33,10 @@ public class IndentController {
     @RequestMapping(value="/indent/add",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)
     public String createIndent(IndentModel model){
         boolean sign=service.createIndent(model);
-        if(sign){
-            return "success";
-        }else{
+        if(!sign){
             return "defeat";
+        }else{
+            return "success";
         }
     }
 //     增加菜品--添菜；
@@ -44,8 +44,6 @@ public class IndentController {
 //     催单；
 //     上菜--对于第一次上菜时间的控制，交由安卓客户端
 //     换桌
-//"id":$scope.indent.id,"name":names,"count":counts,"number":numbers,"table":$scope.indent.tableId,
-//                    "reminderNumber":$scope.indent.reminderNumber,"price":$scope.indent.price,"time":$scope.indent.firstTime
     @RequestMapping(value="/indent/update",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)
     public String updateIndent(@RequestParam("id") Integer id,@RequestParam("name[]") String[] names,@RequestParam("count[]") String[] 
             counts,@RequestParam("number[]") String[] numbers,@RequestParam("table") String table,@RequestParam("reminderNumber") Integer 
@@ -69,25 +67,20 @@ public class IndentController {
         model.setFulfill(fulfill);
         model.setReserve(reserve);
         boolean sign=service.updateIndent(model);
-        if(sign){
-            return "success";
-        }else{
+        if(!sign){
             return "defeat";
+        }else{
+            return "success";
         }
-    }
-    @RequestMapping(value="/test",produces="test/plain",method=RequestMethod.POST)
-    public String postTest(@RequestParam("test[]") String[] test){
-        System.out.println(Arrays.toString(test));
-        return "test";
     }
     //结算与取消订单
     @RequestMapping(value="/indent/style",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)
     public String updateIndentStyle(IndentStyle model){
         boolean sign=service.updateIndentStyle(model);
-        if(sign){
-            return "success";
-        }else{
+        if(!sign){
             return "defeat";
+        }else{
+            return "success";
         }
     }
     //获取所有正在进行的订单，用于响应App请求

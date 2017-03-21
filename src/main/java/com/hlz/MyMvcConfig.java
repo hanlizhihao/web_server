@@ -61,6 +61,7 @@ public class MyMvcConfig extends WebMvcConfigurerAdapter{
         resolver.setSuffix(".html");
         resolver.setTemplateMode(TemplateMode.HTML);
         resolver.setCharacterEncoding("UTF-8");
+        resolver.setCacheable(false);
         return resolver;
     }
 }

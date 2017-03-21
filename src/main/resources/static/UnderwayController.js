@@ -38,7 +38,7 @@ app.controller("UnderwayController", function ($scope, $http, $rootScope, string
         //stomp相关结束
         $interval(function () {
             for (var i = 0; i < $scope.indents.length; i++) {
-                if ($scope.indents[i].firstTime == null) {
+                    if ($scope.indents[i].firstTime==null||$scope.indents[i].fulfillNumber==0){
                     var waitTimeS = Number($scope.indents[i].waitTimeS);
                     waitTimeS = waitTimeS + 1;
                     $scope.indents[i].waitTimeS = Number(waitTimeS);

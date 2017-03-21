@@ -21,10 +21,12 @@ public class IndentModelUtil {
         reserves.clear();
         reserves.putAll(model.getFulfill());
         reserve="";
+        int fulfillNumber=0;
        for(Entry<String,String> entry:reserves.entrySet()){
            reserve=reserve+entry.getKey()+"a"+entry.getValue()+"e";
+           fulfillNumber=Integer.valueOf(entry.getValue())+fulfillNumber;
        }
-        indent.setFulfillNumber(reserves.size());
+        indent.setFulfillNumber(fulfillNumber);
         indent.setFulfill(reserve);
         indent.setPrice(model.getPrice());
         indent.setReminderNumber(model.getRemiderNumber());
@@ -32,8 +34,9 @@ public class IndentModelUtil {
         //如果为0表示怒存在firstTime，还没上菜
         if(model.getTime()==0){
             indent.setFirstTime(null);
+        }else{
+            indent.setFirstTime(new java.sql.Timestamp(model.getTime()));
         }
-        indent.setFirstTime(new java.sql.Timestamp(model.getTime()));
         return indent;
     }
 }

@@ -37,7 +37,6 @@ public class VipService {
     public boolean validateVip(VipModel model){
         boolean sign=dao.validateVip(model.getPhoneNumber());
         if(!sign){
-            dao.addVip(model);
             return false;
         }else{
             return true;

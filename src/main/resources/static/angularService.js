@@ -18,7 +18,7 @@
                     url:'/underwayCarry/:id',
                     controller: 'UnderwayCarryController',
                     controllerAs: 'underwayCarry',
-                    templateUrl: 'underwayCarry.html'
+                    templateUrl: 'carry.html'
                 })
 
                 .state('/underway/details', {//正在进行的详情
@@ -126,8 +126,11 @@
                         greens.count=shuzu[1];
                         //给菜单赋值，使其既有菜品名字，又有上菜和订菜的数量
                         for (var y=0;y<fulfillResult.length;y++){
-                            if (greens.name==fulfillResult[y].name){
+                            if (greens.name==fulfillResult[y].name&&fulfillResult[y]!=null){
                                 greens.number=fulfillResult[y].number;
+                                break;
+                            }else{
+                                greens.number=0;
                                 break;
                             }
                         }

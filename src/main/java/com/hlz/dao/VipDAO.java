@@ -8,8 +8,6 @@ import javax.persistence.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -133,4 +131,6 @@ public class VipDAO implements VipRepository{
         List<Vip> result=query.getResultList();
         return !(result==null||result.isEmpty());
     }
+    //用于对vip的消费进行统计
+    
 }
