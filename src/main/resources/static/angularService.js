@@ -6,9 +6,12 @@
             /**
              * 配置ui-router
              * */
-        app.config(['$stateProvider', function($stateProvider){
+        app.run(function($state){
+            $state.go('/underway');
+        });
+        app.config(['$stateProvider', function($stateProvider,$urlRouterProvider){
             $stateProvider
-                .state('/underway',{//正在进行的路由
+                .state('/underway',{//正在进行的路由s
                     url:'/underway',
                     controller: 'UnderwayController',
                     controllerAs: 'underway',
