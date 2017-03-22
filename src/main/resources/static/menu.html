@@ -53,7 +53,7 @@
                 <td class="col3">{{x.price}}</td>
                 <td class="col4">
                     <a href="#/menuDetails/{{x.id}}" class="btn btn-secondary-outline radius">修改</a>
-                    <button class="btn btn-danger-outline radius" type="button">删除</button>
+                    <button class="btn btn-danger-outline radius" type="button" ng-click="deleteMenu(x.id)">删除</button>
                 </td>
             </tr>
             </tbody>

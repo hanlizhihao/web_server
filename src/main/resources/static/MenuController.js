@@ -61,6 +61,7 @@ app.controller('MenuController', function ($state, $scope, $http, $rootScope) {
                         });
                     }
                 });
+        $("#mymodal").modal("hide");
     };
     $scope.deleteMenu = function (id) {
         var param = String(id);
@@ -78,6 +79,8 @@ app.controller('MenuController', function ($state, $scope, $http, $rootScope) {
             } else {
                 alert("删除失败");
             }
+        }).error(function (a) {
+            alert("服务器发生错误");
         });
     };
 });
@@ -91,9 +94,16 @@ app.controller('MenuDetailsController', function ($rootScope, $scope, $http, $st
             break;
         }
     }
+    $scope.greensName=String();
+    $scope.price=String();
+    
     //修改菜单
     $scope.updateMenu = function () {
-        var menuModel = {"id": $scope.menu.id, "name": $scope.menu.greensName, "price": $scope.menu.price};
+        if($scope.greensName==""||$scope.price==""||$scope.greensName==null){
+            $scope.greensName=String(document.getElementById("name").value);
+            $scope.price=String(document.getElementById("price").value);
+        }
+        var menuModel = {"id": $scope.menu.id, "name": $scope.greensName, "price": $scope.price};
         $.post('/menu/update', $.param(menuModel), {headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}})
                 .success(function (data) {
                     if ("success" == data) {

@@ -15,7 +15,8 @@
                         <th class="col3">菜名：</th>
                         <td class="col4">
                             <div class="formControls col-xs-8">
-                                <input type="text" class="input-text" name="name" id="name" ng-value="menu.greensName">
+                                <input type="text" class="input-text" name="name" id="name" ng-value="menu.greensName" 
+                                       ng-model="greensName">
                             </div>
                         </td>
                     </tr>
@@ -23,7 +24,7 @@
                         <th class="col3">价格（元）：</th>
                         <td class="col4">
                             <div class="formControls col-xs-8">
-                                <input type="number" class="input-text" name="price" id="price" ng-value="menu.price">
+                                <input type="number" class="input-text" name="price" id="price" ng-value="menu.price" ng-model="price">
                             </div>
                         </td>
                     </tr>

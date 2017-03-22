@@ -100,9 +100,15 @@ public class MenuDAO implements MenuRepository{
         sell.setPrice(model.getPrice());
         menu.setGreensName(model.getName());
         menu.setPrice(model.getPrice());
+        //更改版本号
+        Menu temp = session.get(Menu.class, 1);
+        int version = Integer.valueOf(temp.getDbVersion());
+        version = version + 1;
+        temp.setDbVersion(Integer.toString(version));
         try{
             session.update(sell);
             session.update(menu);
+            session.update(temp);
             ts.commit();
             return true;
         }catch(Exception e){
@@ -124,6 +130,11 @@ public class MenuDAO implements MenuRepository{
         Transaction ts= session.beginTransaction();
         session.delete(a);
         session.delete(sell);
+        Menu temp = session.get(Menu.class, 1);
+        int version = Integer.valueOf(temp.getDbVersion());
+        version = version + 1;
+        temp.setDbVersion(Integer.toString(version));
+        session.update(temp);
         try{
             ts.commit();
         }catch(Exception e){
