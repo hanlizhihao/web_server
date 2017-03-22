@@ -1,4 +1,5 @@
 app.controller('UnderwayCarryController', function ($scope, $http, $rootScope, $state, $stateParams) {
+            //用于初始化，一开始不想显示的图标
             $scope.vipFalse = false;
             $scope.vipTrue = false;
             $scope.vipText=false;

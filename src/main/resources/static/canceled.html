@@ -13,14 +13,14 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td class="col1">1</td>
-                <td class="col2">10</td>
-                <td class="col3">20分钟</td>
-                <td class="col4">10次</td>
-                <td class="col5">12.50</td>
+            <tr ng-repeat="x in canceled">
+                <td class="col1">{{$index+1}}</td>
+                <td class="col2">{{x.reserveNumber}}</td>
+                <td class="col3">{{x.waitTime}}</td>
+                <td class="col4">{{x.reminderNumber}}</td>
+                <td class="col5">{{x.price}}</td>
                 <td class="col6">
-                    <a href="#/canceledDetails" class="btn btn-primary radius">详情</a>
+                    <a href="#/canceledDetails/{{x.id}}" class="btn btn-primary radius">详情</a>
                 </td>
             </tr>
             </tbody>

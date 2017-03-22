@@ -1,6 +1,42 @@
 <div class="panel panel-default mt-20">
     <div class="panel-header">菜单管理</div>
     <div class="panel-body">
+        <button class="btn btn-success-outline radius" onClick="modaldemo()">添加菜品</button>
+        <div id="modal-demo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content radius">
+                    <div class="modal-header">
+                        <h3 class="modal-title">添加菜品</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <form action="" method="post" class="form form-horizontal responsive" id="userForm">
+                                    <div class="row cl">
+                                        <label class="form-label col-xs-3">菜品名字：</label>
+                                        <div class="formControls col-xs-8">
+                                            <input type="text" class="input-text" placeholder="1个字符以上" name="name" id="name" ng-model="addname">
+                                        </div>
+                                    </div>
+                                    <div class="row cl">
+                                        <label class="form-label col-xs-3">菜品价格：</label>
+                                        <div class="formControls col-xs-8">
+                                            <input type="number" class="input-text" autocomplete="off" placeholder="菜品价格" name="price" id="price"
+                                                   ng-model="addprice">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <!-点击确定以后，交由AngularJS处理-->
+                        <button class="btn btn-success radius" ng-click="addMenu()">确定</button>
+                        <button class="btn btn-secondary radius" data-dismiss="modal" aria-hidden="true">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <table class="table table-border table-bordered table-striped mt-20">
             <thead>
             <tr>
@@ -11,12 +47,12 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td class="col1">1</td>
-                <td class="col2">尖椒干豆腐</td>
-                <td class="col3">20</td>
+            <tr ng-repeat="x in menus">
+                <td class="col1">{{$index+1}}</td>
+                <td class="col2">{{x.greensName}}</td>
+                <td class="col3">{{x.price}}</td>
                 <td class="col4">
-                    <a href="#/menuDetails" class="btn btn-secondary-outline radius">修改</a>
+                    <a href="#/menuDetails/{{x.id}}" class="btn btn-secondary-outline radius">修改</a>
                     <button class="btn btn-danger-outline radius" type="button">删除</button>
                 </td>
             </tr>
@@ -24,3 +60,19 @@
         </table>
     </div>
 </div>
+<script type="text/javascript">
+    $("#userForm").validate({
+        rules:{
+            name:{
+                required:true,
+                minlength:1
+            },
+            price:{
+                required:true,
+                minlength:1
+            },
+        onkeyup:true,
+        focusCleanup:true,
+        success:"valid"
+    }});
+</script>

@@ -15,4 +15,5 @@ public interface MenuRepository {
     boolean updateMenu(MenuModel model);
     boolean deleteMenu(int id);
     List<Menu> queryMenu();
+    String getVersion();
 }

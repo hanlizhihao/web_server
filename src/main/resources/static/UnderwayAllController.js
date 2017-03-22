@@ -38,6 +38,7 @@ app.controller("UnderwayController", function ($scope, $http, $rootScope, string
         //stomp相关结束
         $interval(function () {
             for (var i = 0; i < $scope.indents.length; i++) {
+                //有上菜且，上菜数量为0时，会发生某种问题
                     if ($scope.indents[i].firstTime==null||$scope.indents[i].fulfillNumber==0){
                     var waitTimeS = Number($scope.indents[i].waitTimeS);
                     waitTimeS = waitTimeS + 1;

@@ -9,13 +9,13 @@
                         <th class="col1">序号：</th>
                         <td class="col2">
                             <div class="formControls col-xs-8">
-                                <label type="text">1</label>
+                                <label type="text">{{menu.id}}</label>
                             </div>
                         </td>
                         <th class="col3">菜名：</th>
                         <td class="col4">
                             <div class="formControls col-xs-8">
-                                <input type="text" class="input-text" name="name" id="name">
+                                <input type="text" class="input-text" name="name" id="name" ng-value="menu.greensName">
                             </div>
                         </td>
                     </tr>
@@ -23,7 +23,7 @@
                         <th class="col3">价格（元）：</th>
                         <td class="col4">
                             <div class="formControls col-xs-8">
-                                <input type="number" class="input-text" name="price" id="price">
+                                <input type="number" class="input-text" name="price" id="price" ng-value="menu.price">
                             </div>
                         </td>
                     </tr>
@@ -32,7 +32,7 @@
             </div>
             <div class="row cl">
                 <div class="col-xs-8 col-xs-offset-3">
-                    <button class="btn btn-secondary radius" type="button">&nbsp;&nbsp;修改&nbsp;&nbsp;</button>
+                    <button class="btn btn-secondary radius" type="button" ng-click="updateMenu()">&nbsp;&nbsp;修改&nbsp;&nbsp;</button>
                     <a href="#/menu" class="btn btn-secondary radius" style="position: relative;left: 25%">&nbsp;&nbsp;返回&nbsp;&nbsp;</a>
                 </div>
             </div>

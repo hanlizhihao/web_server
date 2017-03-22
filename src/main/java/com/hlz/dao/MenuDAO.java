@@ -147,4 +147,12 @@ public class MenuDAO implements MenuRepository{
         session.close();
         return result;
     }
+
+    @Override
+    public String getVersion() {
+        SessionFactory sf=SessionFactoryUtil.getSessionFactory();
+        Session session=sf.openSession();
+        Menu menu=session.get(Menu.class,1);
+        return menu.getDbVersion();
+    }
 }

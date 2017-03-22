@@ -175,6 +175,9 @@
                 $rootScope.findMenu=greens;//菜单
                 $rootScope.showMenu=data;//用于显示的菜单
            });
+            $http.get('/version',{}).success(function (data) {
+            $rootScope.version=String(data);
+            });
         });
 
 

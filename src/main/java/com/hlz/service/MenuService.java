@@ -27,4 +27,7 @@ public class MenuService {
     public List<Menu> findAllMenu(){
         return dao.queryMenu();
     }
+    public String getVersion(){
+        return dao.getVersion();
+    }
 }

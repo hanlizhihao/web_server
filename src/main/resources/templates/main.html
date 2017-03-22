@@ -59,7 +59,34 @@
      * angularJS开始
      * */
         var app = angular.module('app',['ui.router']);
-        
+        app.controller('CanceledDetailsController',function ($stateParams,$http,$scope,$rootScope) {
+            var id=Number($stateParams.id);
+            var canceled=$rootScope.canceled;
+            for (var i=0;i<canceled.length;i++){
+                if (canceled[i].id==id){
+                    $scope.canceled=canceled[i];
+                    $scope.reserve=canceled[i].reserve;//取出菜单赋值给scope
+                    break;
+                }
+            }
+        });
+        app.controller('CanceledController',function($rootScope,$scope,$http,stringService){
+            $http.get('canceled/1',{}).success(function (data) {
+                //获得等待时间，获得订菜菜单
+                for (var i=0;i<data.length;i++){
+                    var first=Number(data[i].firstTime);
+                    var begin=Number(data[i].beginTime);
+                    var waitTime=round((first-begin)/1000);
+                    data[i].waitTime=timeToString(waitTime);
+                    var reserve=stringService.convertString(data[i].reserve,data[i].fulfill);
+                    data[i].reserve=reserve;
+                }
+                $scope.canceled=data;
+                $rootScope.canceled=data;
+            }).error(function () {
+                alert("服务器暂时无法响应");
+            });
+        });
         app.controller('FinishedController',function($rootScope,$scope,$http,stringService){
             $http.get('finished/1',{}).success(function (data) {
                 for (var i=0;i<data.length;i++){
@@ -112,7 +139,7 @@
         //编写控制器时，应该将其置于指定的控制器中
         $("#underway_reserve").Spinner({value:1, min:1, len:2, max:99});
         $("#underway_fulfil").Spinner({value:1, min:1, len:2, max:99});
-        $("#reserve11").Spinner({value:8,min:1,len:2,max:99})
+        $("#reserve11").Spinner({value:8,min:1,len:2,max:99});
         //返回顶部
         $(window).on("scroll",backToTopFun);
         backToTopFun();
@@ -125,4 +152,5 @@
 <script type="text/javascript" src="UnderwayCarryController.js"></script>
 <script type="text/javascript" src="UnderwayAllController.js"></script>
 <script type="text/javascript" src="angularService.js"></script>
+<script type="text/javascript" src="MenuController.js"></script>
 </html>
