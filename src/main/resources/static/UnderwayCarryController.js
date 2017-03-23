@@ -79,21 +79,36 @@ app.controller('UnderwayCarryController', function ($scope, $http, $rootScope, $
                 $scope.indent.price=price;
             };
             $scope.carry = function (id) {
-                console.log(id);
                 var indentStyle = {};
                 indentStyle.id = id;
                 indentStyle.style = 1;
-                $http.post('/indent/style',
-                        $.param({id: indentStyle.id, style: indentStyle.style}),
-                        {headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}}
-                ).success(function (data) {
-                    if (data == "success") {
-                        $state.go('/underway');
-                    } else {
-                        alert("取消订单失败");
-                    }
-                }).error(function (a) {
-                    alert("服务器发生错误");
-                });
+                //若不是会员，结账时将自动加入会员
+                if($scope.vipFalse){
+                    $http.post('/indent/style',
+                            $.param({id: indentStyle.id, style: indentStyle.style,vip:$scope.telephone}),
+                            {headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}}
+                    ).success(function (data) {
+                        if (data == "success") {
+                            $state.go('/underway');
+                        } else {
+                            alert("取消订单失败");
+                        }
+                    }).error(function (a) {
+                        alert("服务器发生错误");
+                    });
+                }else{
+                    $http.post('/indent/style',
+                            $.param({id: indentStyle.id, style: indentStyle.style}),
+                            {headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}}
+                    ).success(function (data) {
+                        if (data == "success") {
+                            $state.go('/underway');
+                        } else {
+                            alert("取消订单失败");
+                        }
+                    }).error(function (a) {
+                        alert("服务器发生错误");
+                    });
+                }
             };
         });

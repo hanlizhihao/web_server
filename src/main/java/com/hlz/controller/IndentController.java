@@ -73,10 +73,10 @@ public class IndentController {
             return "success";
         }
     }
-    //结算与取消订单
+    //结算与取消订单，需要再次添加，将手机号作为会员
     @RequestMapping(value="/indent/style",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)
-    public String updateIndentStyle(IndentStyle model){
-        boolean sign=service.updateIndentStyle(model);
+    public String updateIndentStyle(IndentStyle model,@RequestParam("vip") String telephone){
+        boolean sign=service.updateIndentStyle(model,telephone);
         if(!sign){
             return "defeat";
         }else{

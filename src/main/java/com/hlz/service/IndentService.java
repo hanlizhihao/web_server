@@ -2,10 +2,12 @@ package com.hlz.service;
 
 import com.hlz.dao.IndentDAO;
 import com.hlz.dao.SellAnalyzeDAO;
+import com.hlz.dao.VipDAO;
 import com.hlz.entity.Indent;
 import com.hlz.entity.SellAnalyze;
 import com.hlz.webModel.IndentModel;
 import com.hlz.webModel.IndentStyle;
+import com.hlz.webModel.VipModel;
 import java.util.List;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,8 @@ public class IndentService {
     private SimpMessageSendingOperations messaging;
     @Autowired
     private RabbitTemplate rabbitTemplate;
+    @Autowired
+    private VipDAO vipDAO;
     /**
      * 增，删，改均涉及消息推送
      * @param model 客户端传递过来最新的数据
@@ -61,10 +65,14 @@ public class IndentService {
     /**
      * 结算与取消订单，均涉及推送消息
      * @param model
+     * @param telephone
      * @return 
      */
-    public boolean updateIndentStyle(IndentStyle model){
+    public boolean updateIndentStyle(IndentStyle model,String telephone){
         Indent indent=dao.updateIndent(model);
+        VipModel vipModel=new VipModel();
+        vipModel.setPhoneNumber(telephone);
+        vipDAO.addVip(vipModel);
         if(indent!=null){
             messaging.convertAndSend("/topic/style",model);
             rabbitTemplate.convertAndSend("style-indent",model);

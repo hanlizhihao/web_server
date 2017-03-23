@@ -9,13 +9,13 @@
                         <th class="col1">序号：</th>
                         <td class="col2">
                             <div class="formControls col-xs-8">
-                                <label type="text">1</label>
+                                <label type="text">{{vip.id}}</label>
                             </div>
                         </td>
                         <th class="col3">会员手机号：</th>
                         <td class="col4">
                             <div class="formControls col-xs-8">
-                                <input type="text" class="input-text" name="telephone" id="telephone">
+                                <input type="text" class="input-text" name="telephone" id="telephone" ng-value="vip.phoneNumber" ng-model="phoneNumber">
                             </div>
                         </td>
                     </tr>
@@ -23,13 +23,14 @@
                         <th class="col1">会员注册时间：</th>
                         <td class="col2">
                             <div class="formControls col-xs-8">
-                                <input type="text" class="input-text" name="joinTime" id="joinTime">
+                                <input type="text" class="input-text" name="joinTime" id="joinTime" ng-value="vip.joinTime" ng-model="joinTime">
                             </div>
                         </td>
                         <th class="col3">消费次数：</th>
                         <td class="col4">
                             <div class="formControls col-xs-8">
-                                <input type="number" class="input-text" name="consumeNumber" id="consumeNumber">
+                                <input type="number" class="input-text" name="consumeNumber" id="consumeNumber" ng-value="vip.consumNumber"
+                                       ng-model="consumeNumber">
                             </div>
                         </td>
                     </tr>
@@ -37,7 +38,8 @@
                         <th class="col1">消费总额（元）</th>
                         <td class="col2">
                             <div class="formControls col-xs-8">
-                                <input type="number" class="input-text" name="totalConsume" id="totalConsume">
+                                <input type="number" class="input-text" name="totalConsume" id="totalConsume" ng-value="vip.totalConsum"
+                                       ng-model="totalConsume">
                             </div>
                         </td>
                     </tr>
@@ -46,7 +48,7 @@
             </div>
             <div class="row cl">
                 <div class="col-xs-8 col-xs-offset-3">
-                    <button class="btn btn-secondary radius" type="button">&nbsp;&nbsp;修改&nbsp;&nbsp;</button>
+                    <button class="btn btn-secondary radius" type="button" ng-click="updateMenu()">&nbsp;&nbsp;修改&nbsp;&nbsp;</button>
                     <a href="#/vip" class="btn btn-secondary radius" style="position: relative;left: 25%">&nbsp;&nbsp;返回&nbsp;&nbsp;</a>
                 </div>
             </div>
