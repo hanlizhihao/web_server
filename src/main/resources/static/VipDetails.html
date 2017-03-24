@@ -48,22 +48,10 @@
             </div>
             <div class="row cl">
                 <div class="col-xs-8 col-xs-offset-3">
-                    <button class="btn btn-secondary radius" type="button" ng-click="updateMenu()">&nbsp;&nbsp;修改&nbsp;&nbsp;</button>
+                    <button class="btn btn-secondary radius" type="button" ng-click="updateVip()">&nbsp;&nbsp;修改&nbsp;&nbsp;</button>
                     <a href="#/vip" class="btn btn-secondary radius" style="position: relative;left: 25%">&nbsp;&nbsp;返回&nbsp;&nbsp;</a>
                 </div>
             </div>
         </form>
     </div>
 </div>
-<script type="text/javascript">
-    //日期插件
-    $("#joinTime").datetimepicker({
-        format: 'yyyy-mm-dd',
-        minView: "month",
-        todayBtn:  1,
-        autoclose: 1,
-        endDate : new Date()
-    }).on('hide',function(e) {
-        //此处可以触发日期校验。
-    });
-</script>

@@ -4,12 +4,14 @@ import com.hlz.entity.Users;
 import com.hlz.service.UserService;
 import com.hlz.webModel.UserAddModel;
 import com.hlz.webModel.UserOutput;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -22,16 +24,16 @@ public class UserController {
     private UserService service;
     @RequestMapping(value="/users",produces="application/json;charset=UTF-8",method=RequestMethod.GET)
     public ArrayList<UserOutput> getUsers(){
-        ArrayList<UserOutput> users=new ArrayList<>();
-        List<UserOutput> result=service.findAllUser();
+        ArrayList<UserOutput> result=service.findAllUser();
         if(result==null||result.isEmpty()){
+            result=new ArrayList<>();
             UserOutput user=new UserOutput();
             user.setName("404");
-            users.add(user);
+            result.add(user);
+            return result;
         }else{
-            users.addAll(result);
+            return result;
         }
-        return users; 
     }
     @RequestMapping(value="/user/{id}",produces="application/json;charset=UTF-8",method=RequestMethod.GET)
     public Users getOneUser(@PathVariable String id){
@@ -54,7 +56,15 @@ public class UserController {
         }
     }
     @RequestMapping(value="/user/update",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)
-    public String updateUser(Users user){
+    public String updateUser(@RequestParam("id") Integer id,@RequestParam("name") String name,@RequestParam("username") String username,
+            @RequestParam("password") String password,@RequestParam("style") Integer style,@RequestParam("joinTime") Date joinTime){
+        Users user=new Users();
+        user.setId(style);
+        user.setJoinTime(joinTime);
+        user.setName(name);
+        user.setPassword(password);
+        user.setStyle(style);
+        user.setUsername(username);
         boolean sign=service.updateUser(user);
         if(sign){
             return "success";

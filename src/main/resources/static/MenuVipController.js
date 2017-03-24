@@ -70,7 +70,7 @@ app.controller('MenuController', function ($state, $scope, $http, $rootScope) {
     $scope.deleteMenu = function (id) {
         var param = String(id);
         param = "/menu/delete/" + param;
-        $.get(param, {}).success(function (data) {
+        $http.get(param, {}).success(function (data) {
             if ("success" == data) {
                 for (var i = 0; i < $rootScope.showMenu.length; i++) {
                     if ($rootScope.showMenu[i].id == id) {
@@ -104,7 +104,7 @@ app.controller('MenuDetailsController', function ($rootScope, $scope, $http, $st
         $scope.greensName = String(document.getElementById("name").value);
         $scope.price = String(document.getElementById("price").value);
         var menuModel = {"id": $scope.menu.id, "name": $scope.greensName, "price": $scope.price};
-        $.post('/menu/update', $.param(menuModel), {headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}})
+        $http.post('/menu/update', $.param(menuModel), {headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}})
                 .success(function (data) {
                     if ("success" == data) {
                         var greens = [];
@@ -159,6 +159,7 @@ app.controller('VipController', function ($scope, $rootScope, $http, $state) {
                                 alert("服务器获取数据失败");
                             } else {
                                 $scope.vips = data;
+                                $rootScope.vips=data;
                             }
                         }).error(function () {
                             alert("获取数据失败");
@@ -174,11 +175,12 @@ app.controller('VipController', function ($scope, $rootScope, $http, $state) {
     $scope.deleteVip = function (id) {
         var param = String(id);
         param = "/vip/delete/" + param;
-        $.get(param, {}).success(function (data) {
+        $http.get(param, {}).success(function (data) {
             if ("success" == data) {
                 for (var i = 0; i < $scope.vips.length; i++) {
                     if ($scope.vips[i].id == id) {
-                        $scope.vips.splice(i,1);//删除指定的vip
+                        $rootScope.vips.splice(i,1);
+                        $scope.vips=$rootScope.vips;
                         break;
                     }
                 }
@@ -200,10 +202,10 @@ app.controller('VipDetailsController', function ($state, $scope, $rootScope, $ht
         }
     }
     //用于数据绑定的模型
-    $scope.phoneNumber = String();
-    $scope.consumeNumber = String();
-    $scope.totalConsume = String();
-    $scope.joinTime = String();
+    $scope.phoneNumber =$scope.vip.phoneNumber;
+    $scope.consumeNumber =$scope.vip.consumNumber;
+    $scope.totalConsume =$scope.vip.totalConsum;
+    $scope.joinTime =$scope.vip.joinTime;
     $scope.updateVip = function () {
         if($scope.phoneNumber.length==11||$scope.phoneNumber.length==10||$scope.phoneNumber.length==6){
             var vipModel = {

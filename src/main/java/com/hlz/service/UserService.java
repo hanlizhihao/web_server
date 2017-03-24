@@ -32,9 +32,8 @@ public class UserService {
     public ArrayList<UserOutput> findAllUser(){
          List<Users> users=dao.queryAllUser();
          ArrayList<UserOutput> result=new ArrayList<>();
-         UserOutput userOutput=new UserOutput();
-        for (Iterator<Users> it = users.iterator(); it.hasNext();) {
-            Users user = it.next();
+        for (Users user : users) {
+            UserOutput userOutput=new UserOutput();
             userOutput.setId(user.getId());
             userOutput.setJoinTime(user.getJoinTime());
             userOutput.setName(user.getName());

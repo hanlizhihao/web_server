@@ -83,3 +83,14 @@ function stomp() {
         });
     });
 }
+//用于将用户的数字类型转换为文字描述
+function convertStyle(styleNumber) {
+    var style = Number(styleNumber);
+    if (style == "0") {
+        return "管理员";
+    } else if (style == "1") {
+        return "服务员";
+    } else {
+        return "异常";
+    }
+}

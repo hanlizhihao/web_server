@@ -13,38 +13,34 @@
                             <div class="panel-body">
                                 <form action="" method="post" class="form form-horizontal responsive" id="userForm">
                                     <div class="row cl">
-                                        <label class="form-label col-xs-3">序号：</label>
-                                        <div class="formControls col-xs-8">
-                                            <label>1</label>
-                                        </div>
-                                    </div>
-                                    <div class="row cl">
                                         <label class="form-label col-xs-3">用户昵称：</label>
                                         <div class="formControls col-xs-8">
-                                            <input type="text" class="input-text" placeholder="1~3个中文字符" name="name" id="name">
+                                            <input type="text" class="input-text" placeholder="1~3个中文字符" name="name" id="name" ng-model="addName">
                                         </div>
                                     </div>
                                     <div class="row cl">
                                         <label class="form-label col-xs-3">用户名：</label>
                                         <div class="formControls col-xs-8">
-                                            <input type="text" class="input-text" autocomplete="off" placeholder="1个英文字符以上" name="username" id="username">
+                                            <input type="text" class="input-text" autocomplete="off" placeholder="1个英文字符以上" name="username" id="username"
+                                                   ng-model="addUsername">
                                         </div>
                                     </div>
                                     <div class="row cl">
                                         <label class="form-label col-xs-3">密码：</label>
                                         <div class="formControls col-xs-8">
-                                            <input type="password" class="input-text" autocomplete="off" placeholder="密码" name="password" id="password">
+                                            <input type="text" class="input-text" autocomplete="off" placeholder="密码" name="password" id="password" 
+                                                   ng-model="addPassword">
                                         </div>
                                     </div>
                                     <div class="row cl">
                                         <label class="form-label col-xs-3">用户类型：</label>
                                         <div class="formControls skin-minimal col-xs-5">
                                             <div class="radio-box">
-                                                <input type="radio" id="waiter" name="userType">
+                                                <input type="radio" id="waiter" name="userType" ng-click="checked(1)">
                                                 <label for="waiter">服务员</label>
                                             </div>
                                             <div class="radio-box">
-                                                <input type="radio" id="administrator" name="userType">
+                                                <input type="radio" id="administrator" name="userType" ng-click="checked(0)">
                                                 <label for="administrator">管理员</label>
                                             </div>
                                         </div>
@@ -55,7 +51,7 @@
                     </div>
                     <div class="modal-footer">
                         <!-点击确定以后，交由AngularJS处理-->
-                        <button class="btn btn-success radius">确定</button>
+                        <button class="btn btn-success radius" ng-click="addUser()">确定</button>
                         <button class="btn btn-secondary radius" data-dismiss="modal" aria-hidden="true">关闭</button>
                     </div>
                 </div>
@@ -74,46 +70,19 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td class="col1">1</td>
-                <td class="col2">东哥</td>
-                <td class="col3">wuguixu</td>
-                <td class="col4">1</td>
-                <td class="col5">2017.02.22</td>
-                <td class="col6">管理员</td>
+            <tr ng-repeat="x in users">
+                <td class="col1">{{$index+1}}</td>
+                <td class="col2">{{x.name}}</td>
+                <td class="col3">{{x.username}}</td>
+                <td class="col4">{{x.password}}</td>
+                <td class="col5">{{x.joinTime}}</td>
+                <td class="col6">{{x.styleString}}</td>
                 <td class="col7">
-                    <a href="#/userDetails" class="btn btn-secondary-outline radius">修改</a>
-                    <button class="btn btn-danger-outline radius" type="button">删除</button>
+                    <a href="#/userDetails/{{x.id}}" class="btn btn-secondary-outline radius">修改</a>
+                    <button class="btn btn-danger-outline radius" type="button" ng-click="deleteUser(x.id)">删除</button>
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
 </div>
-<!-这部分验证代码放到指定的控制器中-->
-<script type="text/javascript">
-    $("#userForm").validate({
-        rules:{
-            name:{
-                required:true,
-                minlength:1,
-                maxlength:3
-            },
-            username:{
-                required:true,
-                minlength:1,
-                maxlength:16
-            },
-            password:{
-                required:true,
-                isPwd:true,
-            },
-            userType:{
-                required:true,
-            },
-        },
-        onkeyup:false,
-        focusCleanup:true,
-        success:"valid",
-    });
-</script>
