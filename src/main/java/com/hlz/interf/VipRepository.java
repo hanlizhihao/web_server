@@ -15,4 +15,5 @@ public interface VipRepository {
     int countVip();
     List<Vip> queryVipOnPage(int page);
     Vip querySingle(int id);
+    Vip querySingle(String telephone);
 }

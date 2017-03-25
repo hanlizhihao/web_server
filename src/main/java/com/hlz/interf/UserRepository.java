@@ -1,6 +1,8 @@
 package com.hlz.interf;
 
+import com.hlz.entity.Sign;
 import com.hlz.entity.Users;
+import com.hlz.entity.WorkTime;
 import com.hlz.webModel.UserAddModel;
 import java.util.List;
 
@@ -15,4 +17,6 @@ public interface UserRepository {
     List<Users> queryAllUser();
     Users querySingleUsers(int id);
     Users findByUsername(String username);
+    List<Sign> getSignByUserID(int id);
+    List<WorkTime> getWorkTimeByUserID(int id);
 }

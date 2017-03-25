@@ -5,8 +5,8 @@ import com.hlz.entity.Users;
 import com.hlz.entity.WorkTime;
 import com.hlz.interf.SignAndWorkRepository;
 import com.hlz.webModel.WorkModel;
-import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -37,7 +37,7 @@ public class SignAndWorkDAO implements SignAndWorkRepository{
         }
         Users user=(Users)session.get(Users.class,id);
         Sign sign=new Sign();
-        sign.setSignTime(new java.sql.Date(System.currentTimeMillis()));
+        sign.setSignTime(new java.sql.Timestamp(System.currentTimeMillis()));
         Transaction t= session.beginTransaction();
         try{
             session.save(sign);
@@ -83,16 +83,6 @@ public class SignAndWorkDAO implements SignAndWorkRepository{
         userWork.add(model.getId());
         return true;
     }
-
-    @Override
-    public boolean deleteSign(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean deleteWork(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     /**
      * model中只带有user的id，故通过user的id查找出本次要修改的工作时间，这是通
      * 过比对user的所有工作时间的操作时间是否是今天来判断的
@@ -104,8 +94,8 @@ public class SignAndWorkDAO implements SignAndWorkRepository{
     public boolean updateWork(WorkModel model) {
         SessionFactory sf = SessionFactoryUtil.getSessionFactory();
         Session session = sf.openSession();
-        Users user = session.get(Users.class, model.getId());
-        Collection<WorkTime> works = user.getWorkTimeCollection();
+        UserDAO dao=new UserDAO();
+        List<WorkTime> works =dao.getWorkTimeByUserID(model.getId());
         Transaction t = session.beginTransaction();
         for (WorkTime work : works) {
             //判断workTime的记录时间是不是当天
@@ -129,5 +119,4 @@ public class SignAndWorkDAO implements SignAndWorkRepository{
         }
         return true;
     }
-
 }

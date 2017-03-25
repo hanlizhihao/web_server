@@ -132,5 +132,15 @@ public class VipDAO implements VipRepository{
         return !(result==null||result.isEmpty());
     }
     //用于对vip的消费进行统计
-    
+
+    @Override
+    public Vip querySingle(String telephone) {
+        SessionFactory sf = SessionFactoryUtil.getSessionFactory();
+        Session session = sf.openSession();
+        String hql="from Vip where phoneNumber=?";
+        Query query=session.createQuery(hql);
+        query.setParameter(0,telephone);
+        List<Vip> result=query.getResultList();
+        return result.get(0);
+    }
 }

@@ -8,7 +8,5 @@ import com.hlz.webModel.WorkModel;
 public interface SignAndWorkRepository {
     boolean addSign(int id);
     boolean addWork(WorkModel model);
-    boolean deleteSign(int id);
-    boolean deleteWork(int id);
     boolean updateWork(WorkModel model);
 }

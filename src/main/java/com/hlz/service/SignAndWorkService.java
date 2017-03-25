@@ -3,10 +3,9 @@ package com.hlz.service;
 import com.hlz.dao.SignAndWorkDAO;
 import com.hlz.dao.UserDAO;
 import com.hlz.entity.Sign;
-import com.hlz.entity.Users;
 import com.hlz.entity.WorkTime;
 import com.hlz.webModel.WorkModel;
-import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,17 +27,13 @@ public class SignAndWorkService {
         return dao.addWork(model);
     }
     //允许为空
-    public ArrayList<Sign> findSignOnUserId(int id){
-        Users user=userdao.querySingleUsers(id);
-        ArrayList<Sign> result=new ArrayList<>();
-        result.addAll(user.getSignCollection());
-        return result;
+    public List<Sign> findSignOnUserId(int id){
+        List<Sign> signs=userdao.getSignByUserID(id);
+        return signs;
     }
     //对于工作时间的问题，目前只是单纯的返回静态的数据到前端，不会动态更改
-    public ArrayList<WorkTime> findWorkTimeOnUserID(int id){
-        Users user=userdao.querySingleUsers(id);
-        ArrayList<WorkTime> result=new ArrayList<>();
-        result.addAll(user.getWorkTimeCollection());
-        return result;
+    public List<WorkTime> findWorkTimeOnUserID(int id){
+        List<WorkTime> works=userdao.getWorkTimeByUserID(id);
+        return works;
     }
 }

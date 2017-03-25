@@ -1,7 +1,7 @@
 package com.hlz.entity;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Timestamp;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,13 +13,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Administrator 2017-2-16
+ * @author Administrator 2017-3-25
  */
 @Entity
 @Table(name = "sign", catalog = "order", schema = "")
@@ -37,8 +35,7 @@ public class Sign implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Column(name = "sign_time")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date signTime;
+    private Timestamp signTime;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne
     private Users userId;
@@ -58,11 +55,11 @@ public class Sign implements Serializable {
         this.id = id;
     }
 
-    public Date getSignTime() {
+    public Timestamp getSignTime() {
         return signTime;
     }
 
-    public void setSignTime(Date signTime) {
+    public void setSignTime(Timestamp signTime) {
         this.signTime = signTime;
     }
 
@@ -96,7 +93,7 @@ public class Sign implements Serializable {
 
     @Override
     public String toString() {
-        return "dao.Sign[ id=" + id + " ]";
+        return "com.hlz.entity.Sign[ id=" + id + " ]";
     }
 
 }

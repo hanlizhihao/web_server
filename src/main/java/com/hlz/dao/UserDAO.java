@@ -1,6 +1,8 @@
 package com.hlz.dao;
 
+import com.hlz.entity.Sign;
 import com.hlz.entity.Users;
+import com.hlz.entity.WorkTime;
 import com.hlz.interf.UserRepository;
 import com.hlz.webModel.UserAddModel;
 import java.util.List;
@@ -107,7 +109,6 @@ public class UserDAO implements UserRepository{
         }
         return user;
     }
-
     @Override
     public Users findByUsername(String username) {
         String hql="from Users order by id where username=?";
@@ -119,5 +120,49 @@ public class UserDAO implements UserRepository{
         System.out.println("根据username查询User成功");
         session.close();
         return user;
+    }
+
+    @Override
+    public List<Sign> getSignByUserID(int id) {
+        SessionFactory sf=SessionFactoryUtil.getSessionFactory();
+        List<Sign> signs;
+        try(Session session = sf.openSession()) {
+            Transaction t=session.beginTransaction();
+            Users user=(Users)session.get(Users.class, id);
+            signs = user.getSignList();
+            try{
+                t.commit();
+            }catch(Exception e){
+                e.printStackTrace();
+                t.rollback();
+                return null;
+            }
+            signs.forEach((work) -> {
+                System.out.println(work.getSignTime());
+            });
+        }
+        return signs;
+    }
+
+    @Override
+    public List<WorkTime> getWorkTimeByUserID(int id) {
+        SessionFactory sf = SessionFactoryUtil.getSessionFactory();
+        List<WorkTime> signs;
+        try (Session session = sf.openSession()) {
+            Transaction t = session.beginTransaction();
+            Users user = (Users) session.get(Users.class, id);
+            signs = user.getWorkTimeList();
+            try {
+                t.commit();
+            } catch (Exception e) {
+                e.printStackTrace();
+                t.rollback();
+                return null;
+            }
+            signs.forEach((work) -> {
+                System.out.println(work.getContinueTime());
+            });
+        }
+        return signs;
     }
 }

@@ -5,6 +5,7 @@ import com.hlz.dao.SellAnalyzeDAO;
 import com.hlz.dao.VipDAO;
 import com.hlz.entity.Indent;
 import com.hlz.entity.SellAnalyze;
+import com.hlz.entity.Vip;
 import com.hlz.webModel.IndentModel;
 import com.hlz.webModel.IndentStyle;
 import com.hlz.webModel.VipModel;
@@ -70,16 +71,23 @@ public class IndentService {
      */
     public boolean updateIndentStyle(IndentStyle model,String telephone){
         Indent indent=dao.updateIndent(model);
-        VipModel vipModel=new VipModel();
-        vipModel.setPhoneNumber(telephone);
-        vipDAO.addVip(vipModel);
-        if(indent!=null){
-            messaging.convertAndSend("/topic/style",model);
-            rabbitTemplate.convertAndSend("style-indent",model);
-            return true;
-        }else{
+        if(vipDAO.validateVip(telephone)&&indent!=null){//如果是会员，则更新会员的消费金额和消费次数
+            Vip vip=vipDAO.querySingle(telephone);
+            vip.setConsumNumber(vip.getConsumNumber()+1);
+            vip.setTotalConsum(vip.getTotalConsum()+indent.getPrice());
+            vipDAO.updateVip(vip);
+        }else if(!vipDAO.validateVip(telephone)&&indent!=null){//若之前不是会员则创建会员
+            VipModel vipModel = new VipModel();
+            vipModel.setPhoneNumber(telephone);
+            vipModel.setTotalConsum(indent.getPrice());
+            vipModel.setConsumNumber(1);
+            vipDAO.addVip(vipModel);
+        } else {
             return false;
         }
+        messaging.convertAndSend("/topic/style", model);
+        rabbitTemplate.convertAndSend("style-indent", model);
+        return true;
     }
     //查询相关
     public List<Indent> findAllUnderwayIndent(){

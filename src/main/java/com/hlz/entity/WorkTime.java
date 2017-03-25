@@ -1,7 +1,7 @@
 package com.hlz.entity;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,13 +13,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Administrator 2017-2-16
+ * @author Administrator 2017-3-25
  */
 @Entity
 @Table(name = "work_time", catalog = "order", schema = "")
@@ -38,8 +37,8 @@ public class WorkTime implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Column(name = "opration_time")
-    @Temporal(TemporalType.DATE)
     private Date oprationTime;
+    @Size(max = 255)
     @Column(name = "continue_time")
     private String continueTime;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -99,12 +98,15 @@ public class WorkTime implements Serializable {
             return false;
         }
         WorkTime other = (WorkTime) object;
-        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
-        return "dao.WorkTime[ id=" + id + " ]";
+        return "com.hlz.entity.WorkTime[ id=" + id + " ]";
     }
 
 }

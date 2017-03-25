@@ -1,8 +1,8 @@
 package com.hlz.entity;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.sql.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,12 +13,13 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Administrator 2017-2-16
+ * @author Administrator 2017-3-25
  */
 @Entity
 @Table(name = "users", catalog = "order", schema = "")
@@ -39,10 +40,13 @@ public class Users implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    @Size(max = 255)
     @Column(name = "name")
     private String name;
+    @Size(max = 255)
     @Column(name = "username")
     private String username;
+    @Size(max = 255)
     @Column(name = "password")
     private String password;
     @Column(name = "join_time")
@@ -50,9 +54,9 @@ public class Users implements Serializable {
     @Column(name = "style")
     private Integer style;
     @OneToMany(mappedBy = "userId")
-    private Collection<Sign> signCollection;
+    private List<Sign> signList;
     @OneToMany(mappedBy = "userId")
-    private Collection<WorkTime> workTimeCollection;
+    private List<WorkTime> workTimeList;
 
     public Users() {
     }
@@ -110,21 +114,21 @@ public class Users implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Sign> getSignCollection() {
-        return signCollection;
+    public List<Sign> getSignList() {
+        return signList;
     }
 
-    public void setSignCollection(Collection<Sign> signCollection) {
-        this.signCollection = signCollection;
+    public void setSignList(List<Sign> signList) {
+        this.signList = signList;
     }
 
     @XmlTransient
-    public Collection<WorkTime> getWorkTimeCollection() {
-        return workTimeCollection;
+    public List<WorkTime> getWorkTimeList() {
+        return workTimeList;
     }
 
-    public void setWorkTimeCollection(Collection<WorkTime> workTimeCollection) {
-        this.workTimeCollection = workTimeCollection;
+    public void setWorkTimeList(List<WorkTime> workTimeList) {
+        this.workTimeList = workTimeList;
     }
 
     @Override
@@ -149,8 +153,7 @@ public class Users implements Serializable {
 
     @Override
     public String toString() {
-        return "dao.Users[ id=" + id + " ]";
+        return "com.hlz.entity.Users[ id=" + id + " ]";
     }
-    //返回这个user所具有的的权限集合,
-    //并设置这个账号是可用的
+
 }

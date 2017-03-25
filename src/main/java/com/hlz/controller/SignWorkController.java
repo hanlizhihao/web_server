@@ -7,10 +7,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.List;
 import com.hlz.entity.Sign;
 import com.hlz.entity.WorkTime;
+import com.hlz.webModel.SignOutput;
+import com.hlz.webModel.WorkTimeOutput;
 import java.util.ArrayList;
+import java.util.List;
 /**
  *只有添加签到和工作，没有更新和删除
  * @author Administrator 2017-3-7
@@ -39,13 +41,26 @@ public class SignWorkController {
         }
     }
     @RequestMapping(value="/signs/{id}",produces="application/json;charset=UTF-8",method=RequestMethod.GET)
-    public List<Sign> getSigns(@PathVariable String id){
-        ArrayList<Sign> signs=service.findSignOnUserId(Integer.valueOf(id));
-        return signs;
+    public ArrayList<SignOutput> getSigns(@PathVariable String id){
+        List<Sign> signs=service.findSignOnUserId(Integer.valueOf(id));
+        ArrayList<SignOutput> result=new ArrayList<>();
+        for(Sign s:signs){
+            SignOutput signOutput=new SignOutput();
+            signOutput.setSignTime(s.getSignTime());
+            result.add(signOutput);
+        }
+        return result;
     }
     @RequestMapping(value="/works/{id}",produces="application/json;charset=UTF-8",method=RequestMethod.GET)
-    public List<WorkTime> getWorks(@PathVariable String id){
-        ArrayList<WorkTime> works=service.findWorkTimeOnUserID(Integer.valueOf(id));
-        return works;
+    public ArrayList<WorkTimeOutput> getWorks(@PathVariable String id){
+        List<WorkTime> works=service.findWorkTimeOnUserID(Integer.valueOf(id));
+        ArrayList<WorkTimeOutput> result=new ArrayList<>();
+        for(WorkTime w:works){
+            WorkTimeOutput work=new WorkTimeOutput();
+            work.setContinueTime(w.getContinueTime());
+            work.setOprationTime(w.getOprationTime());
+            result.add(work);
+        }
+        return result;
     }
 }
