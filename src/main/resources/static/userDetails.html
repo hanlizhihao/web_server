@@ -3,12 +3,6 @@
     <div class="panel-body">
         <form action="" method="post" class="form form-horizontal responsive" id="demoform">
             <div class="row cl">
-                <label class="form-label col-xs-3">序号：</label>
-                <div class="formControls col-xs-8">
-                    <label type="text">{{user.id}}</label>
-                </div>
-            </div>
-            <div class="row cl">
                 <label class="form-label col-xs-3">用户昵称：</label>
                 <div class="formControls col-xs-8">
                     <input type="text" class="input-text" name="name" id="name" ng-value="user.name" ng-model="name">
@@ -27,6 +21,12 @@
                 </div>
             </div>
             <div class="row cl">
+                <label class="form-label col-xs-3">最近一次签到时间：</label>
+                <div class="formControls col-xs-8">
+                    <label type="text">{{lastSignTime.signTime}}</label>
+                </div>
+            </div>
+            <div class="row cl">
                 <label class="form-label col-xs-3">注册时间：</label>
                 <div class="formControls col-xs-8">
                     <input type="text" class="input-text" autocomplete="off" name="joinTime" id="joinTime" ng-model="joinTime" ng-value="user.joinTime">
@@ -36,11 +36,11 @@
                 <label class="form-label col-xs-3">用户类型：</label>
                 <div class="formControls skin-minimal col-xs-5">
                     <div class="radio-box">
-                        <input type="radio" id="waiter" name="userType" ng-checked="user.style=='1'?true:false;" ng-click="checked(1)">
+                        <input type="radio" id="waiter" name="userType" ng-checked="user.style=='1';" ng-click="checked(1)">
                         <label for="waiter">服务员</label>
                     </div>
                     <div class="radio-box">
-                        <input type="radio" id="administrator" name="userType" ng-checked="user.style=='0'?true:false;" ng-click="checked(0)">
+                        <input type="radio" id="administrator" name="userType" ng-checked="user.style=='0';" ng-click="checked(0)">
                         <label for="administrator">管理员</label>
                     </div>
                 </div>

@@ -9,6 +9,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import com.hlz.entity.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import javax.persistence.Query;
 import org.hibernate.Transaction;
 
@@ -35,20 +37,21 @@ public class SellAnalyzeDAO implements SellAnalyzeRepository {
         List<Menu> result;
         Query query = (Query) session.createQuery(hql);
         result = query.getResultList();
+        Map<String,Menu> menu=new HashMap<>();
+        //将List集合转为map的集合，以方便查找菜单
+        result.forEach((m) -> {
+            menu.put(m.getGreensName(),m);
+        });
         Transaction t = session.beginTransaction();
         for (String a : reserve) {
             String[] name = a.split("a");
-            for (Menu m : result) {
-                if (name[0].equals(m.getGreensName()))//说明查到了名字相同的
-                {
-                    int number = Integer.valueOf(name[1]);
-                    int id = m.getId();
-                    SellAnalyze sell = (SellAnalyze) session.get(SellAnalyze.class, id);
-                    sell.setNumber(sell.getNumber() + number);
-                    sell.setPrice(sell.getPrice() + m.getPrice() * number);
-                    session.save(sell);
-                }
-            }
+            Menu m=menu.get(name[0]);
+            Double price=m.getPrice();
+            int number=Integer.valueOf(name[1]);
+            SellAnalyze sell = (SellAnalyze) session.get(SellAnalyze.class,m.getId());
+            sell.setNumber(sell.getNumber()+number);
+            sell.setPrice(sell.getPrice()+m.getPrice()*number);
+            session.update(sell);
         }
         try {
             t.commit();

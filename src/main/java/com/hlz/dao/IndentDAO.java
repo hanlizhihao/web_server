@@ -110,7 +110,7 @@ public class IndentDAO implements IndentRepository{
         if (style.getStyle() == 1) {
             return dao.updateSellAnalyze(style, indent);
         } else {
-            System.out.print("结算订单信息成功");
+            System.out.print("取消订单信息成功");
             return indent;
         }
     }

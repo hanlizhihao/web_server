@@ -72,46 +72,41 @@ app.controller('UserController', function ($scope, $rootScope, $http) {
         });
     };
 });
-app.controller('UserDetailsController', function ($scope, $rootScope, $http, $stateParams,$state) {
-    var id = Number($stateParams.id);
-    var users = $rootScope.users;
-    for (var i = 0; i < users.length; i++) {
-        if (users[i].id == id) {
-            $scope.user = users[i];
-            break;
+    app.controller('UserDetailsController', function ($scope, $rootScope, $http, $stateParams,$state) {
+        var id = Number($stateParams.id);
+        var users = $rootScope.users;
+        for (var i = 0; i < users.length; i++) {
+            if (users[i].id == id) {
+                $scope.user = users[i];
+                break;
+            }
         }
-    }
-    //用于判断单选，应该显示哪一个
-    $scope.showUserStyle = function (id) {
-        var sign = String(id);
-        if (sign == "管理员" && $scope.user.styleString == "管理员") {
-            return true;
-        } else if (sign == "服务员" && $scope.user.styleString == "服务员") {
-            return true;
-        } else {
-            return false;
-        }
-    };
-    $scope.name = String($scope.user.name);
-    $scope.username =String($scope.user.username);
-    $scope.password =String($scope.user.password);
-    $scope.joinTime = String($scope.user.joinTime);
-    $scope.style=String($scope.user.style);//身份
-    //点击以后，改变style，style用于传递到服务器
-    $scope.checked=function(sign){
-        var style=String(sign);
-        $scope.style=style=="0"?"0":"1";
-    };
-    $scope.updateUser = function () {
-        var user={};
-        if ($scope.style == "1") {
-            user = {"id": $scope.user.id, "name": $scope.name, "username": $scope.username, "password": $scope.password, "style": "1","joinTime"
-            :$scope.joinTime};
-        } else if ($scope.style == "0") {
-            user = {"id": $scope.user.id, "name": $scope.name, "username": $scope.username, "password": $scope.password, "style": "0","joinTime"
-            :$scope.joinTime};
-        }
-        $http.post('/user/update', user, {headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}})
+        var param=String(id);
+        param="/signs/"+param;
+        $http.get(param,{}).success(function (data) {
+            var number=Number(data.length);
+            $scope.lastSignTime=data[number-1];
+        });
+        $scope.name = String($scope.user.name);
+        $scope.username =String($scope.user.username);
+        $scope.password =String($scope.user.password);
+        $scope.joinTime = String($scope.user.joinTime);
+        $scope.style=String($scope.user.style);//身份
+        //点击以后，改变style，style用于传递到服务器
+        $scope.checked=function(sign){
+            var style=String(sign);
+            $scope.style=style=="0"?"0":"1";
+        };
+        $scope.updateUser = function () {
+            var user={};
+            if ($scope.style == "1") {
+                user = {"id": $scope.user.id, "name": $scope.name, "username": $scope.username, "password": $scope.password, "style": "1","joinTime"
+                    :$scope.joinTime};
+            } else if ($scope.style == "0") {
+                user = {"id": $scope.user.id, "name": $scope.name, "username": $scope.username, "password": $scope.password, "style": "0","joinTime"
+                    :$scope.joinTime};
+            }
+            $http.post('/user/update', user, {headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}})
                 .success(function (data) {
                     if (data == "success") {
                         $state.go('user');
@@ -124,6 +119,6 @@ app.controller('UserDetailsController', function ($scope, $rootScope, $http, $st
                 $state.go('user');
                 alert("添加用户信息失败，网络连接异常");
             });
-        $state.go('user');
-    };
-});
+            $state.go('user');
+        };
+    });

@@ -11,11 +11,11 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td class="col1">1</td>
-                <td class="col2">尖椒干豆腐</td>
-                <td class="col3">20</td>
-                <td class="col4">1</td>
+            <tr ng-repeat="x in analyze">
+                <td class="col1">{{$index+1}}</td>
+                <td class="col2">{{x.name}}</td>
+                <td class="col3">{{x.price}}</td>
+                <td class="col4">{{x.number}}</td>
             </tr>
             </tbody>
         </table>

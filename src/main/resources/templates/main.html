@@ -59,6 +59,14 @@
      * angularJS开始
      * */
         var app = angular.module('app',['ui.router']);
+        app.controller('SalesController',function ($scope, $rootScope, $http) {
+            $http.get('/analyze',{}).success(function (data) {
+                $scope.analyze=data;
+                $rootScope.analyze=data;
+            }).error(function () {
+                alert("网络连接异常");
+            });
+        });
         app.controller('CanceledDetailsController',function ($stateParams,$http,$scope,$rootScope) {
             var id=Number($stateParams.id);
             var canceled=$rootScope.canceled;

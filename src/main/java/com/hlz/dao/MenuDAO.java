@@ -24,12 +24,12 @@ public class MenuDAO implements MenuRepository{
         SessionFactory sf=SessionFactoryUtil.getSessionFactory();
         Session session=sf.openSession();
         Transaction t=session.beginTransaction();
-        if(row==0){
+        if(row==0){//菜单第一条数据需要进行初始化
             Menu menu=new Menu();
             SellAnalyze sell=new SellAnalyze();//用于对初始化对销售进行分析
             sell.setName(model.getName());
             sell.setNumber(0);
-            sell.setPrice(model.getPrice());
+            sell.setPrice(0.0);
             menu.setDbVersion("1");
             menu.setGreensName(model.getName());
             menu.setPrice(model.getPrice());
@@ -51,7 +51,7 @@ public class MenuDAO implements MenuRepository{
             SellAnalyze sell = new SellAnalyze();//用于初始化销售分析
             sell.setName(model.getName());
             sell.setNumber(0);
-            sell.setPrice(model.getPrice());
+            sell.setPrice(0.0);
             int version=Integer.valueOf(menu.getDbVersion());
             version=version+1;
             menu.setDbVersion(Integer.toString(version));
