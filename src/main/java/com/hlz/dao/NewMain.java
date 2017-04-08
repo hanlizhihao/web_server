@@ -13,10 +13,6 @@ public class NewMain {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        UserDAO dao=new UserDAO();
-        List<Sign> result=dao.getSignByUserID(1);
-        for(Sign s:result){
-            System.out.println(s.getSignTime());
-        }
+        SellAnalyzeDAO dao=new SellAnalyzeDAO();
     }
 }

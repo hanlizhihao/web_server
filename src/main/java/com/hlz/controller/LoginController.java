@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  *
@@ -32,6 +33,15 @@ public class LoginController {
             return "main";
         }else{
             return "login";
+        }
+    }
+    @RequestMapping(value="app/login",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)
+    @ResponseBody
+    public String appLogin(UserModel user){
+        if(service.login(user)){
+            return "success";
+        }else{
+            return "defeat";
         }
     }
 }

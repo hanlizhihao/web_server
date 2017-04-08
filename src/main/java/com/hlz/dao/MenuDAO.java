@@ -52,9 +52,7 @@ public class MenuDAO implements MenuRepository{
             sell.setName(model.getName());
             sell.setNumber(0);
             sell.setPrice(0.0);
-            int version=Integer.valueOf(menu.getDbVersion());
-            version=version+1;
-            menu.setDbVersion(Integer.toString(version));
+            menu.setDbVersion(Integer.toString(Integer.valueOf(menu.getDbVersion())+1));
             Menu newMenu=new Menu();
             newMenu.setDbVersion("");
             newMenu.setGreensName(model.getName());
@@ -95,9 +93,6 @@ public class MenuDAO implements MenuRepository{
         Transaction ts = session.beginTransaction();
         Menu menu=(Menu)session.get(Menu.class,model.getId());
         //用于更新销售分析
-        SellAnalyze sell=(SellAnalyze)session.get(SellAnalyze.class,model.getId());
-        sell.setName(model.getName());
-        sell.setPrice(model.getPrice());
         menu.setGreensName(model.getName());
         menu.setPrice(model.getPrice());
         //更改版本号
@@ -106,7 +101,6 @@ public class MenuDAO implements MenuRepository{
         version = version + 1;
         temp.setDbVersion(Integer.toString(version));
         try{
-            session.update(sell);
             session.update(menu);
             session.update(temp);
             ts.commit();
@@ -124,10 +118,12 @@ public class MenuDAO implements MenuRepository{
     public boolean deleteMenu(int id) {
         SessionFactory sf=SessionFactoryUtil.getSessionFactory();
         Session session=sf.openSession();
+        Transaction ts= session.beginTransaction();
         Menu a=(Menu)session.get(Menu.class,id);
         //用于删除销售分析中的数据
         SellAnalyze sell=(SellAnalyze)session.get(SellAnalyze.class,id);
-        Transaction ts= session.beginTransaction();
+        System.out.println(a);
+        System.out.println(sell);
         session.delete(a);
         session.delete(sell);
         Menu temp = session.get(Menu.class, 1);

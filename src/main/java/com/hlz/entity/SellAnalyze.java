@@ -36,7 +36,7 @@ public class SellAnalyze implements Serializable {
     private Integer id;
     @Column(name = "name")
     private String name;
-    @Min(value=1)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    //if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "price")
     private Double price;
     @Column(name = "number")

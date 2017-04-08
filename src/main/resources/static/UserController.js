@@ -81,11 +81,15 @@ app.controller('UserController', function ($scope, $rootScope, $http) {
                 break;
             }
         }
+        //获取签到信息
         var param=String(id);
         param="/signs/"+param;
         $http.get(param,{}).success(function (data) {
             var number=Number(data.length);
-            $scope.lastSignTime=data[number-1];
+            var timeMS=Number(data[number-1].signTime);
+            var signTime=new Date();
+            signTime.setTime(timeMS);
+            $scope.lastSignTime=signTime.toLocaleString();
         });
         $scope.name = String($scope.user.name);
         $scope.username =String($scope.user.username);
