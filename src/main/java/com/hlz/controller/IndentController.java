@@ -71,6 +71,27 @@ public class IndentController {
             return "success";
         }
     }
+    @RequestMapping(value="/indent/update",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)
+    public String updateIndentString(@RequestParam("id") Integer id,@RequestParam("reserve") String reserve,@RequestParam("fulfill") String 
+            fulfill,@RequestParam("table") String table,@RequestParam("reminderNumber") Integer 
+            reminderNumber,@RequestParam("price") Double price,@RequestParam("time") String firstTime){
+        IndentModel model = new IndentModel();
+        model.setId(id);
+        model.setPrice(price);
+        model.setRemiderNumber(reminderNumber);
+        model.setTable(table);
+        if ("".equals(firstTime)) {
+            model.setTime(0);
+        } else {
+            model.setTime(Long.valueOf(firstTime));
+        }
+        if(service.updateIndentString(model,reserve,fulfill)){
+            return "success";
+        }else{
+            return "defeat";
+        }
+        
+    }
     //结算与取消订单，需要再次添加，将手机号作为会员
     @RequestMapping(value="/indent/style",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)
     public String updateIndentStyle(IndentStyle model,@RequestParam("vip") String telephone){
@@ -127,6 +148,14 @@ public class IndentController {
             indent=new Indent();
             indent.setTableId("404");
             return indent;
+        }
+    }
+    @RequestMapping(value="reminder/{id}",produces="text/plain;charset=UTF-8",method=RequestMethod.GET)
+    public String reminder(@PathVariable String id){
+        if(service.reminder(Integer.valueOf(id))){
+            return "success";
+        }else{
+            return "defeat";
         }
     }
 }

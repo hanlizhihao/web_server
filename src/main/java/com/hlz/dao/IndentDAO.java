@@ -81,6 +81,35 @@ public class IndentDAO implements IndentRepository{
         System.out.print("修改餐桌信息成功");
         return indent;
     }
+    //Android专用更新Indent
+    @Override
+    public Indent updateIndent(IndentModel model, String reserves, String fulfill) {
+        SessionFactory sf = SessionFactoryUtil.getSessionFactory();
+        Session session = sf.openSession();
+        Transaction ts = session.beginTransaction();
+        Indent indent = session.get(Indent.class, model.getId());
+        indent.setReserveNumber(reserves.substring(0, reserves.length()-1).length());
+        indent.setReserve(reserves);
+        indent.setFulfillNumber(fulfill.substring(0, fulfill.length()-1).length());
+        indent.setFulfill(fulfill);
+        indent.setPrice(model.getPrice());
+        indent.setReminderNumber(model.getRemiderNumber());
+        indent.setTableId(model.getTable());
+        //如果为0表示不存在firstTime，还没上菜
+        if (model.getTime() == 0) {
+            indent.setFirstTime(null);
+        } else {
+            indent.setFirstTime(new java.sql.Timestamp(model.getTime()));
+        }
+        session.update(indent);
+        try{
+            ts.commit();
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        return indent;
+    }
     @Override
     //专门用于更新餐桌状态
     public Indent updateIndent(IndentStyle style) {
@@ -254,5 +283,24 @@ public class IndentDAO implements IndentRepository{
         Query query=session.createQuery(hql);
         int rows=Integer.valueOf(query.getSingleResult().toString());
         return rows;
+    }
+
+    @Override
+    public boolean reminder(int id) {
+        SessionFactory sf=SessionFactoryUtil.getSessionFactory();
+        Session session=sf.openSession();
+        Transaction t=session.beginTransaction();
+        Indent indent=session.get(Indent.class, id);
+        indent.setReminderNumber(indent.getReminderNumber()+1);
+        session.update(indent);
+        try{
+            t.commit();
+        }catch(Exception e){
+            t.rollback();
+            return false;
+        }finally{
+            session.close();
+        }
+        return true;
     }
 }
