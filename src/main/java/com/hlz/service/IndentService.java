@@ -47,16 +47,16 @@ public class IndentService {
             //由于Indent的设计，不会出现删除Indent情况，故表中存储的id最大的，就是最后插入的那一条数据
             int count = dao.countIndent();
             model.setId(count);
-            messaging.convertAndSend("/topic/add", model);//stomp推送
-            rabbitTemplate.convertAndSend("add-indent", model);//rabbitmq推送
+            messaging.convertAndSend("/topic/add","1");//stomp推送
+            rabbitTemplate.convertAndSend("add-indent", "1");//rabbitmq推送
             return true;
         }
     }
     public boolean updateIndent(IndentModel model) {
         Indent indent = dao.updateIndent(model);
         if (indent != null) {
-            messaging.convertAndSend("/topic/update", indent);
-            rabbitTemplate.convertAndSend("update-indent", indent);
+            messaging.convertAndSend("/topic/update", indent.getId());
+            rabbitTemplate.convertAndSend("update-indent", indent.getId());
             return true;
         } else {
             return false;
@@ -65,8 +65,8 @@ public class IndentService {
     public boolean updateIndentString(IndentModel model,String reserve,String fulfill){
         Indent indent=dao.updateIndent(model, reserve, fulfill);
         if (indent != null) {
-            messaging.convertAndSend("/topic/update", indent);
-            rabbitTemplate.convertAndSend("update-indent", indent);
+            messaging.convertAndSend("/topic/update", indent.getId());
+            rabbitTemplate.convertAndSend("update-indent", indent.getId());
             return true;
         }else{
             return false;
@@ -94,8 +94,8 @@ public class IndentService {
         } else {
             return false;
         }
-        messaging.convertAndSend("/topic/style", model);
-        rabbitTemplate.convertAndSend("style-indent", model);
+        messaging.convertAndSend("/topic/style", model.getId());
+        rabbitTemplate.convertAndSend("style-indent", model.getId());
         return true;
     }
     //查询相关

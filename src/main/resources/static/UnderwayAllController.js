@@ -20,6 +20,7 @@ app.controller("UnderwayController", function ($scope, $http, $rootScope, string
                 var begin = Number(data[i].beginTime);
                 var waitTime = round((first - begin) / 1000);
                 data[i].waitTime = timeToString(waitTime);
+                data[i].waitTimeS=waitTime;
             }
             //将表示点菜的一个字符串转化为对象数组
             var reserve = stringService.convertString(data[i].reserve, data[i].fulfill);
@@ -33,13 +34,10 @@ app.controller("UnderwayController", function ($scope, $http, $rootScope, string
         }
         $rootScope.indents = data;
         $scope.indents = data;
-        //stomp相关，用于接受指定主题返回的消息
-        stomp();
-        //stomp相关结束
         $interval(function () {
             for (var i = 0; i < $scope.indents.length; i++) {
                 //有上菜且，上菜数量为0时，会发生某种问题
-                    if ($scope.indents[i].firstTime==null||$scope.indents[i].fulfillNumber==0){
+                if ($scope.indents[i].firstTime == null || $scope.indents[i].fulfillNumber == 0) {
                     var waitTimeS = Number($scope.indents[i].waitTimeS);
                     waitTimeS = waitTimeS + 1;
                     $scope.indents[i].waitTimeS = Number(waitTimeS);
@@ -47,6 +45,9 @@ app.controller("UnderwayController", function ($scope, $http, $rootScope, string
                 }
             }
         }, 1000);
+       //stomp相关，用于接受指定主题返回的消息
+        stomp();
+        //stomp相关结束
     });
     //对取消的支持
     $scope.cancel = function (id) {

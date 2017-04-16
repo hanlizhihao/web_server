@@ -71,7 +71,7 @@ public class IndentController {
             return "success";
         }
     }
-    @RequestMapping(value="/indent/update",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)
+    @RequestMapping(value="/indent/update/app",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)
     public String updateIndentString(@RequestParam("id") Integer id,@RequestParam("reserve") String reserve,@RequestParam("fulfill") String 
             fulfill,@RequestParam("table") String table,@RequestParam("reminderNumber") Integer 
             reminderNumber,@RequestParam("price") Double price,@RequestParam("time") String firstTime){
@@ -90,7 +90,6 @@ public class IndentController {
         }else{
             return "defeat";
         }
-        
     }
     //结算与取消订单，需要再次添加，将手机号作为会员
     @RequestMapping(value="/indent/style",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)
