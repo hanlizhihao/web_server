@@ -88,9 +88,23 @@ public class IndentDAO implements IndentRepository{
         Session session = sf.openSession();
         Transaction ts = session.beginTransaction();
         Indent indent = session.get(Indent.class, model.getId());
-        indent.setReserveNumber(reserves.substring(0, reserves.length()-1).length());
+        int reserveNumber=0;
+        int fulfillNumber=0;
+        reserves=reserves.substring(0,reserves.length()-1);
+        fulfill=fulfill.substring(0,fulfill.length()-1);
+        String[] reserveArray=reserves.split("e");
+        String[] fulfillArray=fulfill.split("e");
+        for(String s:reserveArray){
+            String[] singleReserve=s.split("a");
+            reserveNumber=reserveNumber+Integer.valueOf(singleReserve[1]);
+        }
+        for(String s:fulfillArray){
+            String[] singleFulfill=s.split("a");
+            fulfillNumber=fulfillNumber+Integer.valueOf(singleFulfill[1]);
+        }
+        indent.setReserveNumber(reserveNumber);
+        indent.setFulfillNumber(fulfillNumber);
         indent.setReserve(reserves);
-        indent.setFulfillNumber(fulfill.substring(0, fulfill.length()-1).length());
         indent.setFulfill(fulfill);
         indent.setPrice(model.getPrice());
         indent.setReminderNumber(model.getRemiderNumber());
