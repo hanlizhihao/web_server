@@ -104,8 +104,8 @@ public class IndentDAO implements IndentRepository{
         }
         indent.setReserveNumber(reserveNumber);
         indent.setFulfillNumber(fulfillNumber);
-        indent.setReserve(reserves);
-        indent.setFulfill(fulfill);
+        indent.setReserve(reserves+"e");
+        indent.setFulfill(fulfill+"e");
         indent.setPrice(model.getPrice());
         indent.setReminderNumber(model.getRemiderNumber());
         indent.setTableId(model.getTable());

@@ -42,6 +42,7 @@ public class IndentController {
 //     催单；
 //     上菜--对于第一次上菜时间的控制，交由安卓客户端
 //     换桌
+    //需要注意格式问题，由于使用JS不能直接发送对象数组，除非使用JSON，所以采用发送参数数组的方式，接受参数name[]、count[]、number[]都是一一对应
     @RequestMapping(value="/indent/update",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)
     public String updateIndent(@RequestParam("id") Integer id,@RequestParam("name[]") String[] names,@RequestParam("count[]") String[] 
             counts,@RequestParam("number[]") String[] numbers,@RequestParam("table") String table,@RequestParam("reminderNumber") Integer 
