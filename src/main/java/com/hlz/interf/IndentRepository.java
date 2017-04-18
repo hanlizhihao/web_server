@@ -24,4 +24,5 @@ public interface IndentRepository {
     long countCanceled();
     List<Indent> queryAllUnderwayIndent();
     boolean reminder(int id);
+    boolean updateIndent(int id,String price);//用于结算前的更新操作
 }

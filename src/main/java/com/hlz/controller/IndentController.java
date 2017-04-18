@@ -102,6 +102,25 @@ public class IndentController {
             return "success";
         }
     }
+    @RequestMapping(value="/indent/app/notTelephone/finishedIndent/{id}",produces="text/plain;charset=UTF-8",method=RequestMethod.GET)
+    public String finishedIndentById(@PathVariable String id){
+        boolean sign=service.finishedIndentApp(id);
+        if (!sign) {
+            return "defeat";
+        } else {
+            return "success";
+        }
+    }
+    @RequestMapping(value="/indent/app/finishedIndent/{id}",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)
+    public String finishedIndentByIdAndTelephone(@PathVariable String id,@RequestParam("telephone") String telephone,
+            @RequestParam("price") String price){
+        boolean sign = service.finishedIndentApp(id, telephone,price);
+        if (!sign) {
+            return "defeat";
+        } else {
+            return "success";
+        }
+    }
     //获取所有正在进行的订单，用于响应App请求
     @RequestMapping(value="/underway",produces="application/json;charset=UTF-8",method=RequestMethod.GET)
     public ArrayList<Indent> getAllUnderwayIndent(){

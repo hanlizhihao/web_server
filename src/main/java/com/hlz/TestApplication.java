@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
-import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.core.FanoutExchange;
 @SpringBootApplication
 @EnableCaching
 public class TestApplication {
@@ -14,15 +14,7 @@ public class TestApplication {
     }
 //rabbitMQ的主题
     @Bean
-    public TopicExchange topicAdd(){
-        return new TopicExchange("add-indent");
-    }
-    @Bean
-    public TopicExchange topicUpdate(){
-        return new TopicExchange("update-indent");
-    }
-    @Bean
-    public TopicExchange topicStyle(){
-        return new TopicExchange("style-indent");
+    public FanoutExchange topicAdd(){
+        return new FanoutExchange("indent");
     }
 }

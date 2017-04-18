@@ -317,4 +317,23 @@ public class IndentDAO implements IndentRepository{
         }
         return true;
     }
+
+    @Override
+    public boolean updateIndent(int id, String price) {
+        SessionFactory sf=SessionFactoryUtil.getSessionFactory();
+        Session session=sf.openSession();
+        Transaction t=session.beginTransaction();
+        Indent indent=session.get(Indent.class, id);
+        indent.setPrice(Double.valueOf(price));
+        session.update(indent);
+        try{
+            t.commit();
+        }catch(Exception e){
+            t.rollback();
+            return false;
+        }finally{
+            session.close();
+        }
+        return true;
+    }
 }

@@ -47,16 +47,16 @@ public class IndentService {
             //由于Indent的设计，不会出现删除Indent情况，故表中存储的id最大的，就是最后插入的那一条数据
             int count = dao.countIndent();
             model.setId(count);
-            messaging.convertAndSend("/topic/add","1");//stomp推送
-            rabbitTemplate.convertAndSend("add-indent", "1");//rabbitmq推送
+            messaging.convertAndSend("/topic/add","newIndent");//stomp推送
+            rabbitTemplate.convertAndSend("indent", "1");//rabbitmq推送
             return true;
         }
     }
     public boolean updateIndent(IndentModel model) {
         Indent indent = dao.updateIndent(model);
         if (indent != null) {
-            messaging.convertAndSend("/topic/update", indent.getId());
-            rabbitTemplate.convertAndSend("update-indent", indent.getId());
+            messaging.convertAndSend("/topic/update", "updateIndent"+indent.getId());
+            rabbitTemplate.convertAndSend("indent", "1");
             return true;
         } else {
             return false;
@@ -65,8 +65,8 @@ public class IndentService {
     public boolean updateIndentString(IndentModel model,String reserve,String fulfill){
         Indent indent=dao.updateIndent(model, reserve, fulfill);
         if (indent != null) {
-            messaging.convertAndSend("/topic/update", indent.getId());
-            rabbitTemplate.convertAndSend("update-indent", indent.getId());
+            messaging.convertAndSend("/topic/update", "updateIndent"+indent.getId());
+            rabbitTemplate.convertAndSend("indent","1");
             return true;
         }else{
             return false;
@@ -94,9 +94,44 @@ public class IndentService {
         } else {
             return false;
         }
-        messaging.convertAndSend("/topic/style", model.getId());
-        rabbitTemplate.convertAndSend("style-indent", model.getId());
+        messaging.convertAndSend("/topic/style", "finisheIndent"+model.getId());
+        rabbitTemplate.convertAndSend("indent", "1");
         return true;
+    }
+    public boolean finishedIndentApp(String id){
+        IndentStyle style=new IndentStyle();
+        style.setId(Integer.valueOf(id));
+        style.setStyle(1);
+        Indent indent = dao.updateIndent(style);
+        messaging.convertAndSend("/topic/style", "finisheIndent" + id);
+        rabbitTemplate.convertAndSend("indent", "1");
+        return indent != null;
+    }
+    public boolean finishedIndentApp(String id,String telephone,String price){
+        IndentStyle style = new IndentStyle();
+        style.setId(Integer.valueOf(id));
+        style.setStyle(1);
+        if (dao.updateIndent(Integer.valueOf(id), price)) {
+            Indent indent = dao.updateIndent(style);
+            if (vipDAO.validateVip(telephone) && indent != null) {//如果是会员，则更新会员的消费金额和消费次数
+                Vip vip = vipDAO.querySingle(telephone);
+                vip.setConsumNumber(vip.getConsumNumber() + 1);
+                vip.setTotalConsum(vip.getTotalConsum() + indent.getPrice());
+                vipDAO.updateVip(vip);
+            } else if (!vipDAO.validateVip(telephone) && indent != null) {//若之前不是会员则创建会员
+                VipModel vipModel = new VipModel();
+                vipModel.setPhoneNumber(telephone);
+                vipModel.setTotalConsum(indent.getPrice());
+                vipModel.setConsumNumber(1);
+                vipDAO.addVip(vipModel);
+            } else {
+                return false;
+            }
+            messaging.convertAndSend("/topic/style", "finisheIndent" + id);
+            rabbitTemplate.convertAndSend("indent", "1");
+            return true;
+        }
+        return false;
     }
     //查询相关
     public List<Indent> findAllUnderwayIndent(){
