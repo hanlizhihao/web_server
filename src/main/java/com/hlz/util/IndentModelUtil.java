@@ -1,7 +1,10 @@
 package com.hlz.util;
 
 import com.hlz.entity.Indent;
+import com.hlz.entity.Menu;
 import com.hlz.webModel.IndentModel;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -14,10 +17,12 @@ public class IndentModelUtil {
     public static Indent TransformModel(IndentModel model, Indent indent) {
         Map<String, String> reserves = model.getReserve();
         String reserve = "";
+        int reserveNumber=0;
         for (Entry<String, String> entry : reserves.entrySet()) {
             reserve = reserve + entry.getKey() + "a" + entry.getValue() + "e";
+            reserveNumber+=Integer.valueOf(entry.getValue());
         }
-        indent.setReserveNumber(reserves.size());
+        indent.setReserveNumber(reserveNumber);
         indent.setReserve(reserve);
         reserves.clear();
         reserves.putAll(model.getFulfill());

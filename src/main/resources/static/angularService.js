@@ -124,13 +124,13 @@ app.service('stringService', function () {
                 greens.count = shuzu[1];
                 //给菜单赋值，使其既有菜品名字，又有上菜和订菜的数量
                 for (var y = 0; y < fulfillResult.length; y++) {
-                    if (greens.name == fulfillResult[y].name && fulfillResult[y] != null) {
+                    if (greens.name == fulfillResult[y].name) {
                         greens.number = fulfillResult[y].number;
                         break;
-                    } else {
-                        greens.number = 0;
-                        break;
                     }
+                }
+                if(greens.number==null){
+                    greens.number=new Number(0);
                 }
                 result.push(greens);
             }

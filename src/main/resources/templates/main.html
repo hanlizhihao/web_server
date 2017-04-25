@@ -5,7 +5,7 @@
     <meta name="renderer" content="webkit|ie-comp|ie-stand">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
-    <title>Title</title>
+    <title>餐饮管理系统</title>
     <link rel="stylesheet" type="text/css" href="h-ui/css/H-ui.min.css" />
     <link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.8/iconfont.min.css" />
 </head>
@@ -33,10 +33,8 @@
                             <li><a href="#/income">损益表分析</a></li>
                         </ul>
                     </li>
+                    <li><a class="btn-warning-outline" href="/exitLogin">退出登录</a></li>
                 </ul>
-            </nav>
-            <nav class="navbar-userbar hidden-xs">
-                <button id="exitLogin">退出登录</button>
             </nav>
         </div>
     </div>
@@ -128,11 +126,6 @@
     /**
      * 与UI相关的JS
      * */
-    $("exitLogin").click(function(){
-        $.get("/exitLogin",function(data,status){
-        console.log(data);
-        });
-    });
     $(function(){
         //checkbox 美化
         $('.skin-minimal input').iCheck({

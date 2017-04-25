@@ -91,7 +91,7 @@ app.controller('UnderwayCarryController', function ($scope, $http, $rootScope, $
                 if (data == "success") {
                     $state.go('/underway');
                 } else {
-                    alert("取消订单失败");
+                    alert("结算订单失败");
                 }
             }).error(function (a) {
                 alert("服务器发生错误");
@@ -104,7 +104,7 @@ app.controller('UnderwayCarryController', function ($scope, $http, $rootScope, $
                 if (data == "success") {
                     $state.go('/underway');
                 } else {
-                    alert("取消订单失败");
+                    alert("结算订单失败");
                 }
             }).error(function (a) {
                 alert("服务器发生错误");

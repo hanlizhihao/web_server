@@ -22,10 +22,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class IndentDAO implements IndentRepository{
     @Autowired
-    private final SellAnalyzeDAO dao;
-    public IndentDAO(){
-        this.dao=new SellAnalyzeDAO();
-    }
+    private SellAnalyzeDAO dao;
     @Override
     public boolean addIndent(IndentModel model) {
        SessionFactory sf=SessionFactoryUtil.getSessionFactory();

@@ -46,10 +46,10 @@ public class LoginController {
         }
     }
     @RequestMapping(value="/exitLogin",produces="text/plain;charset=UTF-8",method=RequestMethod.GET)
-    @ResponseBody
     public String exitLogin(){
         Users exitUser=user.getUser();
         user.setUser(null);
-        return "退出用户的ID："+exitUser.getId()+"退出用户的用户名："+exitUser.getName();
+        System.out.println(exitUser.getName()+exitUser.getId());
+        return "login";
     }
 }

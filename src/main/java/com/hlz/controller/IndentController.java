@@ -86,7 +86,7 @@ public class IndentController {
         } else {
             model.setTime(Long.valueOf(firstTime));
         }
-        if(service.updateIndentString(model,reserve,fulfill)){
+        if(service.updateIndentApp(model,reserve,fulfill)){
             return "success";
         }else{
             return "defeat";

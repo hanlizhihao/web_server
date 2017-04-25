@@ -24,10 +24,7 @@ app.controller("UnderwayController", function ($scope, $http, $rootScope, string
             }
             //将表示点菜的一个字符串转化为对象数组
             var reserve = stringService.convertString(data[i].reserve, data[i].fulfill);
-            console.log(reserve);
             data[i].reserve = reserve;//预定的菜品数,将字符串转为对象数组
-            var fulfill = "" != data[i].fulfill ? stringService.convertString(data[i].fulfill) : "";
-            data[i].fulfill = fulfill;
             var beginDate = new Date();//将开始时间的毫秒数转为字符串
             var beginTime = Number(data[i].beginTime);
             beginDate.setTime(beginTime);
@@ -46,10 +43,10 @@ app.controller("UnderwayController", function ($scope, $http, $rootScope, string
                 }
             }
         }, 1000);
-       //stomp相关，用于接受指定主题返回的消息
-        stomp();
-        //stomp相关结束
     });
+    //stomp相关，用于接受指定主题返回的消息
+    stomp();
+    //stomp相关结束
     //对取消的支持
     $scope.cancel = function (id) {
         var indentStyle = {};
@@ -140,6 +137,7 @@ app.controller('UnderwayDetailsController', function ($rootScope, $stateParams, 
             numbers.push(number);
         }
         updateFirstTime();
+        //count订菜，number上菜
         var param = {"id": $scope.indent.id, "name": names, "count": counts, "number": numbers, "table": $scope.indent.tableId,
             "reminderNumber": $scope.indent.reminderNumber, "price": $scope.indent.price, "time": $scope.indent.firstTime};
         $http.post('/indent/update', $.param(param), {headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}})
