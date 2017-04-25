@@ -1,5 +1,6 @@
 package com.hlz.controller;
 
+import com.hlz.entity.Users;
 import com.hlz.service.LoginService;
 import com.hlz.webModel.UserModel;
 import com.hlz.webModel.UserPower;
@@ -43,5 +44,12 @@ public class LoginController {
         }else{
             return "defeat";
         }
+    }
+    @RequestMapping(value="/exitLogin",produces="text/plain;charset=UTF-8",method=RequestMethod.GET)
+    @ResponseBody
+    public String exitLogin(){
+        Users exitUser=user.getUser();
+        user.setUser(null);
+        return "退出用户的ID："+exitUser.getId()+"退出用户的用户名："+exitUser.getName();
     }
 }

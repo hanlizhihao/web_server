@@ -107,9 +107,9 @@ app.service('stringService', function () {
             var reserves = [];
             reserves = book.split("e");//每个字符串有a连接
             fulfillArray = fulfil.split("e");
-            var fulfillObject = {};
             var fulfillResult = [];
             for (var i = 0; i < fulfillArray.length; i++) {
+                var fulfillObject = {};
                 var fulfillshuzu = fulfillArray[i].split("a");
                 fulfillObject.name = fulfillshuzu[0];
                 fulfillObject.number = fulfillshuzu[1];

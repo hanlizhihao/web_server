@@ -15,7 +15,6 @@ function timeToString(wait) {
         var second = wait % 3600 % 60;
         waitTime = hour + "小时" + minute + "分钟" + second + "秒";
     }
-    console.log(waitTime);
     return waitTime;
 }
 //由于Math.round函数是四舍五入的，所以不符合需求，需要向下取整的方法

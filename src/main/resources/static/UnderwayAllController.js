@@ -24,6 +24,7 @@ app.controller("UnderwayController", function ($scope, $http, $rootScope, string
             }
             //将表示点菜的一个字符串转化为对象数组
             var reserve = stringService.convertString(data[i].reserve, data[i].fulfill);
+            console.log(reserve);
             data[i].reserve = reserve;//预定的菜品数,将字符串转为对象数组
             var fulfill = "" != data[i].fulfill ? stringService.convertString(data[i].fulfill) : "";
             data[i].fulfill = fulfill;
@@ -51,7 +52,6 @@ app.controller("UnderwayController", function ($scope, $http, $rootScope, string
     });
     //对取消的支持
     $scope.cancel = function (id) {
-        console.log(id);
         var indentStyle = {};
         indentStyle.id = id;
         indentStyle.style = 2;

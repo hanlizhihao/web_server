@@ -15,7 +15,7 @@
         <div class="container cl">
             <nav class="nav navbar-nav nav-collapse" role="navigation" id="Hui-navbar">
                 <ul class="cl">
-                    <li class="current"> <a href="main.html" target="_blank" style="color: white">首页</a> </li>
+                    <li> <a href="/login" target="_blank" style="color: white">首页</a> </li>
                     <li class="dropDown dropDown_hover"> <a href="javascript:" class="dropDown_A" style="color: white">餐厅运营实况<i class="Hui-iconfont">&#xe6d5;</i></a>
                         <ul class="dropDown-menu menu radius box-shadow">
                             <li> <a href="#/underway" >正在进行的</a> </li>
@@ -35,7 +35,9 @@
                     </li>
                 </ul>
             </nav>
-            <nav class="navbar-userbar hidden-xs"> </nav>
+            <nav class="navbar-userbar hidden-xs">
+                <button id="exitLogin">退出登录</button>
+            </nav>
         </div>
     </div>
 </header>
@@ -126,6 +128,11 @@
     /**
      * 与UI相关的JS
      * */
+    $("exitLogin").click(function(){
+        $.get("/exitLogin",function(data,status){
+        console.log(data);
+        });
+    });
     $(function(){
         //checkbox 美化
         $('.skin-minimal input').iCheck({
