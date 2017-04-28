@@ -39,21 +39,22 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="x in reserve">
-                            <td class="col1">{{$index+1}}</td>
-                            <td class="col2">{{x.name}}</td>
-                            <td class="col3">
-                                <div class="formControls skin-minimal col-xs-5">
-                                    <input type="text" class="input-text" name="table" value="{{x.count}}" ng-blur="getPrice(x.id)"
-                                           id="{{x.id}}">
-                                </div>
-                            </td>
-                            <td class="col4">
-                                <div class="formControls skin-minimal col-xs-5">
-                                    <input type="text" class="input-text" name="table" value="{{x.number}}">
-                                </div>
-                            </td>
-                        </tr>
+                            <tr ng-repeat="x in reserve">
+                                <td class="col1">{{$index+1}}</td>
+                                <td class="col2">{{reserve[$index].name}}</td>
+                                <td class="col3">
+                                    <div class="formControls skin-minimal col-xs-5">
+                                        <input type="text" class="input-text" name="table" ng-value="reserve[$index].count" id="{{x.id}}"
+                                               ng-blur="getPrice(x.id)" ng-model="reserve[$index].count">
+                                    </div>
+                                </td>
+                                <td class="col4">
+                                    <div class="formControls skin-minimal col-xs-5">
+                                        <input type="text" class="input-text" name="table" ng-value="reserve[$index].number" 
+                                               ng-model="reserve[$index].number">
+                                    </div>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

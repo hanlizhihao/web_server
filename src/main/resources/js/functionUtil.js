@@ -1,4 +1,4 @@
-/* global $scope, $rootScope, app */
+/* global $scope, $rootScope, app, $http, stringService */
 
 //参数为等待时间的秒数,进行取整
 function timeToString(wait) {
@@ -28,13 +28,14 @@ function round(number){
     }
 }
 //连接stomp，接受add主题下的indent
-function stomp() {
+//
+function stomp($http,$scope,$rootScope,stringService,$interval) {
     var stompClient=null;
     var socket=new SockJS('/server');
     stompClient=Stomp.over(socket);
     stompClient.connect({},function (frame) {
         stompClient.subscribe('/topic/update',function (response) {//订阅消息
-            isPush();
+            isPush($http,$scope,$rootScope,stringService,$interval);
 //            var indent={};
 //            //这个indent与rootScope之前传过来的indent，属性不相同
 //            indent=JSON.parse(response.body);
@@ -65,13 +66,13 @@ function stomp() {
         });
         stompClient.subscribe('/topic/add',function (response) {//订阅消息
 //            var indent={};
-            isPush();
+            isPush($http,$scope,$rootScope,stringService,$interval);
 //            indent=JSON.parse(response.body);
 //            $rootScope.indents.push(indent);
 //            $scope.indents.push(indent);
         });
         stompClient.subscribe('/topic/style',function (response) {//订阅消息
-            isPush();
+            isPush($http,$scope,$rootScope,stringService,$interval);
 //            var indent={};
 //            indent=JSON.parse(response.body);
 //            var id=indent.id;
@@ -97,7 +98,7 @@ function convertStyle(styleNumber) {
         return "异常";
     }
 }
-function isPush(){
+function isPush($http,$scope,$rootScope,stringService,$interval){
     $http.get('underway', {
         //参数
     }).success(function (data) {

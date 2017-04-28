@@ -45,7 +45,7 @@ app.controller("UnderwayController", function ($scope, $http, $rootScope, string
         }, 1000);
     });
     //stomp相关，用于接受指定主题返回的消息
-    stomp();
+    stomp($http,$scope,$rootScope,stringService,$interval);
     //stomp相关结束
     //对取消的支持
     $scope.cancel = function (id) {
@@ -85,7 +85,7 @@ app.controller('UnderwayDetailsController', function ($rootScope, $stateParams, 
     /**
      * 用于查找菜单，返回订单菜单的价格,id为被更改的id
      */
-    $scope.getPrice = function getPrice(id) {
+    $scope.getPrice = function(id) {
         var value = Number(document.getElementById(id).value);
         for (var z = 0; z < $scope.reserve.length; z++) {
             if (id == $scope.reserve[z].id) {
