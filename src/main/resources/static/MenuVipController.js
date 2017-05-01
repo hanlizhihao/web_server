@@ -87,6 +87,7 @@ app.controller('MenuController', function ($state, $scope, $http, $rootScope) {
             alert("服务器发生错误");
         });
     };
+    stompUpdateMenu($scope, $http, $rootScope);
 });
 app.controller('MenuDetailsController', function ($rootScope, $scope, $http, $stateParams, $state) {
     var id = Number($stateParams.id);
@@ -146,10 +147,11 @@ app.controller('VipController', function ($scope, $rootScope, $http, $state) {
             alert("手机号不能为空");
             return;
         }
+        var vipModel={};
         if ($scope.addSum === null || $scope.addNumber === null) {
-            var vipModel = {"phoneNumber": $scope.addTelephone, "consumeNumber": "", "totalConsume": ""};
+            vipModel = {"phoneNumber": $scope.addTelephone, "consumeNumber": "0", "totalConsume": "0"};
         } else {
-            var vipModel = {"phoneNumber": $scope.addTelephone, "consumeNumber": $scope.addNumber, "totalConsume": $scope.addSum};
+            vipModel = {"phoneNumber": $scope.addTelephone, "consumeNumber": $scope.addNumber, "totalConsume": $scope.addSum};
         }
         $http.post('/vip/add', $.param(vipModel), {headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}})
                 .success(function (data) {
@@ -191,6 +193,7 @@ app.controller('VipController', function ($scope, $rootScope, $http, $state) {
             alert("服务器发生错误");
         });
     };
+    stompUpdateVip( $scope, $rootScope, $http);
 });
 app.controller('VipDetailsController', function ($state, $scope, $rootScope, $http, $stateParams) {
     var id = Number($stateParams.id);
@@ -201,35 +204,37 @@ app.controller('VipDetailsController', function ($state, $scope, $rootScope, $ht
             break;
         }
     }
+    if($scope.vip.consumeNumber==null&&$scope.vip.totalConsume==null){
+        $scope.vip.consumeNumber=Number(0);
+        $scope.vip.totalConsume=Number(0);
+    }
+    //只用scope绑定
     //用于数据绑定的模型
-    $scope.phoneNumber =$scope.vip.phoneNumber;
-    $scope.consumeNumber =$scope.vip.consumNumber;
-    $scope.totalConsume =$scope.vip.totalConsum;
-    $scope.joinTime =$scope.vip.joinTime;
     $scope.updateVip = function () {
-        if($scope.phoneNumber.length==11||$scope.phoneNumber.length==10||$scope.phoneNumber.length==6){
+        if ($scope.vip.phoneNumber.length == 11 || $scope.vip.phoneNumber.length == 10 || $scope.vip.phoneNumber.length == 6) {
             var vipModel = {
-            "id": id,
-            "phoneNumber": $scope.phoneNumber,
-            "consumeNumber": $scope.consumeNumber,
-            "totalConsume": $scope.totalConsume,
-            "joinTime": $scope.joinTime
-        };
-        $http.post('/vip/update', $.param(vipModel), {headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}})
-                .success(function (data) {
-                    if (data == "success") {
-                        $state.go('vip');
-                        alert("更新会员信息成功");
-                    } else {
-                        $state.go('vip');
-                        alert("更新会员信息失败，服务器存储数据异常");
-                    }
-                }).error(function () {
+                "id": id,
+                "phoneNumber": $scope.vip.phoneNumber,
+                "consumeNumber": $scope.vip.consumeNumber,
+                "totalConsume": $scope.vip.totalConsume,
+                "joinTime": $scope.vip.joinTime
+            };
+            console.log(vipModel);
+            $http.post('/vip/update', $.param(vipModel), {headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}})
+                    .success(function (data) {
+                        if (data == "success") {
+                            $state.go('vip');
+                            alert("更新会员信息成功");
+                        } else {
+                            $state.go('vip');
+                            alert("更新会员信息失败，服务器存储数据异常");
+                        }
+                    }).error(function () {
+                $state.go('vip');
+                alert("更新会员信息失败，网络连接异常");
+            });
             $state.go('vip');
-            alert("更新会员信息失败，网络连接异常");
-        });
-        $state.go('vip');
-        }else{
+        } else {
             alert("号码格式不正确");
         }
     };

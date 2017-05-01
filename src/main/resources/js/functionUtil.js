@@ -29,7 +29,7 @@ function round(number){
 }
 //连接stomp，接受add主题下的indent
 //
-function stomp($http,$scope,$rootScope,stringService,$interval) {
+function stompAddIndent($http,$scope,$rootScope,stringService,$interval) {
     var stompClient=null;
     var socket=new SockJS('/server');
     stompClient=Stomp.over(socket);
@@ -138,5 +138,47 @@ function isPush($http,$scope,$rootScope,stringService,$interval){
                 }
             }
         }, 1000);
+    });
+}
+function stompUpdateMenu($scope, $http, $rootScope) {
+    var stompClient = null;
+    var socket = new SockJS('/server');
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, function (frame) {
+        stompClient.subscribe('/topic/menu', function (response) {//订阅消息
+            $http.get('/menus', {
+            }).success(function (data) {
+                var greens = [];
+                //从数据中抽取出用于判断菜品价格的对象数组
+                for (var i = 0; i < data.length; i++) {
+                    var green = {};
+                    green.name = data[i].greensName;
+                    green.price = data[i].price;
+                    greens.push(green);
+                }
+                $rootScope.findMenu = greens;//菜单
+                $rootScope.showMenu = data;//用于显示的菜单
+                $scope.menus = data;
+            });
+        });
+    });
+}
+function stompUpdateVip($scope, $rootScope, $http) {
+    var stompClient = null;
+    var socket = new SockJS('/server');
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, function (frame) {
+        stompClient.subscribe('/topic/vip', function (response) {//订阅消息
+            $http.get('/vips/1', {}).success(function (data) {
+                if (data[0].phoneNumber == 404) {
+                    alert("服务器获取数据失败");
+                } else {
+                    $scope.vips = data;
+                    $rootScope.vips = data;
+                }
+            }).error(function () {
+                alert("获取数据失败");
+            });
+        });
     });
 }

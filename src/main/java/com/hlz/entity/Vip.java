@@ -75,20 +75,20 @@ public class Vip implements Serializable {
         this.joinTime = joinTime;
     }
 
-    public Integer getConsumNumber() {
+    public Integer getConsumeNumber() {
         return consumeNumber;
     }
 
-    public void setConsumNumber(Integer consumNumber) {
-        this.consumeNumber = consumNumber;
+    public void setConsumeNumber(Integer consumeNumber) {
+        this.consumeNumber = consumeNumber;
     }
 
-    public Double getTotalConsum() {
+    public Double getTotalConsume() {
         return totalConsume;
     }
 
-    public void setTotalConsum(Double totalConsum) {
-        this.totalConsume = totalConsum;
+    public void setTotalConsume(Double totalConsume) {
+        this.totalConsume = totalConsume;
     }
 
     @Override

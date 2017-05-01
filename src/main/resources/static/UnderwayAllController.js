@@ -45,7 +45,7 @@ app.controller("UnderwayController", function ($scope, $http, $rootScope, string
         }, 1000);
     });
     //stomp相关，用于接受指定主题返回的消息
-    stomp($http,$scope,$rootScope,stringService,$interval);
+    stompAddIndent($http,$scope,$rootScope,stringService,$interval);
     //stomp相关结束
     //对取消的支持
     $scope.cancel = function (id) {

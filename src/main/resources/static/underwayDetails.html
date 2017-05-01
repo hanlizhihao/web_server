@@ -45,7 +45,7 @@
                                 <td class="col3">
                                     <div class="formControls skin-minimal col-xs-5">
                                         <input type="text" class="input-text" name="table" ng-value="reserve[$index].count" id="{{x.id}}"
-                                               ng-blur="getPrice(x.id)" ng-model="reserve[$index].count">
+                                               ng-change="getPrice(x.id)" ng-model="reserve[$index].count">
                                     </div>
                                 </td>
                                 <td class="col4">

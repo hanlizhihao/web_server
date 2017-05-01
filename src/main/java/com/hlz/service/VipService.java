@@ -5,6 +5,7 @@ import com.hlz.entity.Vip;
 import com.hlz.webModel.VipModel;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 public class VipService {
     @Autowired
     private VipDAO dao;
+    @Autowired
+    private SimpMessageSendingOperations messaging;
     public boolean addVip(VipModel model){
         return dao.addVip(model);
     }
@@ -25,7 +28,12 @@ public class VipService {
     }
     public boolean updateVip(Vip vip){
         Vip result=dao.updateVip(vip);
-        return result!=null;
+        if(result!=null){
+            messaging.convertAndSend("topic/vip","1");
+            return true;
+        }else{
+            return false;
+        }
     }
     public List<Vip> findVipOnPage(int page){
         return dao.queryVipOnPage(page);

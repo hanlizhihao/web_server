@@ -15,21 +15,22 @@
                                     <div class="row cl">
                                         <label class="form-label col-xs-3">手机号：</label>
                                         <div class="formControls col-xs-8">
-                                            <input type="text" class="input-text" placeholder="手机号码" name="telephone" id="telephone" ng-model="addTelephone">
+                                            <input type="text" class="input-text" placeholder="手机号码" name="telephone" id="telephone" 
+                                                   ng-model="addTelephone">
                                         </div>
                                     </div>
                                     <div class="row cl">
                                         <label class="form-label col-xs-3">会员消费次数：</label>
                                         <div class="formControls col-xs-8">
                                             <input type="number" class="input-text" autocomplete="off" placeholder="数字" name="number" 
-                                                   id="number" ng-value="consumNumber" ng-model="addNumber">
+                                                   id="number" ng-model="addNumber">
                                         </div>
                                     </div>
                                     <div class="row cl">
                                         <label class="form-label col-xs-3">消费总金额（元）：</label>
                                         <div class="formControls col-xs-8">
                                             <input type="number" class="input-text" autocomplete="off" placeholder="数字" name="sum" id="sum"
-                                                   ng-model="addSum" ng-value="totalConsum">
+                                                   ng-model="addSum">
                                         </div>
                                     </div>
                                 </form>
@@ -59,8 +60,8 @@
                 <td class="col1">{{$index+1}}</td>
                 <td class="col2">{{x.phoneNumber}}</td>
                 <td class="col3">{{x.joinTime}}</td>
-                <td class="col4">{{x.consumNumber}}</td>
-                <td class="col5">{{x.totalConsum}}</td>
+                <td class="col4">{{x.consumeNumber}}</td>
+                <td class="col5">{{x.totalConsume}}</td>
                 <td class="col6">
                     <a href="#/vipDetails/{{x.id}}" class="btn btn-secondary-outline radius">修改</a>
                     <button class="btn btn-danger-outline radius" type="button" ng-click="deleteVip(x.id)">删除</button>

@@ -82,8 +82,8 @@ public class IndentService {
         Indent indent = dao.updateIndent(model);
         if (vipDAO.validateVip(telephone) && indent != null) {//如果是会员，则更新会员的消费金额和消费次数
             Vip vip = vipDAO.querySingle(telephone);
-            vip.setConsumNumber(vip.getConsumNumber() + 1);
-            vip.setTotalConsum(vip.getTotalConsum() + indent.getPrice());
+            vip.setConsumeNumber(vip.getConsumeNumber() + 1);
+            vip.setTotalConsume(vip.getTotalConsume() + indent.getPrice());
             vipDAO.updateVip(vip);
         } else if (!vipDAO.validateVip(telephone) && indent != null) {//若之前不是会员则创建会员
             VipModel vipModel = new VipModel();
@@ -117,8 +117,8 @@ public class IndentService {
             Indent indent = dao.updateIndent(style);
             if (vipDAO.validateVip(telephone) && indent != null) {//如果是会员，则更新会员的消费金额和消费次数
                 Vip vip = vipDAO.querySingle(telephone);
-                vip.setConsumNumber(vip.getConsumNumber() + 1);
-                vip.setTotalConsum(vip.getTotalConsum() + indent.getPrice());
+                vip.setConsumeNumber(vip.getConsumeNumber() + 1);
+                vip.setTotalConsume(vip.getTotalConsume() + indent.getPrice());
                 vipDAO.updateVip(vip);
             } else if (!vipDAO.validateVip(telephone) && indent != null) {//若之前不是会员则创建会员
                 VipModel vipModel = new VipModel();

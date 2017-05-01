@@ -5,7 +5,7 @@ package com.hlz.webModel;
  * @author Administrator 2017-2-28
  */
 public class MenuModel {
-    private int id;
+    private Integer id;
     private String name;
     private Double price;
     public int getId() {

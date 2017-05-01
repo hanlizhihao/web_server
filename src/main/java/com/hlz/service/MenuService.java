@@ -5,6 +5,7 @@ import com.hlz.entity.Menu;
 import com.hlz.webModel.MenuModel;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,11 +16,18 @@ import org.springframework.stereotype.Service;
 public class MenuService {
     @Autowired
     private MenuDAO dao;
+    @Autowired
+    private SimpMessageSendingOperations messaging;
     public boolean addMenu(MenuModel model){
         return dao.addMenu(model);
     }
     public boolean updateMenu(MenuModel model){
-        return dao.updateMenu(model);
+        if(dao.updateMenu(model)){
+            messaging.convertAndSend("/topic/menu","1");
+            return true;
+        }else{
+            return false;
+        }
     }
     public boolean deleteMenu(int id){
         return dao.deleteMenu(id);

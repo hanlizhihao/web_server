@@ -22,10 +22,10 @@ public class VipDAO implements VipRepository{
         SessionFactory sf = SessionFactoryUtil.getSessionFactory();
         Session session = sf.openSession();
         Vip vip = new Vip();
-        vip.setConsumNumber(model.getConsumNumber());
+        vip.setConsumeNumber(model.getConsumNumber());
         vip.setJoinTime(new java.sql.Date(System.currentTimeMillis()));
         vip.setPhoneNumber(model.getPhoneNumber());
-        vip.setTotalConsum(model.getTotalConsum());
+        vip.setTotalConsume(model.getTotalConsum());
         Transaction t = session.beginTransaction();
         try {
             session.save(vip);
