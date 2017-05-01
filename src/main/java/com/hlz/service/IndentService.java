@@ -48,7 +48,7 @@ public class IndentService {
             int count = dao.countIndent();
             model.setId(count);
             messaging.convertAndSend("/topic/add","1");//stomp推送
-            rabbitTemplate.convertAndSend("indent", "1");//rabbitmq推送
+            rabbitTemplate.convertAndSend("indent","","1");
             return true;
         }
     }
@@ -56,7 +56,7 @@ public class IndentService {
         Indent indent = dao.updateIndent(model);
         if (indent != null) {
             messaging.convertAndSend("/topic/update", indent.getId());
-            rabbitTemplate.convertAndSend("indent", "1");
+            rabbitTemplate.convertAndSend("indent","","1");
             return true;
         } else {
             return false;
@@ -66,7 +66,7 @@ public class IndentService {
         Indent indent=dao.updateIndent(model, reserve, fulfill);
         if (indent != null) {
             messaging.convertAndSend("/topic/update",indent.getId());
-            rabbitTemplate.convertAndSend("indent","1");
+            rabbitTemplate.convertAndSend("indent","","1");
             return true;
         }else{
             return false;
@@ -97,7 +97,7 @@ public class IndentService {
         if(model.getStyle()==1){
             messaging.convertAndSend("/topic/style",Integer.toString(model.getId()));
         }
-        rabbitTemplate.convertAndSend("indent", "1");
+        rabbitTemplate.convertAndSend("indent","","1");
         return true;
     }
     public boolean finishedIndentApp(String id){
@@ -106,7 +106,7 @@ public class IndentService {
         style.setStyle(1);
         Indent indent = dao.updateIndent(style);
         messaging.convertAndSend("/topic/style", id);
-        rabbitTemplate.convertAndSend("indent", "1");
+        rabbitTemplate.convertAndSend("indent","","1");
         return indent != null;
     }
     public boolean finishedIndentApp(String id,String telephone,String price){
@@ -130,7 +130,7 @@ public class IndentService {
                 return false;
             }
             messaging.convertAndSend("/topic/style",id);
-            rabbitTemplate.convertAndSend("indent", "1");
+            rabbitTemplate.convertAndSend("indent","","1");
             return true;
         }
         return false;
