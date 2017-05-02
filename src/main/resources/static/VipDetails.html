@@ -15,7 +15,8 @@
                         <th class="col3">会员手机号：</th>
                         <td class="col4">
                             <div class="formControls col-xs-8">
-                                <input type="text" class="input-text" name="telephone" id="telephone" ng-value="vip.phoneNumber">
+                                <input type="text" class="input-text" name="telephone" id="telephone" value="{{phoneNumber}}" 
+                                       ng-model="phoneNumber">
                             </div>
                         </td>
                     </tr>
@@ -23,13 +24,14 @@
                         <th class="col1">会员注册时间：</th>
                         <td class="col2">
                             <div class="formControls col-xs-8">
-                                <input type="text" class="input-text" name="joinTime" id="joinTime" ng-value="vip.joinTime">
+                                <input type="text" class="input-text" name="joinTime" id="joinTime" value="{{joinTime}}" ng-model="joinTime">
                             </div>
                         </td>
                         <th class="col3">消费次数：</th>
                         <td class="col4">
                             <div class="formControls col-xs-8">
-                                <input type="number" class="input-text" name="consumeNumber" id="consumeNumber" ng-value="vip.consumeNumber">
+                                <input type="number" class="input-text" name="consumeNumber" id="consumeNumber" value="{{consumeNumber}}" 
+                                       ng-model="consumeNumber">
                             </div>
                         </td>
                     </tr>
@@ -37,7 +39,8 @@
                         <th class="col1">消费总额（元）</th>
                         <td class="col2">
                             <div class="formControls col-xs-8">
-                                <input type="number" class="input-text" name="totalConsume" id="totalConsume" ng-value="vip.totalConsume" >
+                                <input type="number" class="input-text" name="totalConsume" id="totalConsume" value="{{totalConsume}}"
+                                       ng-model="totalConsume">
                             </div>
                         </td>
                     </tr>

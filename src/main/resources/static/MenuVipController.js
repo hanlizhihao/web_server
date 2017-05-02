@@ -204,6 +204,10 @@ app.controller('VipDetailsController', function ($state, $scope, $rootScope, $ht
             break;
         }
     }
+    $scope.phoneNumber=String($scope.vip.phoneNumber);
+    $scope.consumeNumber=Number($scope.vip.consumeNumber);
+    $scope.totalConsume=Number($scope.vip.totalConsume);
+    $scope.joinTime=String($scope.vip.joinTime);
     if($scope.vip.consumeNumber==null&&$scope.vip.totalConsume==null){
         $scope.vip.consumeNumber=Number(0);
         $scope.vip.totalConsume=Number(0);
@@ -212,12 +216,8 @@ app.controller('VipDetailsController', function ($state, $scope, $rootScope, $ht
     //用于数据绑定的模型
     $scope.updateVip = function () {
         if ($scope.vip.phoneNumber.length == 11 || $scope.vip.phoneNumber.length == 10 || $scope.vip.phoneNumber.length == 6) {
-            var vipModel = {
-                "id": id,
-                "phoneNumber": $scope.vip.phoneNumber,
-                "consumeNumber": $scope.vip.consumeNumber,
-                "totalConsume": $scope.vip.totalConsume,
-                "joinTime": $scope.vip.joinTime
+            var vipModel = {"id": id,"phoneNumber": $scope.phoneNumber,"consumeNumber": $scope.consumeNumber,
+                "totalConsume": $scope.totalConsume,"joinTime": $scope.joinTime
             };
             console.log(vipModel);
             $http.post('/vip/update', $.param(vipModel), {headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}})
