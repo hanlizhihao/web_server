@@ -51,6 +51,12 @@ public class SignWorkController {
         }
         return result;
     }
+    //签到次数
+    @RequestMapping(value = "sign/number/{id}", produces = "text/plain;charset=UTF-8", method = RequestMethod.GET)
+    public String getSignNumber(@PathVariable String id) {
+        List<Sign> signs = service.findSignOnUserId(Integer.valueOf(id));
+        return Integer.toString(signs.size());
+    }
     @RequestMapping(value="/works/{id}",produces="application/json;charset=UTF-8",method=RequestMethod.GET)
     public ArrayList<WorkTimeOutput> getWorks(@PathVariable String id){
         List<WorkTime> works=service.findWorkTimeOnUserID(Integer.valueOf(id));

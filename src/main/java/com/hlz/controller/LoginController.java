@@ -3,6 +3,7 @@ package com.hlz.controller;
 import com.hlz.entity.Users;
 import com.hlz.service.LoginService;
 import com.hlz.webModel.UserModel;
+import com.hlz.webModel.UserOutput;
 import com.hlz.webModel.UserPower;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,7 @@ public class LoginController {
     private UserPower user;
     @RequestMapping(value="/login",method=RequestMethod.POST)
     public String login(UserModel user){
-        if(service.login(user)){
+        if(service.login(user)!=null){
             return "redirect:/";
         }else{
             return "login";
@@ -36,13 +37,22 @@ public class LoginController {
             return "login";
         }
     }
-    @RequestMapping(value="app/login",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)
+    @RequestMapping(value="app/login",produces="application/json;charset=UTF-8",method=RequestMethod.POST)
     @ResponseBody
-    public String appLogin(UserModel user){
-        if(service.login(user)){
-            return "success";
+    public UserOutput appLogin(UserModel user){
+        Users u=service.login(user);
+        UserOutput us=new UserOutput();
+        us.setId(u.getId());
+        us.setJoinTime(u.getJoinTime());
+        us.setName(u.getName());
+        us.setPassword(u.getPassword());
+        us.setStyle(u.getStyle());
+        us.setUsername(u.getUsername());
+        if(u!=null){
+            return us;
         }else{
-            return "defeat";
+            u.setName("");
+            return us;
         }
     }
     @RequestMapping(value="/exitLogin",produces="text/plain;charset=UTF-8",method=RequestMethod.GET)

@@ -18,19 +18,19 @@ public class LoginService {
     private UserDAO dao;
     @Autowired
     private UserPower power;
-    public boolean login(UserModel userModel) {
+    public Users login(UserModel userModel) {
         String name = userModel.getUsername();
         String password = userModel.getPassword();
         if(name==null||password==null){
-            return false;
+            return null;
         }
         List<Users> result = dao.queryAllUser();
         for (Users u : result) {
             if(name.equals(u.getUsername())&&password.equals(u.getPassword())){
                 power.setUser(u);
-                return true;
+                return u;
             }
         }
-        return false;
+        return null;
     }
 }
