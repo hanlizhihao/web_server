@@ -7,10 +7,15 @@ import com.hlz.webModel.IndentModel;
 import com.hlz.webModel.IndentStyle;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,7 +34,19 @@ public class IndentController {
     private IndentService service;
     //创建
     @RequestMapping(value="/indent/add",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)
-    public String createIndent(IndentModel model){
+    public String createIndent(@RequestParam("table")String table,@RequestParam("price")Double price,@RequestParam("reserve")
+            String reserve){
+        Map<String,String> reserveMap=new HashMap<>();
+        String stringMenu=reserve.substring(1,reserve.length()-1);
+        String[] arrayMenu=stringMenu.split(",");
+        for(String s:arrayMenu){
+            String[] one=s.split(":");//JsonObject其中一个值
+            reserveMap.put(one[0].substring(1,one[0].length()-1),one[1]);
+        }
+        IndentModel model=new IndentModel();
+        model.setTable(table);
+        model.setPrice(price);
+        model.setReserve(reserveMap);
         boolean sign=service.createIndent(model);
         if(!sign){
             return "defeat";

@@ -53,7 +53,7 @@ app.controller("UnderwayController", function ($scope, $http, $rootScope, string
         indentStyle.id = id;
         indentStyle.style = 2;
         $http.post('/indent/style',
-                $.param({id: indentStyle.id, style: indentStyle.style}),
+                $.param({id: indentStyle.id, style: indentStyle.style,vip:null}),
                 {headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}}
         ).success(function (data) {
             if (data == "success") {
