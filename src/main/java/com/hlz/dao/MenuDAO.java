@@ -125,7 +125,7 @@ public class MenuDAO implements MenuRepository{
         System.out.println(a);
         System.out.println(sell);
         session.delete(a);
-        session.delete(sell);
+        //session.delete(sell);
         Menu temp = session.get(Menu.class, 1);
         int version = Integer.valueOf(temp.getDbVersion());
         version = version + 1;
