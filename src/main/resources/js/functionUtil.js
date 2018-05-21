@@ -127,17 +127,6 @@ function isPush($http,$scope,$rootScope,stringService,$interval){
         }
         $rootScope.indents = data;
         $scope.indents = data;
-        $interval(function () {
-            for (var i = 0; i < $scope.indents.length; i++) {
-                //有上菜且，上菜数量为0时，会发生某种问题
-                if ($scope.indents[i].firstTime == null || $scope.indents[i].fulfillNumber == 0) {
-                    var waitTimeS = Number($scope.indents[i].waitTimeS);
-                    waitTimeS = waitTimeS + 1;
-                    $scope.indents[i].waitTimeS = Number(waitTimeS);
-                    $scope.indents[i].waitTime = timeToString(waitTimeS);
-                }
-            }
-        }, 1000);
     });
 }
 function stompUpdateMenu($scope, $http, $rootScope) {
