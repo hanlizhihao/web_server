@@ -216,7 +216,6 @@ app.controller('VipDetailsController', function ($state, $scope, $rootScope, $ht
     //用于数据绑定的模型
     $scope.updateVip = function () {
         var phone = new String($scope.phoneNumber);
-        debugger;
         if (phone.length == 11 || phone.length == 10 || phone.length == 6) {
             var vipModel = {"id": id,"phoneNumber": $scope.phoneNumber,"consumeNumber": $scope.consumeNumber,
                 "totalConsume": $scope.totalConsume,"joinTime": $scope.joinTime

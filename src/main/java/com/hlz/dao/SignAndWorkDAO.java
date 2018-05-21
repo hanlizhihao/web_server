@@ -37,6 +37,7 @@ public class SignAndWorkDAO implements SignAndWorkRepository{
         }
         Users user=(Users)session.get(Users.class,id);
         Sign sign=new Sign();
+        sign.setUserId(user);
         sign.setSignTime(new java.sql.Timestamp(System.currentTimeMillis()));
         Transaction t= session.beginTransaction();
         try{
