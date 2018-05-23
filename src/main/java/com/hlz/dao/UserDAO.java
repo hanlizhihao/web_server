@@ -5,7 +5,14 @@ import com.hlz.entity.Users;
 import com.hlz.entity.WorkTime;
 import com.hlz.interf.UserRepository;
 import com.hlz.webModel.UserAddModel;
+
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.persistence.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -111,7 +118,7 @@ public class UserDAO implements UserRepository{
     }
     @Override
     public Users findByUsername(String username) {
-        String hql="from Users order by id where username=?";
+        String hql="from Users  where username=? order by id";
         SessionFactory sf=SessionFactoryUtil.getSessionFactory();
         Session session=sf.openSession();
         Query query=session.createQuery(hql);
@@ -128,8 +135,15 @@ public class UserDAO implements UserRepository{
         List<Sign> signs;
         try(Session session = sf.openSession()) {
             Transaction t=session.beginTransaction();
-            Users user=(Users)session.get(Users.class, id);
+            Users user= session.get(Users.class, id);
             signs = user.getSignList();
+            Stream<Sign> signStream =  signs.stream().filter(sign -> {
+                LocalDateTime localDateTime = LocalDateTime.now();
+                LocalDateTime mouth = LocalDateTime.of(localDateTime.getYear(), localDateTime.getMonth(), 1,0,0);
+                Instant mouthBegin = mouth.atZone(ZoneId.systemDefault()).toInstant();
+                return sign.getSignTime().toInstant().isAfter(mouthBegin);
+            });
+            signs = signStream.collect(Collectors.toList());
             try{
                 t.commit();
             }catch(Exception e){
@@ -137,9 +151,6 @@ public class UserDAO implements UserRepository{
                 t.rollback();
                 return null;
             }
-            signs.forEach((work) -> {
-                System.out.println(work.getSignTime());
-            });
         }
         return signs;
     }

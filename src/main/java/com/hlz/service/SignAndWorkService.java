@@ -23,6 +23,9 @@ public class SignAndWorkService {
     public boolean addSign(int id){
         return dao.addSign(id);
     }
+    public boolean signOut(int id) {
+        return dao.signOut(id);
+    }
     public boolean addWork(WorkModel model){
         return dao.addWork(model);
     }
@@ -31,7 +34,7 @@ public class SignAndWorkService {
         List<Sign> signs=userdao.getSignByUserID(id);
         return signs;
     }
-    //对于工作时间的问题，目前只是单纯的返回静态的数据到前端，不会动态更改
+    // 对于工作时间的问题，目前只是单纯的返回静态的数据到前端，不会动态更改
     public List<WorkTime> findWorkTimeOnUserID(int id){
         List<WorkTime> works=userdao.getWorkTimeByUserID(id);
         return works;

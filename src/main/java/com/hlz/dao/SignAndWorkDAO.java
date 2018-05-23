@@ -5,13 +5,19 @@ import com.hlz.entity.Users;
 import com.hlz.entity.WorkTime;
 import com.hlz.interf.SignAndWorkRepository;
 import com.hlz.webModel.WorkModel;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
+
+
+import javax.persistence.Query;
+import java.sql.Timestamp;
+import java.time.*;
+import java.time.temporal.TemporalUnit;
+import java.util.Date;
+import java.util.List;
 
 /**
  *添加签到信息和工作时间的信息是特殊的
@@ -21,38 +27,28 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class SignAndWorkDAO implements SignAndWorkRepository{
-    private final Set<Integer> userSign;
-    private final Set<Integer> userWork;
-    public SignAndWorkDAO(){
-        this.userSign=new HashSet();
-        this.userWork=new HashSet();
-    }
+
+
     @Override
     public boolean addSign(int id) {//id是user的id
         SessionFactory sf=SessionFactoryUtil.getSessionFactory();
         Session session=sf.openSession();
-        if(userSign.contains(id)){
-            session.close();
-            return true;
+        // 查询是否有当天签到记录
+        String hql = "from Sign where signTime >= ? and signTime <= ? and type = 0";
+        Query query = session.createQuery(hql);
+        query.setParameter(0, getTodayBegin());
+        query.setParameter(1, getTodayEnd());
+        List signs = query.getResultList();
+        if (CollectionUtils.isEmpty(signs)) {
+            Users user= session.get(Users.class,id);
+            Sign sign=new Sign();
+            sign.setUserId(user);
+            sign.setSignTime(new java.sql.Timestamp(System.currentTimeMillis()));
+            // 签入
+            sign.setType(0);
+            Transaction t= session.beginTransaction();
+            return !executeSession(session, user, sign, t);
         }
-        Users user=(Users)session.get(Users.class,id);
-        Sign sign=new Sign();
-        sign.setUserId(user);
-        sign.setSignTime(new java.sql.Timestamp(System.currentTimeMillis()));
-        Transaction t= session.beginTransaction();
-        try{
-            session.save(sign);
-            session.saveOrUpdate(user);
-            t.commit();
-            System.out.println("成功添加一个签到信息");
-        }catch(Exception e){
-            t.rollback();
-            e.printStackTrace();
-            return false;
-        }finally{
-          session.close();
-        }
-        userSign.add(id);
         return true;
     }
 
@@ -60,10 +56,6 @@ public class SignAndWorkDAO implements SignAndWorkRepository{
     public boolean addWork(WorkModel model) {
         SessionFactory sf = SessionFactoryUtil.getSessionFactory();
         Session session = sf.openSession();
-        if(userWork.contains(model.getId())){
-            session.close();
-            return updateWork(model);
-        }
         Users user=(Users)session.get(Users.class,model.getId());
         WorkTime work=new WorkTime();
         work.setContinueTime(model.getTime());
@@ -81,7 +73,6 @@ public class SignAndWorkDAO implements SignAndWorkRepository{
         }finally{
           session.close();
         }
-        userWork.add(model.getId());
         return true;
     }
     /**
@@ -119,5 +110,68 @@ public class SignAndWorkDAO implements SignAndWorkRepository{
             session.close();
         }
         return true;
+    }
+
+    @Override
+    public boolean signOut(int id) {
+        SessionFactory sf=SessionFactoryUtil.getSessionFactory();
+        Session session=sf.openSession();
+        // 查询是否有当天签到记录
+        String hql = "from Sign where signTime >= ? and signTime <= ? and type = 1";
+        Query query = session.createQuery(hql);
+        query.setParameter(0, getTodayBegin());
+        query.setParameter(1, getTodayEnd());
+        List signs = query.getResultList();
+        if (CollectionUtils.isEmpty(signs)) {
+            Users user= session.get(Users.class,id);
+            Sign sign=new Sign();
+            sign.setUserId(user);
+            sign.setSignTime(new java.sql.Timestamp(System.currentTimeMillis()));
+            // 签出
+            sign.setType(1);
+            Transaction t= session.beginTransaction();
+            return !executeSession(session, user, sign, t);
+        } else {
+            Sign sign = (Sign)signs.get(signs.size() - 1);
+            sign.setSignTime(new Timestamp(System.currentTimeMillis()));
+            Transaction t = session.beginTransaction();
+            session.update(sign);
+            try {
+                t.commit();
+            } catch (Exception e) {
+                t.rollback();
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+    }
+
+    private boolean executeSession(Session session, Users user, Sign sign, Transaction t) {
+        try{
+            session.save(sign);
+            session.saveOrUpdate(user);
+            t.commit();
+            System.out.println("成功添加一个签到信息");
+        }catch(Exception e){
+            t.rollback();
+            e.printStackTrace();
+            return true;
+        }finally{
+            session.close();
+        }
+        return false;
+    }
+
+    public Date getTodayBegin() {
+        int zeroToNowSecond = LocalTime.now().toSecondOfDay();
+        Date todayBegin =  Date.from(Instant.now().minusSeconds(zeroToNowSecond));
+        return todayBegin;
+    }
+
+    public Date getTodayEnd() {
+        Instant instant = getTodayBegin().toInstant();
+        instant = instant.plusSeconds(24*3600);
+        return Date.from(instant);
     }
 }

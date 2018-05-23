@@ -15,6 +15,6 @@
     <mapping class="com.hlz.entity.Users"/>
     <mapping class="com.hlz.entity.Vip"/>
     <mapping class="com.hlz.entity.WorkTime"/>
-    <mapping class="com.hlz.entitty.Bill"/>
+    <mapping class="com.hlz.entity.Bill"/>
   </session-factory>
 </hibernate-configuration>

@@ -2,6 +2,7 @@ package com.hlz.entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,7 +26,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Sign.findAll", query = "SELECT s FROM Sign s")
     , @NamedQuery(name = "Sign.findById", query = "SELECT s FROM Sign s WHERE s.id = :id")
-    , @NamedQuery(name = "Sign.findBySignTime", query = "SELECT s FROM Sign s WHERE s.signTime = :signTime")})
+    , @NamedQuery(name = "Sign.findBySignTime", query = "SELECT s FROM Sign s WHERE s.signTime = :signTime")
+    , @NamedQuery(name = "Sign.findByType", query = "SELECT s FROM Sign s WHERE s.type = :type")})
 public class Sign implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -36,6 +38,8 @@ public class Sign implements Serializable {
     private Integer id;
     @Column(name = "sign_time")
     private Timestamp signTime;
+    @Column(name = "type")
+    private Integer type;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne
     private Users userId;
@@ -72,28 +76,42 @@ public class Sign implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Sign sign = (Sign) o;
+        return Objects.equals(id, sign.id) &&
+                Objects.equals(signTime, sign.signTime) &&
+                Objects.equals(type, sign.type) &&
+                Objects.equals(userId, sign.userId);
+    }
+
+    @Override
+    public String toString() {
+        return "Sign{" +
+                "id=" + id +
+                ", signTime=" + signTime +
+                ", type=" + type +
+                ", userId=" + userId +
+                '}';
+    }
+
+    @Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Sign)) {
-            return false;
-        }
-        Sign other = (Sign) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+    public Integer getType() {
+        return type;
     }
 
-    @Override
-    public String toString() {
-        return "com.hlz.entity.Sign[ id=" + id + " ]";
+    public void setType(Integer type) {
+        this.type = type;
     }
-
 }

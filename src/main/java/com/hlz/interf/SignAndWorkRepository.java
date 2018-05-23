@@ -9,4 +9,5 @@ public interface SignAndWorkRepository {
     boolean addSign(int id);
     boolean addWork(WorkModel model);
     boolean updateWork(WorkModel model);
+    boolean signOut(int id);
 }

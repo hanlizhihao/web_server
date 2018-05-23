@@ -31,6 +31,14 @@ public class SignWorkController {
             return "defeat";
         }
     }
+    @RequestMapping(value = "/signOut/{id}", produces = "text/plain;charset=UTF-8", method = RequestMethod.GET)
+    public String signOut(@PathVariable String id) {
+        if (service.signOut(Integer.valueOf(id))) {
+            return "success";
+        }else {
+            return "defeat";
+        }
+    }
     @RequestMapping(value="/addwork",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)
     public String addWork(WorkModel model){
         boolean sign=service.addWork(model);
@@ -51,7 +59,12 @@ public class SignWorkController {
         }
         return result;
     }
-    //签到次数
+
+    /**
+     * 月累计签到次数
+     * @param id userId
+     * @return 签到数量
+     */
     @RequestMapping(value = "sign/number/{id}", produces = "text/plain;charset=UTF-8", method = RequestMethod.GET)
     public String getSignNumber(@PathVariable String id) {
         List<Sign> signs = service.findSignOnUserId(Integer.valueOf(id));
