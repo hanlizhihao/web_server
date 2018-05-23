@@ -106,11 +106,10 @@ public class IndentDAO implements IndentRepository{
         indent.setPrice(model.getPrice());
         indent.setReminderNumber(model.getRemiderNumber());
         indent.setTableId(model.getTable());
-        //如果为0表示不存在firstTime，还没上菜
-        if (model.getTime() == 0) {
+        if (fulfillNumber == 0) {
             indent.setFirstTime(null);
-        } else {
-            indent.setFirstTime(new java.sql.Timestamp(model.getTime()));
+        } else if (indent.getFirstTime() == null){
+            indent.setFirstTime(new java.sql.Timestamp(System.currentTimeMillis()));
         }
         session.update(indent);
         try{
@@ -137,6 +136,9 @@ public class IndentDAO implements IndentRepository{
             indent.setStyle(style.getStyle());
         }
         indent.setEndTime(new Timestamp(System.currentTimeMillis()));
+        if (indent.getFirstTime() == null) {
+            indent.setFirstTime(new Timestamp(System.currentTimeMillis()));
+        }
         try {
             session.update(indent);
             ts.commit();

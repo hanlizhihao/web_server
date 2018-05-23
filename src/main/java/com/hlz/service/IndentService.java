@@ -14,6 +14,8 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 //Stomp
 /**
@@ -80,19 +82,19 @@ public class IndentService {
      */
     public boolean updateIndentStyle(IndentStyle model,String telephone){
         Indent indent = dao.updateIndent(model);
-        if (vipDAO.validateVip(telephone) && indent != null) {//如果是会员，则更新会员的消费金额和消费次数
+        // 如果是会员，则更新会员的消费金额和消费次数
+        if (vipDAO.validateVip(telephone) && indent != null) {
             Vip vip = vipDAO.querySingle(telephone);
             vip.setConsumeNumber(vip.getConsumeNumber() + 1);
             vip.setTotalConsume(vip.getTotalConsume() + indent.getPrice());
             vipDAO.updateVip(vip);
-        } else if (!vipDAO.validateVip(telephone) && indent != null) {//若之前不是会员则创建会员
+            // 若之前不是会员则创建会员
+        } else if (!StringUtils.isEmpty(telephone) && !vipDAO.validateVip(telephone) && indent != null) {
             VipModel vipModel = new VipModel();
             vipModel.setPhoneNumber(telephone);
             vipModel.setTotalConsum(indent.getPrice());
             vipModel.setConsumNumber(1);
             vipDAO.addVip(vipModel);
-        } else {
-            return false;
         }
         if(model.getStyle()==1){
             messaging.convertAndSend("/topic/style",Integer.toString(model.getId()));
@@ -115,19 +117,19 @@ public class IndentService {
         style.setStyle(1);
         if (dao.updateIndent(Integer.valueOf(id), price)) {
             Indent indent = dao.updateIndent(style);
-            if (vipDAO.validateVip(telephone) && indent != null) {//如果是会员，则更新会员的消费金额和消费次数
+            // 如果是会员，则更新会员的消费金额和消费次数
+            if (vipDAO.validateVip(telephone) && indent != null) {
                 Vip vip = vipDAO.querySingle(telephone);
                 vip.setConsumeNumber(vip.getConsumeNumber() + 1);
                 vip.setTotalConsume(vip.getTotalConsume() + indent.getPrice());
                 vipDAO.updateVip(vip);
-            } else if (!vipDAO.validateVip(telephone) && indent != null) {//若之前不是会员则创建会员
+                // 若之前不是会员则创建会员
+            } else if (!StringUtils.isEmpty(telephone) && !vipDAO.validateVip(telephone) && indent != null) {
                 VipModel vipModel = new VipModel();
                 vipModel.setPhoneNumber(telephone);
                 vipModel.setTotalConsum(indent.getPrice());
                 vipModel.setConsumNumber(1);
                 vipDAO.addVip(vipModel);
-            } else {
-                return false;
             }
             messaging.convertAndSend("/topic/style",id);
             rabbitTemplate.convertAndSend("indent","","1");

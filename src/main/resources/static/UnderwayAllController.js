@@ -60,7 +60,6 @@ app.controller("UnderwayController", function ($scope, $http, $rootScope, string
                 for (var i = 0; i < $rootScope.indents.length; i++) {
                     if ($rootScope.indents[i].id == id) {
                         $rootScope.indents.splice(i, 1);
-                        $scope.indents.splice(i, 1);
                         break;
                     }
                 }
@@ -111,20 +110,17 @@ app.controller('UnderwayDetailsController', function ($rootScope, $stateParams, 
         copyReserve = $scope.reserve;
         for (var i = 0; i < $scope.reserve.length; i++) {
             var value = Number(document.getElementById($scope.reserve[i].id).value);
-            if ($scope.reserve[i].number != 0) {
-                return;
+            if ($scope.reserve[i].number != 0 && $scope.indent.firstTime == null) {
+                $scope.indent.firstTime = new Date().getTime();
             }
             if ($scope.reserve[i].id == id) {
                 $scope.reserve[i].number = value;
-            }
-            if (i == $scope.reserve.length - 1) {
-                //若已经到了最后一个，则更改第一次上菜时间
-                $scope.indent.firstTime = new Date().getTime();
             }
         }
     }
     //直接使用scope中的值传递
     $scope.update = function () {
+        updateFirstTime();
         var names = [];
         var counts = [];
         var numbers = [];
@@ -136,7 +132,6 @@ app.controller('UnderwayDetailsController', function ($rootScope, $stateParams, 
             counts.push(count);
             numbers.push(number);
         }
-        updateFirstTime();
         //count订菜，number上菜
         var param = {"id": $scope.indent.id, "name": names, "count": counts, "number": numbers, "table": $scope.indent.tableId,
             "reminderNumber": $scope.indent.reminderNumber, "price": $scope.indent.price, "time": $scope.indent.firstTime};
