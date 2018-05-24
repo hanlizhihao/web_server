@@ -1,18 +1,27 @@
 package com.hlz.controller;
 
+import com.hlz.entity.Sign;
+import com.hlz.entity.WorkTime;
 import com.hlz.service.SignAndWorkService;
+import com.hlz.util.SignEnum;
+import com.hlz.util.TimeUtil;
+import com.hlz.webModel.SignOutput;
 import com.hlz.webModel.WorkModel;
+import com.hlz.webModel.WorkTimeOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import com.hlz.entity.Sign;
-import com.hlz.entity.WorkTime;
-import com.hlz.webModel.SignOutput;
-import com.hlz.webModel.WorkTimeOutput;
+
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Stream;
+
 /**
  *只有添加签到和工作，没有更新和删除
  * @author Administrator 2017-3-7
@@ -21,7 +30,7 @@ import java.util.List;
 public class SignWorkController {
     @Autowired
     private SignAndWorkService service;
-    //id为user的id
+    // id为user的id
     @RequestMapping(value="/addsign/{id}",produces="text/plain;charset=UTF-8",method=RequestMethod.GET)
     public String addSign(@PathVariable String id){
         boolean sign=service.addSign(Integer.valueOf(id));
@@ -51,12 +60,32 @@ public class SignWorkController {
     @RequestMapping(value="/signs/{id}",produces="application/json;charset=UTF-8",method=RequestMethod.GET)
     public ArrayList<SignOutput> getSigns(@PathVariable String id){
         List<Sign> signs=service.findSignOnUserId(Integer.valueOf(id));
+        signs.sort(Comparator.comparing(Sign::getSignTime));
         ArrayList<SignOutput> result=new ArrayList<>();
-        for(Sign s:signs){
-            SignOutput signOutput=new SignOutput();
-            signOutput.setSignTime(s.getSignTime());
-            result.add(signOutput);
-        }
+        Instant mouthBegin = TimeUtil.getMouthBegin();
+        Instant now = Instant.now();
+        do {
+            Stream<Sign> signsStream = signs.parallelStream().filter(sign -> {
+                Instant signTime = sign.getSignTime().toInstant();
+                return mouthBegin.isBefore(signTime) && mouthBegin.plus(Duration.ofDays(1)).isAfter(signTime);
+            });
+            SignOutput signOutput = new SignOutput();
+            if (signsStream.count() != 0) {
+                signOutput.setTime(Date.from(mouthBegin));
+                signsStream.forEach(sign -> {
+                    if (SignEnum.SIGN_IN.getValue().equals(sign.getType())) {
+                        signOutput.setSignInTime(sign.getSignTime());
+                    } else if (SignEnum.SIGN_OUT.getValue().equals(sign.getType())) {
+                        signOutput.setSignOutTime(sign.getSignTime());
+                    }
+                    signOutput.setNull(false);
+                });
+            } else {
+                signOutput.setTime(Date.from(mouthBegin));
+                signOutput.setNull(true);
+            }
+            mouthBegin.plus(Duration.ofDays(1));
+        } while (!now.isBefore(mouthBegin));
         return result;
     }
 
