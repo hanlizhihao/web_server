@@ -66,7 +66,8 @@
                 <th class="col4">密码</th>
                 <th class="col5">注册时间</th>
                 <th class="col6">用户类型</th>
-                <th class="col7">操作</th>
+                <th class="col7">月累计签到次数</th>
+                <th class="col8">操作</th>
             </tr>
             </thead>
             <tbody>
@@ -77,7 +78,8 @@
                 <td class="col4">{{x.password}}</td>
                 <td class="col5">{{x.joinTime}}</td>
                 <td class="col6">{{x.styleString}}</td>
-                <td class="col7">
+                <td class="col7">{{x.signNumber}}</td>
+                <td class="col8">
                     <a href="#/userDetails/{{x.id}}" class="btn btn-secondary-outline radius">详情</a>
                     <button class="btn btn-danger-outline radius" type="button" ng-click="deleteUser(x.id)">删除</button>
                 </td>

@@ -17,6 +17,10 @@ import org.springframework.stereotype.Service;
 public class UserService {
     @Autowired
     private UserDAO dao;
+
+    @Autowired
+    private SignAndWorkService signAndWorkService;
+
     public boolean addUser(UserAddModel model){
         return dao.addUser(model);
     }
@@ -39,6 +43,7 @@ public class UserService {
             userOutput.setPassword(user.getPassword());
             userOutput.setStyle(user.getStyle());
             userOutput.setUsername(user.getUsername());
+            userOutput.setSignNumber(signAndWorkService.findSignOnUserId(user.getId()).size());
             result.add(userOutput);
         }
         return result;

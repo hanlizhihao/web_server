@@ -40,10 +40,10 @@ public class BillController {
         }
         return "defeat";
     }
-    @RequestMapping(value="/bills",produces="application/json;charset=UTF-8",method=RequestMethod.GET)
-    public ArrayList<Bill> getBills(){
+    @RequestMapping(value="/bills/{id}",produces="application/json;charset=UTF-8",method=RequestMethod.GET)
+    public ArrayList<Bill> getBills(@PathVariable String id){
         ArrayList<Bill> bills=new ArrayList<>();
-        List<Bill> result=service.findAllBill();
+        List<Bill> result=service.findAllBill(id);
         if(result==null||result.isEmpty()){
             Bill bill=new Bill();
             bill.setName("404");

@@ -35,7 +35,7 @@ public class IndentController {
         String stringMenu=reserve.substring(1,reserve.length()-1);
         String[] arrayMenu=stringMenu.split(",");
         for(String s:arrayMenu){
-            String[] one=s.split(":");//JsonObject其中一个值
+            String[] one=s.split(":");
             reserveMap.put(one[0].substring(1,one[0].length()-1),one[1]);
         }
         IndentModel model=new IndentModel();

@@ -16,7 +16,8 @@
             <nav class="nav navbar-nav nav-collapse" role="navigation" id="Hui-navbar">
                 <ul class="cl">
                     <li> <a href="/login" target="_blank" style="color: white">首页</a> </li>
-                    <li class="dropDown dropDown_hover"> <a href="javascript:" class="dropDown_A" style="color: white">餐厅运营实况<i class="Hui-iconfont">&#xe6d5;</i></a>
+                    <li class="dropDown dropDown_hover">
+                        <a href="javascript:" class="dropDown_A" style="color: white">餐厅运营实况<i class="Hui-iconfont">&#xe6d5;</i></a>
                         <ul class="dropDown-menu menu radius box-shadow">
                             <li> <a href="#/underway" >正在进行的</a> </li>
                             <li> <a href="#/finished" >已完成的</a> </li>
@@ -25,7 +26,8 @@
                     </li>
                     <li> <a href="#/menu" style="color: white">菜单管理</a> </li>
                     <li> <a href="#/vip" style="color: white">会员管理</a> </li>
-                    <li> <a href="#/user" style="color: white">用户管理</a> </li>
+                    <li><a href="#/bill" style="color: white">账单管理</a></li>
+                    <li> <a href="#/user" style="color: white">用户与考勤管理</a> </li>
                     <li> <a href="#/sales" style="color: white">销售分析</a> </li>
                     <li><a class="btn-warning-outline" href="/exitLogin">退出登录</a></li>
                 </ul>
@@ -137,6 +139,15 @@
         }).on('hide',function(e) {
             //此处可以触发日期校验。
         });
+        $("#datetimepicker").datetimepicker({
+            format: 'yyyy-mm-dd',
+            minView: "month",
+            todayBtn:  1,
+            autoclose: 1,
+            endDate : new Date()
+        }).on('hide',function(e) {
+            //此处可以触发日期校验。
+        });
         /*+1 -1效果*/
         //编写控制器时，应该将其置于指定的控制器中
         $("#underway_reserve").Spinner({value:1, min:1, len:2, max:99});
@@ -156,4 +167,5 @@
 <script type="text/javascript" src="angularService.js"></script>
 <script type="text/javascript" src="MenuVipController.js"></script>
 <script type="text/javascript" src="UserController.js"></script>
+<script type="text/javascript" src="BillController.js"></script>
 </html>

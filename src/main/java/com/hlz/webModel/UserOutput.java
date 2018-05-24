@@ -12,6 +12,16 @@ public class UserOutput {
     private String username;
     private String password;
     private Date joinTime;
+    private Integer signNumber;
+
+    public Integer getSignNumber() {
+        return signNumber;
+    }
+
+    public void setSignNumber(Integer signNumber) {
+        this.signNumber = signNumber;
+    }
+
     private int style;
 
     public int getId() {

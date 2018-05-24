@@ -86,6 +86,11 @@ app.config(['$stateProvider', function ($stateProvider, $urlRouterProvider) {
                     controllerAs: 'bill',
                     url: '/bill',
                     templateUrl: "bill.html"})
+                .state('bill/details', {//账单管理详情
+                    controller: 'BillDetailsController',
+                    controllerAs: 'billDetails',
+                    url: '/billDetails/:id',
+                    templateUrl: "billDetails.html"})
                 .state('income', {//损益表
                     controller: 'IncomeController',
                     controllerAs: 'income',

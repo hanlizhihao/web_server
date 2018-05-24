@@ -30,7 +30,11 @@ import java.util.stream.Stream;
 public class SignWorkController {
     @Autowired
     private SignAndWorkService service;
-    // id为user的id
+    /**
+     *
+     * @param id user的id
+     * @return 成功失败
+     */
     @RequestMapping(value="/addsign/{id}",produces="text/plain;charset=UTF-8",method=RequestMethod.GET)
     public String addSign(@PathVariable String id){
         boolean sign=service.addSign(Integer.valueOf(id));

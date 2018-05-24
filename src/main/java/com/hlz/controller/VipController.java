@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class VipController {
     @Autowired
     private VipService service;
-    //分页显示，若返回值为空，则返回一个Vip，名字为404
+    // 分页显示，若返回值为空，则返回一个Vip，名字为404
     @RequestMapping(value="/vips/{id}",produces="application/json;charset=UTF-8",method=RequestMethod.GET)
     public List<Vip> getVipOnPage(@PathVariable String id){
         ArrayList<Vip> vips=new ArrayList<>();

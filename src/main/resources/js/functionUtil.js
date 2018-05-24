@@ -171,3 +171,22 @@ function stompUpdateVip($scope, $rootScope, $http) {
         });
     });
 }
+function stompUpdateBill($scope, $rootScope, $http) {
+    var stompClient = null;
+    var socket = new SockJS('/server');
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, function (frame) {
+        stompClient.subscribe('/topic/bill', function (response) {//订阅消息
+            $http.get('/bills/1', {}).success(function (data) {
+                if (data[0].phoneNumber == 404) {
+                    alert("服务器获取数据失败");
+                } else {
+                    $scope.vips = data;
+                    $rootScope.vips = data;
+                }
+            }).error(function () {
+                alert("获取数据失败");
+            });
+        });
+    });
+}

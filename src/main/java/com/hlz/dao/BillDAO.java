@@ -17,11 +17,21 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class BillDAO{
-    public List<Bill> queryAll() {
+    /**
+     * 分页查询账单
+     * @param id 页码
+     * @return
+     */
+    public List<Bill> queryAll(String id) {
         String hql="from Bill order by id";
+        int pageSize=10;
         SessionFactory sf=SessionFactoryUtil.getSessionFactory();
         Session session=sf.openSession();
         Query query=session.createQuery(hql);
+        //增加分页起点
+        int from=(Integer.valueOf(id)-1)*pageSize;
+        query.setFirstResult(from);
+        query.setMaxResults(pageSize);
         List<Bill> result=query.getResultList();
         System.out.print("查询账单信息成功");
         session.close();
