@@ -3,6 +3,7 @@ package com.hlz.service;
 import com.hlz.dao.SignAndWorkDAO;
 import com.hlz.dao.UserDAO;
 import com.hlz.entity.Sign;
+import com.hlz.entity.SignAnalysis;
 import com.hlz.entity.WorkTime;
 import com.hlz.webModel.WorkModel;
 import java.util.List;
@@ -38,5 +39,9 @@ public class SignAndWorkService {
     public List<WorkTime> findWorkTimeOnUserID(int id){
         List<WorkTime> works=userdao.getWorkTimeByUserID(id);
         return works;
+    }
+
+    public List<SignAnalysis> getSignAnalysisByUserId(int id) {
+        return dao.getSignAnalysis(id);
     }
 }

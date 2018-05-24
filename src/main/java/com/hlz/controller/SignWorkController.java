@@ -1,6 +1,7 @@
 package com.hlz.controller;
 
 import com.hlz.entity.Sign;
+import com.hlz.entity.SignAnalysis;
 import com.hlz.entity.WorkTime;
 import com.hlz.service.SignAndWorkService;
 import com.hlz.util.SignEnum;
@@ -62,38 +63,8 @@ public class SignWorkController {
         }
     }
     @RequestMapping(value="/signs/{id}",produces="application/json;charset=UTF-8",method=RequestMethod.GET)
-    public ArrayList<SignOutput> getSigns(@PathVariable String id){
-        List<Sign> signs=service.findSignOnUserId(Integer.valueOf(id));
-        signs.sort(Comparator.comparing(Sign::getSignTime));
-        /**
-         * 将签到数据转化为 日期：签到时间，签退时间 格式
-         */
-        ArrayList<SignOutput> result=new ArrayList<>();
-        Instant mouthBegin = TimeUtil.getMouthBegin();
-        Instant now = Instant.now();
-        do {
-            Stream<Sign> signsStream = signs.parallelStream().filter(sign -> {
-                Instant signTime = sign.getSignTime().toInstant();
-                return mouthBegin.isBefore(signTime) && mouthBegin.plus(Duration.ofDays(1)).isAfter(signTime);
-            });
-            SignOutput signOutput = new SignOutput();
-            if (signsStream.count() != 0) {
-                signOutput.setTime(Date.from(mouthBegin));
-                signsStream.forEach(sign -> {
-                    if (SignEnum.SIGN_IN.getValue().equals(sign.getType())) {
-                        signOutput.setSignInTime(sign.getSignTime());
-                    } else if (SignEnum.SIGN_OUT.getValue().equals(sign.getType())) {
-                        signOutput.setSignOutTime(sign.getSignTime());
-                    }
-                    signOutput.setNull(false);
-                });
-            } else {
-                signOutput.setTime(Date.from(mouthBegin));
-                signOutput.setNull(true);
-            }
-            mouthBegin.plus(Duration.ofDays(1));
-        } while (!now.isBefore(mouthBegin));
-        return result;
+    public List<SignAnalysis> getSigns(@PathVariable String id){
+        return service.getSignAnalysisByUserId(Integer.valueOf(id));
     }
 
     /**

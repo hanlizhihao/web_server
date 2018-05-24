@@ -74,7 +74,8 @@ app.controller('UserController', function ($scope, $rootScope, $http) {
 });
     app.controller('UserDetailsController', function ($scope, $rootScope, $http, $stateParams,$state) {
         var id = Number($stateParams.id);
-        var users = $rootScope.users;
+        var users = [];
+        users = $rootScope.users;
         for (var i = 0; i < users.length; i++) {
             if (users[i].id == id) {
                 $scope.user = users[i];
