@@ -21,15 +21,10 @@
                 </div>
             </div>
             <div class="row cl">
-                <label class="form-label col-xs-3">最近一次签到时间：</label>
-                <div class="formControls col-xs-8">
-                    <label type="text">{{lastSignTime}}</label>
-                </div>
-            </div>
-            <div class="row cl">
                 <label class="form-label col-xs-3">注册时间：</label>
                 <div class="formControls col-xs-8">
-                    <input type="text" class="input-text" autocomplete="off" name="joinTime" id="joinTime" ng-model="joinTime" ng-value="user.joinTime">
+                    <input type="text" class="input-text" autocomplete="off" name="joinTime" id="joinTime"
+                           ng-model="joinTime" ng-value="user.joinTime">
                 </div>
             </div>
             <div class="row cl">
@@ -43,6 +38,31 @@
                         <input type="radio" id="administrator" name="userType" ng-checked="user.style=='0';" ng-click="checked(0)">
                         <label for="administrator">管理员</label>
                     </div>
+                </div>
+            </div>
+            <div class="panel panel-default mt-20">
+                <div class="panel-header">考勤记录</div>
+                <div class="panel-body">
+                    <table class="table table-border table-bordered table-striped mt-20">
+                        <thead>
+                        <tr>
+                            <th class="col1">序号</th>
+                            <th class="col2">日期</th>
+                            <th class="col3">签到时间</th>
+                            <th class="col4">签出时间</th>
+                            <th class="col4">考勤信息记录</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="sign in signs">
+                            <td class="col1">{{$index+1}}</td>
+                            <td class="col2">{{sign.time}}</td>
+                            <td class="col3">{{sign.signInTime}}</td>
+                            <td class="col4">{{sign.signOutTime}}</td>
+                            <td class="col4">{{sign.isNull ? "无考勤记录": "正常签到"}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <div class="row cl">

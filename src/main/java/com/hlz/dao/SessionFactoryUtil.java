@@ -10,7 +10,8 @@ import org.hibernate.service.ServiceRegistry;
  * @author Administrator 2017-1-5
  */
 public class SessionFactoryUtil {
-    private volatile static SessionFactory instance=null;//volatitle防止出现线程安全问题
+    //volatitle防止出现线程安全问题
+    private volatile static SessionFactory instance=null;
     public static SessionFactory getSessionFactory(){
         if(instance==null){
             synchronized(SessionFactoryUtil.class){
@@ -26,6 +27,7 @@ public class SessionFactoryUtil {
                     configuration.addAnnotatedClass(com.hlz.entity.Vip.class);
                     configuration.addAnnotatedClass(com.hlz.entity.WorkTime.class);
                     configuration.addAnnotatedClass(com.hlz.entity.Bill.class);
+                    configuration.addAnnotatedClass(com.hlz.entity.AppLeaveTime.class);
                     ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                     .applySettings(configuration.getProperties()).build();
                     instance = configuration.buildSessionFactory(serviceRegistry);

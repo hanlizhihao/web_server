@@ -1,9 +1,11 @@
 package com.hlz.dao;
 
+import com.hlz.entity.AppLeaveTime;
 import com.hlz.entity.Sign;
 import com.hlz.entity.Users;
 import com.hlz.entity.WorkTime;
 import com.hlz.interf.SignAndWorkRepository;
+import com.hlz.util.TimeUtil;
 import com.hlz.webModel.WorkModel;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -56,25 +58,74 @@ public class SignAndWorkDAO implements SignAndWorkRepository{
     public boolean addWork(WorkModel model) {
         SessionFactory sf = SessionFactoryUtil.getSessionFactory();
         Session session = sf.openSession();
-        Users user=(Users)session.get(Users.class,model.getId());
-        WorkTime work=new WorkTime();
-        work.setContinueTime(model.getTime());
-        work.setOprationTime(new java.sql.Date(System.currentTimeMillis()));
-        Transaction t= session.beginTransaction();
-        try{
-            session.save(work);
-            session.saveOrUpdate(user);
-            t.commit();
-            System.out.println("成功添加一个工作时间信息");
-        }catch(Exception e){
-            t.rollback();
-            e.printStackTrace();
-            return false;
-        }finally{
-          session.close();
+        Users user=session.get(Users.class,model.getId());
+        // 获取当天记录
+        List<WorkTime> workTimeList = user.getWorkTimeList();
+        Instant todayBegin = TimeUtil.getTodayBegin().toInstant();
+        Instant todayEnd = TimeUtil.getTodayEnd().toInstant();
+        WorkTime targetWorkTime = null;
+        for (WorkTime workTime: workTimeList) {
+            if (todayBegin.isBefore(workTime.getOprationTime().toInstant()) && todayEnd.isAfter(workTime.getOprationTime().toInstant())) {
+                targetWorkTime = workTime;
+                break;
+            }
+        }
+        if (targetWorkTime != null) {
+            targetWorkTime.setOverTimeNumber(targetWorkTime.getOverTimeNumber() + 1);
+            targetWorkTime.setContinueTime(model.getTime());
+            AppLeaveTime appLeaveTime = new AppLeaveTime();
+            appLeaveTime.setUserId(user);
+            appLeaveTime.setWorkTimeId(targetWorkTime);
+            appLeaveTime.setLeaveBeginTime(new Timestamp(model.getLeaveBeginTime().getTime()));
+            appLeaveTime.setLeaveEndTime(new Timestamp(model.getLeaveEndTime().getTime()));
+            appLeaveTime.setLeaveTimeDuration(model.getDuration());
+            Transaction transaction = session.beginTransaction();
+            if (executeTransaction(session, user, targetWorkTime, appLeaveTime, transaction)) return false;
+        } else {
+            WorkTime work=new WorkTime();
+            work.setContinueTime(model.getTime());
+            work.setOprationTime(new java.sql.Timestamp(System.currentTimeMillis()));
+            work.setOverTimeNumber(1);
+            work.setUserId(user);
+            Transaction t= session.beginTransaction();
+            try{
+                session.save(work);
+                session.saveOrUpdate(user);
+                t.commit();
+                System.out.println("成功添加一个工作时间信息");
+            }catch(Exception e){
+                t.rollback();
+                e.printStackTrace();
+                return false;
+            }
+            AppLeaveTime appLeaveTime = new AppLeaveTime();
+            appLeaveTime.setUserId(user);
+            appLeaveTime.setWorkTimeId(work);
+            appLeaveTime.setLeaveBeginTime(new Timestamp(model.getLeaveBeginTime().getTime()));
+            appLeaveTime.setLeaveEndTime(new Timestamp(model.getLeaveEndTime().getTime()));
+            appLeaveTime.setLeaveTimeDuration(model.getDuration());
+            Transaction transaction = session.beginTransaction();
+            return !executeTransaction(session, user, targetWorkTime, appLeaveTime, transaction);
         }
         return true;
     }
+
+    private boolean executeTransaction(Session session, Users user, WorkTime targetWorkTime, AppLeaveTime appLeaveTime, Transaction transaction) {
+        try {
+            session.save(appLeaveTime);
+            session.saveOrUpdate(targetWorkTime);
+            session.saveOrUpdate(user);
+            transaction.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            transaction.rollback();
+            return true;
+        } finally {
+            session.close();
+        }
+        return false;
+    }
+
     /**
      * model中只带有user的id，故通过user的id查找出本次要修改的工作时间，这是通
      * 过比对user的所有工作时间的操作时间是否是今天来判断的

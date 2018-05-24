@@ -85,11 +85,7 @@ app.controller('UserController', function ($scope, $rootScope, $http) {
         var param=String(id);
         param="/signs/"+param;
         $http.get(param,{}).success(function (data) {
-            var number=Number(data.length);
-            var timeMS=Number(data[number-1].signTime);
-            var signTime=new Date();
-            signTime.setTime(timeMS);
-            $scope.lastSignTime=signTime.toLocaleString();
+            $scope.signs = data;
         });
         $scope.name = String($scope.user.name);
         $scope.username =String($scope.user.username);
@@ -125,4 +121,13 @@ app.controller('UserController', function ($scope, $rootScope, $http) {
             });
             $state.go('user');
         };
+        $("#joinTime").datetimepicker({
+            format: 'yyyy-mm-dd',
+            minView: "month",
+            todayBtn:  1,
+            autoclose: 1,
+            endDate : new Date()
+        }).on('hide',function(e) {
+            //此处可以触发日期校验。
+        });
     });

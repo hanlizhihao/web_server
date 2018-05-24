@@ -1,7 +1,7 @@
 package com.hlz.entity;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.sql.Timestamp;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -37,13 +37,23 @@ public class WorkTime implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Column(name = "opration_time")
-    private Date oprationTime;
+    private Timestamp oprationTime;
+    @Column(name = "over_time_number")
+    private Integer overTimeNumber;
     @Size(max = 255)
     @Column(name = "continue_time")
     private String continueTime;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne
     private Users userId;
+
+    public Integer getOverTimeNumber() {
+        return overTimeNumber;
+    }
+
+    public void setOverTimeNumber(Integer overTimeNumber) {
+        this.overTimeNumber = overTimeNumber;
+    }
 
     public WorkTime() {
     }
@@ -60,11 +70,11 @@ public class WorkTime implements Serializable {
         this.id = id;
     }
 
-    public Date getOprationTime() {
+    public Timestamp getOprationTime() {
         return oprationTime;
     }
 
-    public void setOprationTime(Date oprationTime) {
+    public void setOprationTime(Timestamp oprationTime) {
         this.oprationTime = oprationTime;
     }
 

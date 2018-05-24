@@ -65,6 +65,9 @@ public class SignWorkController {
     public ArrayList<SignOutput> getSigns(@PathVariable String id){
         List<Sign> signs=service.findSignOnUserId(Integer.valueOf(id));
         signs.sort(Comparator.comparing(Sign::getSignTime));
+        /**
+         * 将签到数据转化为 日期：签到时间，签退时间 格式
+         */
         ArrayList<SignOutput> result=new ArrayList<>();
         Instant mouthBegin = TimeUtil.getMouthBegin();
         Instant now = Instant.now();
@@ -110,7 +113,7 @@ public class SignWorkController {
         for(WorkTime w:works){
             WorkTimeOutput work=new WorkTimeOutput();
             work.setContinueTime(w.getContinueTime());
-            work.setOprationTime(w.getOprationTime());
+            work.setOprationTime(new java.sql.Date(w.getOprationTime().getTime()));
             result.add(work);
         }
         return result;
