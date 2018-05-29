@@ -86,6 +86,11 @@ app.controller('UserController', function ($scope, $rootScope, $http) {
         var param=String(id);
         param="/signs/"+param;
         $http.get(param,{}).success(function (data) {
+            angular.forEach(data, function (value, key) {
+               value.timeString = new Date(value.time).Format("yyyy-MM-dd");
+               value.signInTimeString = new Date(value.time).toLocaleString();
+               value.signOutTimeString = new Date(value.time).toLocaleString();
+            });
             $scope.signs = data;
         });
         $scope.name = String($scope.user.name);

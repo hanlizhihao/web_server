@@ -141,7 +141,7 @@ public class UserDAO implements UserRepository{
                 LocalDateTime localDateTime = LocalDateTime.now();
                 LocalDateTime mouth = LocalDateTime.of(localDateTime.getYear(), localDateTime.getMonth(), 1,0,0);
                 Instant mouthBegin = mouth.atZone(ZoneId.systemDefault()).toInstant();
-                return sign.getSignTime().toInstant().isAfter(mouthBegin);
+                return sign.getSignTime().toInstant().isAfter(mouthBegin) && sign.getType() == 0;
             });
             signs = signStream.collect(Collectors.toList());
             try{

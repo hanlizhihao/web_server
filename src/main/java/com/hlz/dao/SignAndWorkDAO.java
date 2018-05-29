@@ -48,8 +48,8 @@ public class SignAndWorkDAO implements SignAndWorkRepository{
             Transaction t= session.beginTransaction();
             String signAnalysisHql = "from SignAnalysis where time >= ? and time <= ?";
             Query query1 = session.createQuery(signAnalysisHql);
-            query.setParameter(0, getTodayBegin());
-            query.setParameter(1, getTodayEnd());
+            query1.setParameter(0, getTodayBegin());
+            query1.setParameter(1, getTodayEnd());
             List<SignAnalysis> signAnalyses = query1.getResultList();
             if (CollectionUtils.isEmpty(signAnalyses)) {
                 SignAnalysis  signAnalysis = new SignAnalysis();
@@ -196,8 +196,8 @@ public class SignAndWorkDAO implements SignAndWorkRepository{
             Transaction t= session.beginTransaction();
             String signAnalysisHql = "from SignAnalysis where time >= ? and time <= ?";
             Query query1 = session.createQuery(signAnalysisHql);
-            query.setParameter(0, getTodayBegin());
-            query.setParameter(1, getTodayEnd());
+            query1.setParameter(0, getTodayBegin());
+            query1.setParameter(1, getTodayEnd());
             List<SignAnalysis> signAnalyses = query1.getResultList();
             if (CollectionUtils.isEmpty(signAnalyses)) {
                 SignAnalysis  signAnalysis = new SignAnalysis();
@@ -216,8 +216,8 @@ public class SignAndWorkDAO implements SignAndWorkRepository{
             sign.setSignTime(new Timestamp(System.currentTimeMillis()));
             String signAnalysisHql = "from SignAnalysis where time >= ? and time <= ?";
             Query query1 = session.createQuery(signAnalysisHql);
-            query.setParameter(0, getTodayBegin());
-            query.setParameter(1, getTodayEnd());
+            query1.setParameter(0, getTodayBegin());
+            query1.setParameter(1, getTodayEnd());
             List<SignAnalysis> signAnalyses = query1.getResultList();
             SignAnalysis signAnalysis = signAnalyses.get(0);
             signAnalysis.setSignOutTime(new Timestamp(System.currentTimeMillis()));
@@ -239,7 +239,7 @@ public class SignAndWorkDAO implements SignAndWorkRepository{
     public List<SignAnalysis> getSignAnalysis(int id) {
         SessionFactory sessionFactory = SessionFactoryUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        String hql = "from SignAnalysis where time >= ? order by time desc";
+        String hql = "from SignAnalysis where time >= ? order by time desc ";
         Query query = session.createQuery(hql);
         query.setParameter(0, Date.from(TimeUtil.getMouthBegin()));
         return (List<SignAnalysis>) query.getResultList();

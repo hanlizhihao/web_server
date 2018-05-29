@@ -42,6 +42,10 @@ public class SignAndWorkService {
     }
 
     public List<SignAnalysis> getSignAnalysisByUserId(int id) {
-        return dao.getSignAnalysis(id);
+        List<SignAnalysis> signAnalysisList = dao.getSignAnalysis(id);
+        signAnalysisList.parallelStream().forEach(signAnalysis -> {
+            signAnalysis.setUserId(null);
+        });
+        return signAnalysisList;
     }
 }

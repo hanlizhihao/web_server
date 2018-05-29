@@ -53,7 +53,7 @@ public class SignWorkController {
             return "defeat";
         }
     }
-    @RequestMapping(value="/addwork",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)
+    @RequestMapping(value="/addWork",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)
     public String addWork(WorkModel model){
         boolean sign=service.addWork(model);
         if(sign){
