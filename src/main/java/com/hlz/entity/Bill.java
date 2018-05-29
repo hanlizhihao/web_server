@@ -1,21 +1,11 @@
 package com.hlz.entity;
 
-import java.io.Serializable;
-import java.util.Date;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  *
@@ -50,8 +40,7 @@ public class Bill implements Serializable {
     @Column(name = "comment")
     private String comment;
     @Column(name = "record_time")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date recordTime;
+    private Timestamp recordTime;
     @Column(name = "occurrence_time")
     private java.sql.Date occurrenceTime;
 
@@ -94,11 +83,11 @@ public class Bill implements Serializable {
         this.comment = comment;
     }
 
-    public Date getRecordTime() {
+    public Timestamp getRecordTime() {
         return recordTime;
     }
 
-    public void setRecordTime(Date recordTime) {
+    public void setRecordTime(Timestamp recordTime) {
         this.recordTime = recordTime;
     }
 

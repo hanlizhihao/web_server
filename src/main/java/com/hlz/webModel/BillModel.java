@@ -7,10 +7,29 @@ import java.sql.Date;
  * @author Administrator 2017-3-2
  */
 public class BillModel {
+    private Integer id;
     private String name;
     private Double price;
     private String comment;
     private Date occurrenceTime;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public java.util.Date getRecordTime() {
+        return recordTime;
+    }
+
+    public void setRecordTime(java.util.Date recordTime) {
+        this.recordTime = recordTime;
+    }
+
+    private java.util.Date recordTime;
 
     public String getName() {
         return name;

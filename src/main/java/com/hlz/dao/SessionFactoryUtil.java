@@ -28,6 +28,7 @@ public class SessionFactoryUtil {
                     configuration.addAnnotatedClass(com.hlz.entity.WorkTime.class);
                     configuration.addAnnotatedClass(com.hlz.entity.Bill.class);
                     configuration.addAnnotatedClass(com.hlz.entity.AppLeaveTime.class);
+                    configuration.addAnnotatedClass(com.hlz.entity.SignAnalysis.class);
                     ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                     .applySettings(configuration.getProperties()).build();
                     instance = configuration.buildSessionFactory(serviceRegistry);

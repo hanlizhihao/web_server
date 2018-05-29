@@ -17,5 +17,6 @@
     <mapping class="com.hlz.entity.WorkTime"/>
     <mapping class="com.hlz.entity.Bill"/>
     <mapping class="com.hlz.entity.AppLeaveTime"/>
+    <mapping class="com.hlz.entity.SignAnalysis"/>
   </session-factory>
 </hibernate-configuration>

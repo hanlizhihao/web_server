@@ -45,7 +45,7 @@ public class BillDAO{
         bill.setName(model.getName());
         bill.setOccurrenceTime(model.getOccurrenceTime());
         bill.setPrice(model.getPrice());
-        bill.setRecordTime(new java.sql.Date(System.currentTimeMillis()));
+        bill.setRecordTime(new java.sql.Timestamp(System.currentTimeMillis()));
         Transaction t=session.beginTransaction();
         try{
             session.save(bill);

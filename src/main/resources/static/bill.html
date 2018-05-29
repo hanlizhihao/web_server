@@ -37,7 +37,7 @@
                                         <label class="form-label col-xs-3">账单日期：</label>
                                         <div class="formControls col-xs-8">
                                             <input type="text" class="input-text" value="" autocomplete="off"
-                                                   id="datetimepicker" name="datetimepicker" ng-model="addBillTime">
+                                                   id="addBillTime" name="addBillTime" ng-model="addBillTime">
                                         </div>
                                     </div>
                                 </form>
@@ -58,8 +58,8 @@
                 <th class="col2">账单用途</th>
                 <th class="col3">账单总价</th>
                 <th class="col4">备注</th>
-                <th class="col5">账单日期</th>
-                <th class="col6">账单记录时间</th>
+                <th class="col5">账单记录时间</th>
+                <th class="col6">账单日期</th>
                 <th class="col7">操作</th>
             </tr>
             </thead>
@@ -69,7 +69,7 @@
                 <td class="col2">{{x.name}}</td>
                 <td class="col3">{{x.price}}</td>
                 <td class="col4">{{x.comment}}</td>
-                <td class="col5">{{x.recordTime}}</td>
+                <td class="col5">{{x.recordTimeString}}</td>
                 <td class="col6">{{x.occurrenceTime}}</td>
                 <td class="col7">
                     <a href="#/billDetails/{{x.id}}" class="btn btn-secondary-outline radius">修改</a>

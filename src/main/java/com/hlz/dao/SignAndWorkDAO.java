@@ -241,7 +241,7 @@ public class SignAndWorkDAO implements SignAndWorkRepository{
         Session session = sessionFactory.openSession();
         String hql = "from SignAnalysis where time >= ? order by time desc";
         Query query = session.createQuery(hql);
-        query.setParameter(0, TimeUtil.getMouthBegin());
+        query.setParameter(0, Date.from(TimeUtil.getMouthBegin()));
         return (List<SignAnalysis>) query.getResultList();
     }
 
