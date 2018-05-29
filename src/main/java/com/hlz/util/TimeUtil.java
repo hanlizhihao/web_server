@@ -31,4 +31,30 @@ public class TimeUtil {
         return mouth.atZone(ZoneId.systemDefault()).toInstant();
     }
 
+    public static String getTimeStringByLong(Long usedTime) {
+        String time;
+        usedTime=usedTime/1000;
+        if (usedTime<60){
+            time=Long.toString(usedTime);
+            time=time+"秒";
+        }
+        else
+        {
+            if (usedTime>=3600)
+            {
+                long hour=usedTime/3600;
+                long minute=usedTime%3600/60;
+                long second=Math.round(usedTime%3600%60);
+                time=Long.toString(hour)+"小时"+Long.toString(minute)+"分钟"+
+                        Long.toString(second)+"秒";
+            }else
+            {
+                long minute=usedTime/60;
+                long second=Math.round(usedTime%60);
+                time=Long.toString(minute)+"分钟"+Long.toString(second)+"秒";
+            }
+        }
+        return time;
+    }
+
 }

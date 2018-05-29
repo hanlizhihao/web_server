@@ -4,24 +4,14 @@ import com.hlz.entity.Sign;
 import com.hlz.entity.SignAnalysis;
 import com.hlz.entity.WorkTime;
 import com.hlz.service.SignAndWorkService;
-import com.hlz.util.SignEnum;
-import com.hlz.util.TimeUtil;
-import com.hlz.webModel.SignOutput;
+import com.hlz.webModel.Response;
 import com.hlz.webModel.WorkModel;
 import com.hlz.webModel.WorkTimeOutput;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.time.Duration;
-import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  *只有添加签到和工作，没有更新和删除
@@ -53,13 +43,14 @@ public class SignWorkController {
             return "defeat";
         }
     }
-    @RequestMapping(value="/addWork",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)
-    public String addWork(WorkModel model){
+    @RequestMapping(value="/addWork",produces="application/json;charset=UTF-8",method=RequestMethod.POST)
+    public Response addWork(@RequestBody WorkModel model){
         boolean sign=service.addWork(model);
+        Response<String> response = new Response<>();
         if(sign){
-            return "success";
+            return response.setResult("success");
         }else{
-            return "defeat";
+            return response.setResult("defeat");
         }
     }
     @RequestMapping(value="/signs/{id}",produces="application/json;charset=UTF-8",method=RequestMethod.GET)

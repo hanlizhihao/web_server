@@ -91,9 +91,9 @@ public class SignAndWorkDAO implements SignAndWorkRepository{
             appLeaveTime.setWorkTimeId(targetWorkTime);
             appLeaveTime.setLeaveBeginTime(new Timestamp(model.getLeaveBeginTime().getTime()));
             appLeaveTime.setLeaveEndTime(new Timestamp(model.getLeaveEndTime().getTime()));
-            appLeaveTime.setLeaveTimeDuration(model.getDuration());
+            appLeaveTime.setLeaveTimeDuration(TimeUtil.getTimeStringByLong(model.getDuration()));
             Transaction transaction = session.beginTransaction();
-            if (executeTransaction(session, user, targetWorkTime, appLeaveTime, transaction)) return false;
+            return !executeTransaction(session, user, targetWorkTime, appLeaveTime, transaction);
         } else {
             WorkTime work=new WorkTime();
             work.setContinueTime(model.getTime());
@@ -116,18 +116,31 @@ public class SignAndWorkDAO implements SignAndWorkRepository{
             appLeaveTime.setWorkTimeId(work);
             appLeaveTime.setLeaveBeginTime(new Timestamp(model.getLeaveBeginTime().getTime()));
             appLeaveTime.setLeaveEndTime(new Timestamp(model.getLeaveEndTime().getTime()));
-            appLeaveTime.setLeaveTimeDuration(model.getDuration());
+            appLeaveTime.setLeaveTimeDuration(TimeUtil.getTimeStringByLong(model.getDuration()));
             Transaction transaction = session.beginTransaction();
-            return !executeTransaction(session, user, targetWorkTime, appLeaveTime, transaction);
+            return !executeTransaction(session, user, appLeaveTime, transaction);
         }
-        return true;
+    }
+    private boolean executeTransaction(Session session, Users user, AppLeaveTime appLeaveTime, Transaction transaction) {
+        try {
+            session.save(appLeaveTime);
+            session.saveOrUpdate(user);
+            transaction.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            transaction.rollback();
+            return true;
+        } finally {
+            session.close();
+        }
+        return false;
     }
 
     private boolean executeTransaction(Session session, Users user, WorkTime targetWorkTime, AppLeaveTime appLeaveTime, Transaction transaction) {
         try {
             session.save(appLeaveTime);
-            session.saveOrUpdate(targetWorkTime);
-            session.saveOrUpdate(user);
+            session.update(targetWorkTime);
+            session.update(user);
             transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();

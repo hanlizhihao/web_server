@@ -26,7 +26,7 @@ public class AppLeaveTime implements Serializable {
     private Timestamp leaveEndTime;
     @Column(name = "leave_begin_time")
     private Timestamp leaveBeginTime;
-    @Size(max = 20)
+    @Size(max = 100)
     @Column(name = "leave_time_duration")
     private String leaveTimeDuration;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
