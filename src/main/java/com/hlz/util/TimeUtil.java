@@ -12,6 +12,9 @@ import java.util.Date;
  * @created 2018/5/23
  */
 public class TimeUtil {
+
+
+
     @NotNull
     public static Date getTodayBegin() {
         int zeroToNowSecond = LocalTime.now().toSecondOfDay();

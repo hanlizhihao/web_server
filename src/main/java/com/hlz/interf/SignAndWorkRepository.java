@@ -1,6 +1,8 @@
 package com.hlz.interf;
 
+import com.hlz.entity.AppLeaveTime;
 import com.hlz.entity.SignAnalysis;
+import com.hlz.webModel.SignModel;
 import com.hlz.webModel.WorkModel;
 
 import java.util.List;
@@ -14,5 +16,7 @@ public interface SignAndWorkRepository {
     boolean addWork(WorkModel model);
     boolean updateWork(WorkModel model);
     boolean signOut(int id);
-    List<SignAnalysis> getSignAnalysis(int id);
+    List<SignModel> getSignAnalysis(int id);
+
+    List<AppLeaveTime> getAppLeaveTimes(int id);
 }

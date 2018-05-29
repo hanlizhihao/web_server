@@ -3,6 +3,7 @@ package com.hlz.dao;
 import com.hlz.entity.*;
 import com.hlz.interf.SignAndWorkRepository;
 import com.hlz.util.TimeUtil;
+import com.hlz.webModel.SignModel;
 import com.hlz.webModel.WorkModel;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -11,10 +12,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
 
+import javax.annotation.Resource;
 import javax.persistence.Query;
 import java.sql.Timestamp;
 import java.time.*;
 import java.time.temporal.TemporalUnit;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -56,6 +59,12 @@ public class SignAndWorkDAO implements SignAndWorkRepository{
                 signAnalysis.setTime(new Timestamp(System.currentTimeMillis()));
                 signAnalysis.setUserId(user);
                 signAnalysis.setSignInTime(new Timestamp(System.currentTimeMillis()));
+                String getWorkTimeHql = "from WorkTime where oprationTime >= ? and oprationTime <= ?";
+                Query getWorkTimeQuery = session.createQuery(getWorkTimeHql);
+                List<WorkTime> workTimeList = getWorkTimeQuery.getResultList();
+                if (!CollectionUtils.isEmpty(workTimeList)) {
+                    signAnalysis.setWorkTimeId(workTimeList.get(0).getId());
+                }
                 session.save(signAnalysis);
             } else {
                 SignAnalysis signAnalysis = signAnalyses.get(0);
@@ -249,13 +258,37 @@ public class SignAndWorkDAO implements SignAndWorkRepository{
     }
 
     @Override
-    public List<SignAnalysis> getSignAnalysis(int id) {
+    public List<SignModel> getSignAnalysis(int id) {
         SessionFactory sessionFactory = SessionFactoryUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        String hql = "from SignAnalysis where time >= ? order by time desc ";
+        String hql = "from SignAnalysis where time >= ? and userId = ? order by time desc ";
         Query query = session.createQuery(hql);
         query.setParameter(0, Date.from(TimeUtil.getMouthBegin()));
-        return (List<SignAnalysis>) query.getResultList();
+        query.setParameter(1, session.get(Users.class, id));
+        List<SignAnalysis> result = query.getResultList();
+        List<SignModel> signModels = new ArrayList<>();
+        result.forEach(signAnalysis -> {
+            SignModel signModel = new SignModel();
+            signModel.setTime(signAnalysis.getTime());
+            signModel.setSignInTime(signAnalysis.getSignInTime());
+            signModel.setSignOutTime(signAnalysis.getSignOutTime());
+            signModel.setWorkTimeId(signAnalysis.getWorkTimeId());
+            WorkTime workTime = session.get(WorkTime.class, signModel.getWorkTimeId());
+            signModel.setContinueTime(workTime.getContinueTime());
+            signModel.setOverTimeNumber(workTime.getOverTimeNumber());
+            signModels.add(signModel);
+        });
+        session.close();
+        return signModels;
+    }
+
+    @Override
+    public List<AppLeaveTime> getAppLeaveTimes(int id) {
+        Session session = SessionFactoryUtil.getSessionFactory().openSession();
+        WorkTime workTime = session.get(WorkTime.class, id);
+        List<AppLeaveTime> appLeaveTimes = workTime.getAppLeaveTimes();
+        session.close();
+        return appLeaveTimes;
     }
 
     private boolean executeSession(Session session, Users user, Sign sign, Transaction t) {

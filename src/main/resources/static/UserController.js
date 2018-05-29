@@ -73,6 +73,7 @@ app.controller('UserController', function ($scope, $rootScope, $http) {
     };
 });
     app.controller('UserDetailsController', function ($scope, $rootScope, $http, $stateParams,$state) {
+        $scope.showDetail = Boolean(false);
         var id = Number($stateParams.id);
         var users = [];
         users = $rootScope.users;
@@ -136,4 +137,19 @@ app.controller('UserController', function ($scope, $rootScope, $http) {
         }).on('hide',function(e) {
             //此处可以触发日期校验。
         });
+        $scope.showSignDetail = function (id) {
+            var param=String(id);
+            param="/sign/details/"+param;
+            $http.get(param,{}).success(function (data) {
+                angular.forEach(data, function (value, key) {
+                    value.leaveTime = new Date(value.leaveBeginTime).toLocaleString();
+                    value.returnTime = new Date(value.leaveEndTime).toLocaleString();
+                });
+                $scope.appLeaveList = data;
+                $scope.showDetail = true;
+            });
+        };
+        $scope.cancel = function () {
+            $scope.showDetail = false;
+        }
     });

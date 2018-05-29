@@ -5,7 +5,10 @@ import com.hlz.dao.UserDAO;
 import com.hlz.entity.Sign;
 import com.hlz.entity.SignAnalysis;
 import com.hlz.entity.WorkTime;
+import com.hlz.webModel.SignModel;
 import com.hlz.webModel.WorkModel;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,11 +44,7 @@ public class SignAndWorkService {
         return works;
     }
 
-    public List<SignAnalysis> getSignAnalysisByUserId(int id) {
-        List<SignAnalysis> signAnalysisList = dao.getSignAnalysis(id);
-        signAnalysisList.parallelStream().forEach(signAnalysis -> {
-            signAnalysis.setUserId(null);
-        });
-        return signAnalysisList;
+    public List<SignModel> getSignAnalysisByUserId(int id) {
+        return dao.getSignAnalysis(id);
     }
 }

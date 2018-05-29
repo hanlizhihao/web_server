@@ -1,10 +1,13 @@
 package com.hlz.controller;
 
+import com.hlz.dao.SignAndWorkDAO;
+import com.hlz.entity.AppLeaveTime;
 import com.hlz.entity.Sign;
 import com.hlz.entity.SignAnalysis;
 import com.hlz.entity.WorkTime;
 import com.hlz.service.SignAndWorkService;
 import com.hlz.webModel.Response;
+import com.hlz.webModel.SignModel;
 import com.hlz.webModel.WorkModel;
 import com.hlz.webModel.WorkTimeOutput;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,9 @@ import java.util.List;
 public class SignWorkController {
     @Autowired
     private SignAndWorkService service;
+
+    @Autowired
+    private SignAndWorkDAO signAndWorkDAO;
     /**
      *
      * @param id user的id
@@ -54,8 +60,17 @@ public class SignWorkController {
         }
     }
     @RequestMapping(value="/signs/{id}",produces="application/json;charset=UTF-8",method=RequestMethod.GET)
-    public List<SignAnalysis> getSigns(@PathVariable String id){
+    public List<SignModel> getSigns(@PathVariable String id){
         return service.getSignAnalysisByUserId(Integer.valueOf(id));
+    }
+
+    /**
+     * @param id workTimeId
+     * @return
+     */
+    @RequestMapping(value="/sign/details/{id}",produces="application/json;charset=UTF-8",method=RequestMethod.GET)
+    public List<AppLeaveTime> getSignDetails(@PathVariable String id) {
+        return signAndWorkDAO.getAppLeaveTimes(Integer.valueOf(id));
     }
 
     /**

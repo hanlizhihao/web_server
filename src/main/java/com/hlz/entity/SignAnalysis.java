@@ -29,6 +29,16 @@ public class SignAnalysis implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne
     private Users userId;
+    @Column(name = "work_time_id")
+    private Integer workTimeId;
+
+    public Integer getWorkTimeId() {
+        return workTimeId;
+    }
+
+    public void setWorkTimeId(Integer workTimeId) {
+        this.workTimeId = workTimeId;
+    }
 
     @Override
     public boolean equals(Object o) {
