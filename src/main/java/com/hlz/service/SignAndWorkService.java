@@ -2,6 +2,7 @@ package com.hlz.service;
 
 import com.hlz.dao.SignAndWorkDAO;
 import com.hlz.dao.UserDAO;
+import com.hlz.entity.AppLeaveTime;
 import com.hlz.entity.Sign;
 import com.hlz.entity.SignAnalysis;
 import com.hlz.entity.WorkTime;
@@ -47,4 +48,5 @@ public class SignAndWorkService {
     public List<SignModel> getSignAnalysisByUserId(int id) {
         return dao.getSignAnalysis(id);
     }
+
 }

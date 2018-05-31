@@ -67,7 +67,7 @@ public class SellAnalyzeDAO implements SellAnalyzeRepository {
 
     @Override
     public ArrayList<SellAnalyze> queryAllSellAnalyze() {
-        String hql = "from SellAnalyze order by number";
+        String hql = "from SellAnalyze order by number desc ";
         SessionFactory sf = SessionFactoryUtil.getSessionFactory();
         Session session = sf.openSession();
         Query query=session.createQuery(hql);

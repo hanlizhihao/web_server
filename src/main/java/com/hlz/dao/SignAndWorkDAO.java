@@ -61,6 +61,8 @@ public class SignAndWorkDAO implements SignAndWorkRepository{
                 signAnalysis.setSignInTime(new Timestamp(System.currentTimeMillis()));
                 String getWorkTimeHql = "from WorkTime where oprationTime >= ? and oprationTime <= ?";
                 Query getWorkTimeQuery = session.createQuery(getWorkTimeHql);
+                getWorkTimeQuery.setParameter(0, getTodayBegin());
+                getWorkTimeQuery.setParameter(1, getTodayEnd());
                 List<WorkTime> workTimeList = getWorkTimeQuery.getResultList();
                 if (!CollectionUtils.isEmpty(workTimeList)) {
                     signAnalysis.setWorkTimeId(workTimeList.get(0).getId());
@@ -278,16 +280,18 @@ public class SignAndWorkDAO implements SignAndWorkRepository{
             signModel.setOverTimeNumber(workTime.getOverTimeNumber());
             signModels.add(signModel);
         });
-        session.close();
         return signModels;
     }
 
     @Override
     public List<AppLeaveTime> getAppLeaveTimes(int id) {
-        Session session = SessionFactoryUtil.getSessionFactory().openSession();
+        SessionFactory sessionFactory = SessionFactoryUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
         WorkTime workTime = session.get(WorkTime.class, id);
         List<AppLeaveTime> appLeaveTimes = workTime.getAppLeaveTimes();
-        session.close();
+        for (AppLeaveTime appLeaveTime:appLeaveTimes) {
+            appLeaveTime.setUserId(null);
+        }
         return appLeaveTimes;
     }
 

@@ -55,10 +55,10 @@ public class UserController {
         }
     }
     @RequestMapping(value="/user/update",produces="text/plain;charset=UTF-8",method=RequestMethod.POST)
-    public String updateUser(@RequestParam("id") Integer id,@RequestParam("name") String name,@RequestParam("username") String username,
+    public String updateUser(@RequestParam("id") String id,@RequestParam("name") String name,@RequestParam("username") String username,
             @RequestParam("password") String password,@RequestParam("style") Integer style,@RequestParam("joinTime") Date joinTime){
         Users user=new Users();
-        user.setId(style);
+        user.setId(Integer.valueOf(id));
         user.setJoinTime(joinTime);
         user.setName(name);
         user.setPassword(password);

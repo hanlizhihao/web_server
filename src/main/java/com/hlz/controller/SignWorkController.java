@@ -70,7 +70,11 @@ public class SignWorkController {
      */
     @RequestMapping(value="/sign/details/{id}",produces="application/json;charset=UTF-8",method=RequestMethod.GET)
     public List<AppLeaveTime> getSignDetails(@PathVariable String id) {
-        return signAndWorkDAO.getAppLeaveTimes(Integer.valueOf(id));
+        List<AppLeaveTime> appLeaveTimes = signAndWorkDAO.getAppLeaveTimes(Integer.valueOf(id));
+        for (AppLeaveTime appLeaveTime:appLeaveTimes) {
+            appLeaveTime.setUserId(null);
+        }
+        return appLeaveTimes;
     }
 
     /**

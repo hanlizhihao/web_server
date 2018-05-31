@@ -73,13 +73,11 @@ app.controller('UserController', function ($scope, $rootScope, $http) {
     };
 });
     app.controller('UserDetailsController', function ($scope, $rootScope, $http, $stateParams,$state) {
-        $scope.showDetail = Boolean(false);
+        $scope.showDetail = false;
         var id = Number($stateParams.id);
-        var users = [];
-        users = $rootScope.users;
-        for (var i = 0; i < users.length; i++) {
-            if (users[i].id == id) {
-                $scope.user = users[i];
+        for (var i = 0; i < $rootScope.users.length; i++) {
+            if ($rootScope.users[i].id == id) {
+                $scope.user = $rootScope.users[i];
                 break;
             }
         }
@@ -89,8 +87,8 @@ app.controller('UserController', function ($scope, $rootScope, $http) {
         $http.get(param,{}).success(function (data) {
             angular.forEach(data, function (value, key) {
                value.timeString = new Date(value.time).Format("yyyy-MM-dd");
-               value.signInTimeString = new Date(value.time).toLocaleString();
-               value.signOutTimeString = new Date(value.time).toLocaleString();
+               value.signInTimeString = new Date(value.signInTime).toLocaleString();
+               value.signOutTimeString = new Date(value.signOutTime).toLocaleString();
             });
             $scope.signs = data;
         });
@@ -113,7 +111,7 @@ app.controller('UserController', function ($scope, $rootScope, $http) {
                 user = {"id": $scope.user.id, "name": $scope.name, "username": $scope.username, "password": $scope.password, "style": "0","joinTime"
                     :$scope.joinTime};
             }
-            $http.post('/user/update', user, {headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}})
+            $http.post('/user/update', $.param(user), {headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}})
                 .success(function (data) {
                     if (data == "success") {
                         $state.go('user');
